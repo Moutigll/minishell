@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 11:39:02 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/16 11:56:26 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:20:51 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	gest_envp(char **env)
 	return (1);
 }
 
-void	while_main(t_list **lst_var, char *last_cmd)
+void	while_main(t_list **lst_var, char **last_cmd, t_block **lst_block)
 {
 	char	*command;
 
@@ -43,12 +43,13 @@ void	while_main(t_list **lst_var, char *last_cmd)
 		command = read_cmd();
 		if (command == NULL)
 			return ;
-		cmd_format(command, lst_var, last_cmd);
+		cmd_format(command, lst_var, last_cmd, lst_block);
 	}
 }
 
 int	main(int argc, char **argv, char **env)
 {
+	t_block		*lst_block;
 	static char	*last_cmd;
 	t_list		*lst_var;
 
@@ -56,10 +57,11 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	lst_var = NULL;
 	last_cmd = NULL;
+	lst_block = NULL;
 	if (gest_envp(env) == 0)
 		return (0);
 	signal(SIGINT, signal_interception);
 	signal(SIGQUIT, SIG_IGN);
-	while_main(&lst_var, last_cmd);
+	while_main(&lst_var, &last_cmd, &lst_block);
 	return (0);
 }

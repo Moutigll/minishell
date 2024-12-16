@@ -6,32 +6,16 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 13:05:22 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/13 13:34:40 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/16 18:15:38 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char	*check_dollar(char *message, int *i)
+void	while_space(char *str, int *i)
 {
-	char	*var;
-	int		n;
-	int		j;
-
-	j = 0;
-	(*i)++;
-	if (message[*i] == '"')
-		return (NULL);
-	n = ft_strlen_char(&message[*i], ' ');
-	var = malloc(sizeof(char) * (n + 1));
-	while (j < n)
-	{
-		var[j] = message[*i];
+	while (str[*i] == ' ')
 		(*i)++;
-		j++;
-	}
-	var[j] = '\0';
-	return (var);
 }
 
 static void	var_echo(char *name_var, t_list **lst_var)
@@ -59,55 +43,86 @@ static void	var_echo(char *name_var, t_list **lst_var)
 	free(name_var);
 }
 
-static void	print_char(char *message, int j, t_list **lst_var)
+static char	*check_dollar(char *message, int *i)
+{
+	char	*result;
+	int		j;
+	int		n;
+
+	j = 0;
+	n = ft_strlen_char(message, ' ');
+	(*i)++;
+	result = malloc(sizeof(char) * (n + 1));
+	while (j < n)
+	{
+		result[j] = message[j];
+		(*i)++;
+		j++;
+	}
+	result[j] = '\0';
+	return (result);
+}
+
+static void	print_char(int flag, t_block *lst_block, t_list **lst_var)
 {
 	char	*var;
+	int		tmp;
 	int		i;
 
-	i = 0;
-	while (message[i])
+	tmp = 0;
+	while (lst_block)
 	{
-		if (message[i] == 92 && message[i + 1] == 92)
+		i = 0;
+		if (tmp == 0 && flag)
 		{
-			i += 2;
-			write(1, "\\", 1);
+			i = 2;
+			tmp = 1;
+			while_space(lst_block->content, &i);
 		}
-		if (message[i] == '$')
+		while (lst_block->content[i])
 		{
-			var = check_dollar(message, &i);
-			var_echo(var, lst_var);
-		}
-		else if (message[i] != 92)
-			write(1, &message[i++], 1);
-		else
+			if (lst_block->content[i] == '"')
+			{
+				i++;
+				continue ;
+			}
+			if (lst_block->content[i] == '\\')
+			{
+				write(1, "\\", 1);
+				i += 2;
+			}
+			if (lst_block->content[i] == '$' && lst_block->boolean != 1)
+			{
+				var = check_dollar(&lst_block->content[i + 1], &i);
+				var_echo(var, lst_var);
+			}
+			write(1, &lst_block->content[i], 1);
 			i++;
+		}
+		if (!lst_block->next)
+			break ;
+		lst_block = lst_block->next;
 	}
-	if (j == 0)
+	if (!flag)
 		write(1, "\n", 1);
 }
 
-void	while_space(char *str, int *i)
-{
-	while (str[*i] == ' ')
-		(*i)++;
-}
-
-void	echo_cmd(char *command, t_list **lst_var)
+void	echo_cmd(char *command, t_list **lst_var, t_block **lst_block)
 {
 	int	flag;
 	int	i;
 
-	i = 4;
+	i = 0;
 	flag = 0;
-	while_space(command, &i);
+	while (command[i] && command[i] != ' ')
+		i++;
+	i++;
+	while_space(command, &i);;
 	if (check_equal("-n", &command[i]))
 	{
 		i += 3;
 		flag = 1;
 	}
 	while_space(command, &i);
-	if (flag)
-		print_char(&command[i], 1, lst_var);
-	else
-		print_char(&command[i], 0, lst_var);
+	print_char(flag, *lst_block, lst_var);
 }

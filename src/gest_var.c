@@ -6,11 +6,30 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 16:23:14 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/13 11:29:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/16 13:18:00 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+char	*remove_double_quote(char *content)
+{
+	char	*result;
+	int		size;
+	int		i;
+
+	i = 1;
+	size = ft_strlen(content) - 1;
+	result = malloc(sizeof(char) * (ft_strlen(content) - 1));
+	while (content[i] && i < size)
+	{
+		result[i - 1] = content[i];
+		i++;
+	}
+	result[i - 1] = '\0';
+	free(content);
+	return (result);
+}
 
 void	change_direct(char *name_var, char *content)
 {
