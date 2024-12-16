@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 11:39:13 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/16 18:19:19 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/16 18:19:42 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@
 # include "fcntl.h"
 
 extern char	**g_env;
-
-// OK
 
 // list var
 typedef struct	s_list
