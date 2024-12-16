@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 13:05:22 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/16 18:19:09 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/16 18:42:39 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ static void	var_echo(char *name_var, t_list **lst_var)
 	else
 	{
 		i = search_exist(name_var);
+		if (i == -1)
+		{
+			free(name_var);
+			return ;
+		}
 		while (g_env[i][j] != '=')
 			j++;
 		write(1, &g_env[i][j + 1], ft_strlen(&g_env[i][j + 1]));
@@ -51,6 +56,8 @@ static char	*check_dollar(char *message, int *i)
 
 	j = 0;
 	n = ft_strlen_char(message, ' ');
+	if (n > ft_strlen_char(message, '"'))
+		n = ft_strlen_char(message, '"');
 	(*i)++;
 	result = malloc(sizeof(char) * (n + 1));
 	while (j < n)
@@ -81,11 +88,6 @@ static void	print_char(int flag, t_block *lst_block, t_list **lst_var)
 		}
 		while (lst_block->content[i])
 		{
-			if (lst_block->content[i] == '"')
-			{
-				i++;
-				continue ;
-			}
 			if (lst_block->content[i] == '\\')
 			{
 				write(1, "\\", 1);
@@ -96,8 +98,10 @@ static void	print_char(int flag, t_block *lst_block, t_list **lst_var)
 				var = check_dollar(&lst_block->content[i + 1], &i);
 				var_echo(var, lst_var);
 			}
-			write(1, &lst_block->content[i], 1);
-			i++;
+			if (lst_block->content[i] == '"')
+				i++;
+			else
+				write(1, &lst_block->content[i++], 1);
 		}
 		if (!lst_block->next)
 			break ;

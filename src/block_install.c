@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 14:38:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/16 18:11:11 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/16 18:31:05 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,6 @@ void	main_install_block(t_block **lst_block, char *message)
 		else
 			i++;
 	}
-	if (!boolean)
+	if (!boolean || i == ft_strlen(message))
 		ft_lst_block_add_back(lst_block, ft_lst_block_new(after_quote(&message[tmp]), -1));
 }
