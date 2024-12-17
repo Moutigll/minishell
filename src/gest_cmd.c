@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 12:31:00 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/16 18:40:47 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:37:55 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ static void	print(t_list *lst_var, char *last_cmd)
 
 void	cmd_format(char *command, t_list **lst_var, char **last_cmd, t_block **lst_block)
 {
-	int	i;
+	char	*var;
+	int		i;
 
 	i = 0;
 	while_space(command, &i);
@@ -127,6 +128,18 @@ void	cmd_format(char *command, t_list **lst_var, char **last_cmd, t_block **lst_
 			unset_cmd(&command[i]);
 		else if (check_var_type(&command[i]))
 			add_var(lst_var, &command[i]);
+		else if (command[i] == '$' && ((*lst_block)->boolean == 0 || (*lst_block)->boolean == -1))
+		{
+			var = check_dollar(&((*lst_block)->content)[i + 1], &i);
+			var_echo(var, lst_var);
+			printf("\n");
+		}
+		else if (command[i] == '\"' && (*lst_block)->next->content[0] == '$' && ((*lst_block)->boolean == 0 || (*lst_block)->boolean == -1))
+		{
+			var = check_dollar(&(*lst_block)->next->content[i + 1], &i);
+			var_echo(var, lst_var);
+			printf("\n");
+		}
 		else if (command[0] != '\0')
 			printf("%s: command not found\n", &command[i]);
 	}

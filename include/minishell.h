@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 11:39:13 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/16 18:21:39 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:21:56 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,14 @@
 # include "fcntl.h"
 
 extern char	**g_env;
+
+// boolean struct
+typedef struct	s_boolean
+{
+	int	boolean_1;
+	int	boolean_2;
+	int	boolean_3;
+}	t_boolean;
 
 // list var
 typedef struct	s_list
@@ -75,8 +83,10 @@ void	pwd_cmd(void);
 void	print_env(void);
 
 // echo_cmd.c
-void	while_space(char *str, int *i);
 void	echo_cmd(char *command, t_list **lst_var, t_block **lst_block);
+void	var_echo(char *name_var, t_list **lst_var);
+char	*check_dollar(char *message, int *i);
+void	while_space(char *str, int *i);
 
 // gest_cmd.c
 int		check_equal(char *str1, char *str2);
