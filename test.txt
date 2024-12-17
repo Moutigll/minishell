@@ -1,0 +1,24 @@
+echo a b c
+4[ echo][ a][ b][ c]
+"echo" a b
+3[ echo][ a][ b]
+e"c"ho a b
+3[ echo][ a][ b]
+e"c"h'o' a b c
+4[ echo][ a][ b][ c]
+ech" "o a
+2[ ech o][ a]
+ech o a
+3[ ech][ o][ a]
+ech""''""o a
+2[ echo][ a]
+echo" "a b c
+3[ echo a][ b][ c]
+echo "a"""' ' b
+3[ echo][ a ][ b]
+echo "-""n""" a
+3[ echo][ -n][ a]
+echo ''"a" ""''"b"' ''''c'
+3[ echo][ a][ b c]
+echo ""''"" ''" " ''
+4[ echo][ ][  ][ ]
