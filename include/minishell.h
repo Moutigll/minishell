@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/18 16:59:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:36:39 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,12 @@ char	*read_cmd(void);
 // parsing.c
 int		parsing_error(char *command, int etat);
 
+// sanitize.c
+t_head	*sanitize_input(char *input);
+
 // TESTER GLOBAL
 void	main_tester_traitment(int argc, char **argv);
 void	tester_quote(void);
+void	tester_block(void);
 
 #endif
