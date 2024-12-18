@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_function.c                                    :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/13 12:47:29 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/13 12:49:57 by tle-goff         ###   ########.fr       */
+/*   Created: 2024/12/18 12:23:49 by tle-goff          #+#    #+#             */
+/*   Updated: 2024/12/18 17:06:23 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	free_env(void)
+// gestion d'erreur "quote open", ";", "\"
+
+int	parsing_error(char *command, int etat)
 {
+	int	quote_1;
+	int	quote_2;
 	int	i;
 
 	i = 0;
-	while (g_env[i])
+	quote_1 = -1;
+	quote_2 = -1;
+	while (command[i])
 	{
-		free(g_env[i]);
+		if (command[i] == '\"' && quote_2 < 0)
+			quote_1 *= -1;
+		else if (command[i] == '\'' && quote_1 < 0)
+			quote_2 *= -1;
 		i++;
 	}
-	free(g_env);
+	if ((quote_1 > -2 || quote_2 > 0))
+		return (error(ERR_QUOTE, etat), 0);
+	return (1);
 }

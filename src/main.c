@@ -5,63 +5,44 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/11 11:39:02 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/16 15:20:51 by tle-goff         ###   ########.fr       */
+/*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
+/*   Updated: 2024/12/18 16:59:32 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char **g_env = NULL;
+void	error(char *message, int etat)
+{
+	if (etat == 0)
+		printf("%s\n", message);
+}
 
-static int	gest_envp(char **env)
+static void	copy_env_to_mainstruct(char **env, t_main **main)
 {
 	int	i;
 
 	i = 0;
 	while (env[i])
 		i++;
-	g_env = malloc(sizeof(char *) * (i + 1));
-	if (g_env == NULL)
-		return (0);
+	(*main)->g_env = malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (env[i])
 	{
-		g_env[i] = ft_strdup(env[i]);
+		(*main)->g_env[i] = ft_strdup(env[i]);
 		i++;
 	}
-	g_env[i] = 0;
-	return (1);
-}
-
-void	while_main(t_list **lst_var, char **last_cmd, t_block **lst_block)
-{
-	char	*command;
-
-	while (1)
-	{
-		command = read_cmd();
-		if (command == NULL)
-			return ;
-		cmd_format(command, lst_var, last_cmd, lst_block);
-	}
+	(*main)->g_env[i] = 0;
 }
 
 int	main(int argc, char **argv, char **env)
 {
-	t_block		*lst_block;
-	static char	*last_cmd;
-	t_list		*lst_var;
+	t_main	*main;
 
 	(void)argc;
-	(void)argv;
-	lst_var = NULL;
-	last_cmd = NULL;
-	lst_block = NULL;
-	if (gest_envp(env) == 0)
-		return (0);
-	signal(SIGINT, signal_interception);
-	signal(SIGQUIT, SIG_IGN);
-	while_main(&lst_var, &last_cmd, &lst_block);
+	main_tester_traitment(argc, argv);
+	main = malloc(sizeof(t_main));
+	copy_env_to_mainstruct(env, &main);
+	while_input(&main);
 	return (0);
 }

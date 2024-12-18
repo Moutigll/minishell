@@ -1,0 +1,42 @@
+coucou comment tu vas?
+1
+tu vas bien ? "oui et toi?"
+1
+tu vas bien ? "oui et toi?
+0
+tu vas bien" ? "oui et toi?
+1
+tu vas bien" ? oui et toi?
+0
+"tu vas bien" ? oui et toi?
+1
+tu vas bien" ? oui et toi?
+0
+tu vas bien ? 'oui et toi?'
+1
+tu vas bien ? 'oui et toi?
+0
+tu vas bien' ? 'oui et toi?
+1
+tu vas bien' ? oui et toi?
+0
+'tu vas bien' ? oui et toi?
+1
+tu vas bien' ? oui et toi?
+0
+ca va oui "nickel" 'que fais tu de bo?'
+1
+ca va oui "nickel" que fais tu de bo?'
+0
+ca va oui "nickel 'que fais tu de bo?'
+0
+tout est nickel "et oui 'ca va'"
+1
+tout est nickel "et oui ca va'"
+1
+tout est nickel "et" oui ca va'"
+0
+TEST TOTAL "''''""EH OUI" EHEH ''LE''' PLUS GRO'""''S TES''T POSSIBLE
+1
+TEST TOTAL "''''""EH OUI" EHEH ''LE'' PLUS GRO'""''S TES''T POSSIBLE
+0

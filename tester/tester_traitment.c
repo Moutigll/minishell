@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset_cmd.c                                        :+:      :+:    :+:   */
+/*   tester_traitment.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/12 14:07:03 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/12 14:20:22 by tle-goff         ###   ########.fr       */
+/*   Created: 2024/12/18 15:55:25 by tle-goff          #+#    #+#             */
+/*   Updated: 2024/12/18 16:46:31 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	unset_cmd(char *command)
+void	main_tester_traitment(int argc, char **argv)
 {
 	int	i;
-	int	j;
 
-	i = 5;
-	while_space(command, &i);
-	j = search_exist(&command[i]);
-	if (j >= 0)
-		g_env = ft_realoc_ptr_unset(g_env, j);
+	i = 0;
+	while (i < argc - 1)
+	{
+		if (ft_strcmp((const char *)"quote", argv[i + 1]) == 0)
+			tester_quote();
+		i++;
+	}
 }

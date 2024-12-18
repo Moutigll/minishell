@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/11 16:23:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/13 17:00:04 by tle-goff         ###   ########.fr       */
+/*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
+/*   Updated: 2024/12/18 16:07:12 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	return_slash(char *str)
+static int	return_slash(char *str)
 {
 	int	count;
 	int	i;
@@ -26,6 +26,23 @@ int	return_slash(char *str)
 		i++;
 	}
 	return (count);
+}
+
+static char	*verif_solo(char *path)
+{
+	char	*result;
+
+	if (ft_strcmp((const char *)path, (const char *)"/ ") == 0)
+	{
+		result = malloc(sizeof(char) * 4);
+		result[0] = '/';
+		result[1] = '$';
+		result[2] = ' ';
+		result[3] = '\0';
+		free(path);
+		return (result);
+	}
+	return (path);
 }
 
 static char	*return_join(char *str1, char *str2, char *path)
@@ -45,7 +62,7 @@ static char	*return_join(char *str1, char *str2, char *path)
 	return (dest);
 }
 
-char	*prompt_return(char * path)
+static char	*prompt_return(char *path)
 {
 	char	*end_user;
 	char	*end_host;
@@ -60,4 +77,54 @@ char	*prompt_return(char * path)
 	end_host = ft_strcut(host, '.');
 	free(host);
 	return (return_join(end_user, end_host, path));
+}
+
+static char	*remove_start_prompt(char *path)
+{
+	char	*result;
+	int		count;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	count = 0;
+	while (path[i] && count != 3)
+	{
+		if (path[i] == '/')
+			count++;
+		i++;
+	}
+	result = malloc(sizeof(char) * (ft_strlen(path) - i + 3));
+	result[j++] = '/';
+	while (i + j <= (int) ft_strlen(path) && path[i + j])
+	{
+		result[j] = path[i + j - 1];
+		j++;
+	}
+	result[j++] = ' ';
+	result[j] = '\0';
+	free(path);
+	return (verif_solo(result));
+}
+
+char	*read_cmd(void)
+{
+	char	*print_prompt;
+	char	*end_path;
+	char	*end_host;
+	char	*path;
+
+	path = getcwd(NULL, 0);
+	if (path == NULL)
+		return (NULL);
+	end_path = ft_strjoin(path, "$ ");
+	if (return_slash(end_path) >= 2)
+		end_path = remove_start_prompt(end_path);
+	end_host = prompt_return(path);
+	free(path);
+	print_prompt = ft_strjoin(end_host, end_path);
+	free(end_host);
+	free(end_path);
+	return (print_prompt);
 }
