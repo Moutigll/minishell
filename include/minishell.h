@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 15:10:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:55:31 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,5 @@ t_head	*sanitize_input(char *input);
 
 // file_tmp.c
 void	print_block(t_head *head);
-
-// TESTER GLOBAL
-void	main_tester_traitment(int argc, char **argv);
-void	tester_quote(void);
-void	tester_block(void);
 
 #endif

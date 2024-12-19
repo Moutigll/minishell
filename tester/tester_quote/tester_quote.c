@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   tester_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 16:32:35 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/18 17:39:12 by tle-goff         ###   ########.fr       */
+/*   Created: 2024/12/18 16:32:35 by ele-lean          #+#    #+#             */
+/*   Updated: 2024/12/19 16:21:26 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/tester.h"
 
 void	tester_quote()
-{
+{ 
 	char	*result;
 	char	*line;
 	int		fd;
 	int		i;
 
 	i = 0;
-	fd = open("tester/tester_quote/test_err_quote.txt", O_RDONLY);
+	fd = open("tester/tester_quote/test.txt", O_RDONLY);
 	printf("\033[1;37mTester by tle-goff | 42 Le Havre | Quote testing\033[0m\n");
 	while (i < 21)
 	{

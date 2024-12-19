@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tester_block.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:32:29 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 11:31:12 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:56:40 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/tester.h"
 
 void	tester_block(void)
 {
@@ -18,7 +18,7 @@ void	tester_block(void)
 	char	*line, *expected, *generated, *old;
 	t_head	*head;
 
-	fd = open("tester/tester_block/test_block.txt", O_RDONLY);
+	fd = open("tester/tester_block/test.txt", O_RDONLY);
 	printf("\033[1;37mTester by ele-lean | 42 Le Havre | Block testing\033[0m\n");
 	if (fd < 0)
 	{

@@ -1,32 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   tester.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 16:06:42 by ele-lean         ###   ########.fr       */
+/*   Created: 2024/12/19 15:54:41 by ele-lean          #+#    #+#             */
+/*   Updated: 2024/12/19 16:12:01 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
+
 #include "../include/minishell.h"
 
-void	while_input(t_main **main)
-{
-	char	*command;
-	t_head	*head;
-
-	(void)main;
-	while (1)
-	{
-		command = readline(read_cmd());
-		if (parsing_error(command, 0))
-		{
-			head = sanitize_input(command);
-			echo_command(head);
-		}
-		// print_block(sanitize_input(command));
-		free(command);
-	}
-}
+// TESTER GLOBAL
+void	tester_manager(void);
+void	tester_quote(void);
+void	tester_block(void);
