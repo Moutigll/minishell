@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   file_tmp.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 14:53:37 by tle-goff         ###   ########.fr       */
+/*   Created: 2024/12/19 11:38:03 by tle-goff          #+#    #+#             */
+/*   Updated: 2024/12/19 13:42:19 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	while_input(t_main **main)
+void	print_block(t_head *head)
 {
-	char	*command;
-	t_head	*head;
+	t_node	*node_tmp;
+	t_list	*lst_tmp;
+	int		i;
 
-	(void)main;
-	while (1)
+	i = 0;
+	lst_tmp = head->head;
+	while (lst_tmp)
 	{
-		command = readline(read_cmd());
-		if (parsing_error(command, 0))
-		{
-			head = sanitize_input(command);
-			echo_command(head);
-		}
-		// print_block(sanitize_input(command));
-		free(command);
+		node_tmp = lst_tmp->content;
+		printf("Block %i\nContent = |%s|\nState = %i\nHead = %i\n", i, node_tmp->content, node_tmp->type, node_tmp->head);
+		if (!lst_tmp->next)
+			break ;
+		lst_tmp = lst_tmp->next;
+		printf("\n");
+		i++;
 	}
 }

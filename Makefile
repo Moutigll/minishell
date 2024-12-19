@@ -9,7 +9,11 @@ MINISHELL_SRCS =	src/main.c \
 					tester/tester_traitment.c \
 					tester/tester_quote/tester_quote.c \
 					tester/tester_block/tester_block.c \
-					src/sanitize_input.c
+					src/sanitize_input.c \
+					src/file_tmp.c \
+					src/echo_cmd.c \
+					src/check_equal.c \
+					src/ft_listnode.c
 
 OBJS = $(MINISHELL_SRCS:.c=.o)
 

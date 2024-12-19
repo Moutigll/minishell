@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   echo_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 14:53:37 by tle-goff         ###   ########.fr       */
+/*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
+/*   Updated: 2024/12/19 15:24:55 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	while_input(t_main **main)
+char	*echo_command(t_head *head)
 {
-	char	*command;
-	t_head	*head;
+	int	flag;
+	int	tmp;
 
-	(void)main;
-	while (1)
+	flag = 0;
+	tmp = check_equal("echo", head, 0);
+	if (tmp >= 0)
 	{
-		command = readline(read_cmd());
-		if (parsing_error(command, 0))
+		tmp = check_equal("-n", head, tmp);
+		if (tmp >= 0)
 		{
-			head = sanitize_input(command);
-			echo_command(head);
+			flag = 1;
+			printf("FLAG GOOD\n");
 		}
-		// print_block(sanitize_input(command));
-		free(command);
+		printf("ECHO GOOD\n");
 	}
+	return ("COUCOU");
 }
