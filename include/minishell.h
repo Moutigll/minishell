@@ -52,6 +52,9 @@ void	ft_listnode(t_list **lst_tmp, int tab);
 // check_equal.c
 int		check_equal(char *format, t_head *head, int tab);
 
+// check_equal.c
+int		check_equal(char *format, t_head *head, int tab);
+
 // echo_cmd.c
 char	*echo_command(t_head *head);
 

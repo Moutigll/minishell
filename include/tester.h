@@ -18,3 +18,4 @@
 void	tester_manager(void);
 void	tester_quote(void);
 void	tester_block(void);
+void	tester_checkequal(void);

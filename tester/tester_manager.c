@@ -16,4 +16,5 @@ void	tester_manager(void)
 {
 	tester_quote();
 	tester_block();
+	tester_checkequal();
 }

@@ -22,7 +22,8 @@ NORMAL_OBJS = $(addprefix $(SRC_DIR)/, $(NORMAL_SRCS:.c=.o))
 TEST_SRCS = main.c \
 			tester_manager.c \
 			tester_block/tester_block.c \
-			tester_quote/tester_quote.c
+			tester_quote/tester_quote.c \
+			tester_checkequal/tester_checkequal.c
 TEST_OBJS = $(addprefix $(TEST_DIR)/, $(TEST_SRCS:.c=.o))
 
 LIBFT_PATH = libft
