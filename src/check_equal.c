@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:17:53 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 18:38:25 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:00:30 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,9 @@ static int	check_equal_part2(t_node *node_tmp, int *i, char *format, int *n)
 		j++;
 	}
 	if (ft_strcmp((const char *)node_tmp->content, (const char *)format) == 0 && *n == 0)
-	{
-		// printf("---> 1\n");
 		return (4);
-	}
 	else if (*i == (int)ft_strlen((const char *)format) && node_tmp->content[j] == '\0')
-	{
-		// printf("---> 2\n");
-		// printf("%s\n", node_tmp->content);
 		return (4);
-	}
 	return (2);
 }
 
@@ -82,8 +75,6 @@ int	check_equal(char *format, t_head *head, int tab)
 	while (lst_tmp)
 	{
 		node_tmp = lst_tmp->content;
-		// if (n == 0)
-		// 	printf("%s\n", node_tmp->content);
 		if (state != 1 && check_equal_part1(&state, node_tmp, &i, format, &n) == 0)
 			return (-2);
 		if (state == 4)

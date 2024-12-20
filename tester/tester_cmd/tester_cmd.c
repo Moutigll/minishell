@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tester_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:52:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2024/12/20 02:41:10 by ele-lean         ###   ########.fr       */
+/*   Updated: 2024/12/20 12:59:55 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	make_test(int fd, char **env, int i)
 
 void	tester_cmd(char **env)
 {
-	char	*line;
+	// char	*line;
 	int		fd;
 	int		lock;
 	int		i;

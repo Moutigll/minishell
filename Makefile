@@ -15,6 +15,7 @@ MINISHELL_SRCS =	check_equal.c \
 					parsing.c \
 					prompt.c \
 					sanitize_input.c \
+					parsing_var.c
 
 MINISHELL_OBJS = $(addprefix $(SRC_DIR)/, $(MINISHELL_SRCS:.c=.o))
 
@@ -27,6 +28,7 @@ TEST_SRCS = main.c \
 			tester_quote/tester_quote.c \
 			tester_checkequal/tester_checkequal.c \
 			tester_cmd/tester_cmd.c \
+			tester_echo/tester_echo.c
 
 TEST_OBJS = $(addprefix $(TEST_DIR)/, $(TEST_SRCS:.c=.o))
 

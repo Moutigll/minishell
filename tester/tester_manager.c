@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   tester_manager.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:55:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 21:22:10 by ele-lean         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:21:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/tester.h"
 
-void	tester_manager(char **env)
+void	tester_manager(char **env, t_main *main)
 {
-	(void)env;
 	tester_quote();
 	tester_block();
 	tester_checkequal();
 	tester_cmd(env);
+	tester_echo(main);
 }

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 17:28:41 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:08:45 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	while_input(t_main **main)
 {
 	char	*command;
+	char	*result;
 	t_head	*head;
 
 	(void)main;
@@ -24,9 +25,12 @@ void	while_input(t_main **main)
 		if (parsing_error(command, 0))
 		{
 			head = sanitize_input(command);
-			echo_command(head);
+			replace_var(&head, *main);
+			result = echo_command(head);
+			if (result)
+				printf("%s", result);
 		}
-		// print_block(sanitize_input(command));
+		// print_block(head);
 		free(command);
 	}
 }

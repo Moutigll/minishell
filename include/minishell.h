@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 21:34:44 by ele-lean         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:26:45 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ typedef struct s_main
 
 // main.c
 void	error(char *message, int etat);
+
+// parsing_var.c
+int		search_exist(char *name_var, char **g_env);
+void	replace_var(t_head **head, t_main *main);
 
 // ft_listnode.c
 void	ft_listnode(t_list **lst_tmp, int tab);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 16:06:05 by ele-lean         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:26:53 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ static void	copy_env_to_mainstruct(char **env, t_main **main)
 	(*main)->g_env[i] = 0;
 }
 
-int	main(int argc, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_main	*main;
 
 	(void)argc;
+	(void)argv;
 	main = malloc(sizeof(t_main));
 	copy_env_to_mainstruct(env, &main);
 	while_input(&main);
