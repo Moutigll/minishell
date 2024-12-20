@@ -1,20 +1,22 @@
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I include -I libft/include
+CFLAGS = -Wall -Werror -Wextra -g -I include -I libft/include
 NAME = minishell
 TESTER = minishell_tester
 SRC_DIR = src
 TEST_DIR = tester
 
-PUSH_SWAP_SRCS =	check_equal.c \
+MINISHELL_SRCS =	check_equal.c \
 					echo_cmd.c \
+					exec_cmd.c \
 					file_tmp.c \
 					ft_listnode.c \
 					input.c \
+					open_files.c \
 					parsing.c \
 					prompt.c \
 					sanitize_input.c \
 
-MINISHELL_OBJS = $(addprefix $(SRC_DIR)/, $(PUSH_SWAP_SRCS:.c=.o))
+MINISHELL_OBJS = $(addprefix $(SRC_DIR)/, $(MINISHELL_SRCS:.c=.o))
 
 NORMAL_SRCS = main.c
 NORMAL_OBJS = $(addprefix $(SRC_DIR)/, $(NORMAL_SRCS:.c=.o))
@@ -23,7 +25,9 @@ TEST_SRCS = main.c \
 			tester_manager.c \
 			tester_block/tester_block.c \
 			tester_quote/tester_quote.c \
-			tester_checkequal/tester_checkequal.c
+			tester_checkequal/tester_checkequal.c \
+			tester_cmd/tester_cmd.c \
+
 TEST_OBJS = $(addprefix $(TEST_DIR)/, $(TEST_SRCS:.c=.o))
 
 LIBFT_PATH = libft

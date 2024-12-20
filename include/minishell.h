@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 15:55:31 by ele-lean         ###   ########.fr       */
+/*   Updated: 2024/12/19 21:34:44 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,45 @@
 # include "../libft/include/libft.h"
 # include "readline/readline.h"
 # include "readline/history.h"
-# include "unistd.h"
 # include "signal.h"
-# include "stdlib.h"
 # include "stdio.h"
-# include "fcntl.h"
 
-typedef struct 	s_head
+typedef struct s_head
 {
 	t_list		*head;
 	int			size;
 }	t_head;
 
-typedef struct 	s_node
+typedef struct s_node
 {
 	int			type;
 	int			head;
 	char		*content;
 }	t_node;
+
+typedef struct s_command_head
+{
+	t_list		*head;
+	char		*in_fd;
+	char		*out_fd;
+	char		**envp;
+	char		*here_doc;
+	int			size;
+	int			error;
+}	t_command_head;
+typedef struct s_command
+{
+	char		*command;
+	char		*args;
+}				t_command;
+
+typedef struct s_pipex
+{
+	int				in_fd;
+	int				out_fd;
+	int				pipe_fd[2];
+	t_command_head	*cmd_head;
+}	t_pipex;
 
 typedef struct s_main
 {
@@ -72,5 +93,12 @@ t_head	*sanitize_input(char *input);
 
 // file_tmp.c
 void	print_block(t_head *head);
+
+// exec_cmd.c
+void	exec_cmds(t_command_head *cmd_head);
+void	clean_pipex(t_pipex *pipex, char *error, int exit_status);
+
+// open_files.c
+void	open_fds(t_pipex *pipex, t_command_head *head);
 
 #endif

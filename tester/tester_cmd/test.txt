@@ -1,0 +1,31 @@
+Testing with no files
+NULL
+NULL
+0
+1
+ls
+-l
+
+Testing out file whithout write permission
+NULL
+tester/tester_cmd/lock
+0
+1
+ls
+-l
+
+Testing in file whithout read permission
+tester/tester_cmd/lock
+NULL
+0
+1
+ls
+-l
+
+Testing both at the same time
+tester/tester_cmd/lock
+tester/tester_cmd/lock
+0
+1
+ls
+-

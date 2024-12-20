@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tester_checkequal.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:32:29 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 18:32:04 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/19 21:16:47 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	tester_checkequal()
 	i = 0;
 	fd = open("tester/tester_checkequal/test.txt", O_RDONLY);
 	printf("\033[1;37mTester by tle-goff | 42 Le Havre | CheckEqual testing\033[0m\n");
-	while (i < 100)
+	while ((line = get_next_line(fd)))
 	{
-		line = get_next_line(fd);
+		line[ft_strlen(line) - 1] = '\0';
 		result = get_next_line(fd);
 		flag = get_next_line(fd);
 		if (line == NULL)
