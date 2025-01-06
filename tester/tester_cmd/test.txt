@@ -4,7 +4,7 @@ NULL
 0
 1
 ls
--l
+-l -a
 
 Testing out file whithout write permission
 NULL
@@ -28,4 +28,4 @@ tester/tester_cmd/lock
 0
 1
 ls
--
+-l

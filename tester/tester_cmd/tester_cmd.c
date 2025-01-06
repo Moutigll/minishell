@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tester_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:52:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2024/12/20 12:59:55 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/06 10:23:18 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_list	*get_file_cmd(int fd)
 		free(line);
 		line = get_next_line(fd);
 		line[ft_strlen(line) - 1] = '\0';
-		cmd->args = ft_strdup(line);
+		cmd->args = ft_split(line, ' ');
 		free(line);
 		ft_lstadd_back(&head, ft_lstnew(cmd));
 	}
@@ -77,7 +77,6 @@ void	make_test(int fd, char **env, int i)
 
 void	tester_cmd(char **env)
 {
-	// char	*line;
 	int		fd;
 	int		lock;
 	int		i;
@@ -101,10 +100,10 @@ void	tester_cmd(char **env)
 	close(fd);
 }
 
-// int	main(int ac, char **av, char **env)
-// {
-// 	(void)ac;
-// 	(void)av;
-// 	tester_cmd(env);
-// 	return (0);
-// }
+int	main(int ac, char **av, char **env)
+{
+	(void)ac;
+	(void)av;
+	tester_cmd(env);
+	return (0);
+}

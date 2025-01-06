@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/20 17:26:45 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/06 09:47:24 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "readline/history.h"
 # include "signal.h"
 # include "stdio.h"
+# include <sys/wait.h>
 
 typedef struct s_head
 {
@@ -42,10 +43,11 @@ typedef struct s_command_head
 	int			size;
 	int			error;
 }	t_command_head;
+
 typedef struct s_command
 {
 	char		*command;
-	char		*args;
+	char		**args;
 }				t_command;
 
 typedef struct s_pipex
@@ -104,5 +106,11 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status);
 
 // open_files.c
 void	open_fds(t_pipex *pipex, t_command_head *head);
+
+// get_path.c
+void	get_path(t_pipex *pipex);
+
+// fork.c
+void	exec_cmd(t_pipex *pipex, int i, char **envp);
 
 #endif

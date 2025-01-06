@@ -9,7 +9,9 @@ MINISHELL_SRCS =	check_equal.c \
 					echo_cmd.c \
 					exec_cmd.c \
 					file_tmp.c \
+					fork.c \
 					ft_listnode.c \
+					get_path.c \
 					input.c \
 					open_files.c \
 					parsing.c \

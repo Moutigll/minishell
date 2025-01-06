@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2024/12/20 01:15:31 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/06 10:35:03 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 	while (tmp)
 	{
 		free(((t_command *)tmp->content)->command);
-		free(((t_command *)tmp->content)->args);
+		free_tab((void **)((t_command *)tmp->content)->args);
 		tmp = tmp->next;
 	}
 	free_list(pipex->cmd_head->head);
@@ -81,8 +81,8 @@ void	handle_here_doc(char *delimiter, t_pipex *pipex)
 
 void	exec_cmds(t_command_head *cmd_head)
 {
-	t_list		*tmp;
 	t_pipex		*pipex;
+	int			i;
 
 	if (!cmd_head || !cmd_head->head)
 		return ;
@@ -97,7 +97,14 @@ void	exec_cmds(t_command_head *cmd_head)
 		handle_here_doc(cmd_head->here_doc, pipex);
 	if (cmd_head->error)
 		return ;
-	ft_putstr_fd("executing command\n", pipex->out_fd);
-	tmp = cmd_head->head;
+	get_path(pipex);
+	if (cmd_head->error)
+		return ;
+	i = 0;
+	while (i < cmd_head->size)
+	{
+		exec_cmd(pipex, i, cmd_head->envp);
+		i++;
+	}
 	clean_pipex(pipex, NULL, 0);
 }
