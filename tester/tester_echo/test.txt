@@ -14,5 +14,5 @@ echo '$PATH$USER'|
 $PATH$USER
 echo $SHELL|
 /bin/zsh
-'ec'"h"o "-"'n' 'COU"COU" $PATH' ''coucou'' 'salut ya' $SHELL
-COU"COU" $PATH coucou salut ya /bin/zsh
+'ec'"h"o "-"'n' 'COU"COU" $PATH' ''coucou'' 'salut ya' $SHELL|
+COU"COU" $PATH coucou salut ya /bin/zsh|

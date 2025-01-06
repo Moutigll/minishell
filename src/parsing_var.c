@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 13:00:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/20 17:26:49 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/02 14:58:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	change_var(int n, t_node **node, char *new_char, int z, int p)
 	(*node)->content = result;
 }
 
-static char	*return_name_var(char *content)
+char	*return_name_var(char *content, char c)
 {
 	char	*result;
 	int		i;
@@ -55,7 +55,7 @@ static char	*return_name_var(char *content)
 
 	i = 1;
 	j = 0;
-	while (content[i] && content[i] != ' ' && content[i] != '$')
+	while (content[i] && content[i] != ' ' && content[i] != c && content[i] != '\'')
 		i++;
 	result = malloc(sizeof(char) * (i + 1));
 	while (j < i)
@@ -88,7 +88,7 @@ static void	return_var(t_node **node, char **g_env)
 	{
 		if ((*node)->content[i] == '$')
 		{
-			name_var = return_name_var(&(*node)->content[i]);
+			name_var = return_name_var(&(*node)->content[i], '$');
 			tab = search_exist(&name_var[1], g_env);
 			if (tab >= 0)
 			{
@@ -97,8 +97,12 @@ static void	return_var(t_node **node, char **g_env)
 				i += (int)ft_strlen((const char *)&g_env[tab][remove_equal(g_env[tab])]);
 			}
 			else
+			{
 				change_var((int)ft_strlen((const char *)(*node)->content) - (int)ft_strlen((const char *)name_var) + 1,
-					node, "", 0, (int)ft_strlen((const char *)name_var));
+					node, "\0", 0, (int)ft_strlen((const char *)name_var));
+				if (ft_strlen((*node)->content) == 0)
+					(*node)->head = -1;
+			}
 			free(name_var);
 		}
 		else

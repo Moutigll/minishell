@@ -12,6 +12,8 @@ MINISHELL_SRCS =	check_equal.c \
 					fork.c \
 					ft_listnode.c \
 					get_path.c \
+					detect_var.c \
+					export_cmd.c \
 					input.c \
 					open_files.c \
 					parsing.c \

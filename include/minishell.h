@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/06 09:47:24 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/06 11:37:20 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_pipex
 
 typedef struct s_main
 {
+	t_list	*lst_var;
 	char	**g_env;
 }	t_main;
 
@@ -68,16 +69,23 @@ typedef struct s_main
 
 // main.c
 void	error(char *message, int etat);
+void	print_list(t_list *lst);
+
+// export_cmd.c
+int		export_cmd(t_head *head, t_main **main);
+t_head	*return_head(t_head *head, int i);
+t_list	*return_lst(t_head *head, int i);
+
+// detect_var.c
+void	verif_var(t_head *head, t_main **main);
 
 // parsing_var.c
 int		search_exist(char *name_var, char **g_env);
 void	replace_var(t_head **head, t_main *main);
+char	*return_name_var(char *content, char c);
 
 // ft_listnode.c
 void	ft_listnode(t_list **lst_tmp, int tab);
-
-// check_equal.c
-int		check_equal(char *format, t_head *head, int tab);
 
 // check_equal.c
 int		check_equal(char *format, t_head *head, int tab);

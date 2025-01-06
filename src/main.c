@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/20 17:26:53 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/02 12:13:22 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,14 @@ static void	copy_env_to_mainstruct(char **env, t_main **main)
 
 int	main(int argc, char **argv, char **env)
 {
+	t_list	*lst_var;
 	t_main	*main;
 
 	(void)argc;
 	(void)argv;
+	lst_var = NULL;
 	main = malloc(sizeof(t_main));
+	main->lst_var = lst_var;
 	copy_env_to_mainstruct(env, &main);
 	while_input(&main);
 	return (0);

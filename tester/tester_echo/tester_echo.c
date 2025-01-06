@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 17:16:41 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/20 18:10:56 by tle-goff         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:53:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,10 @@ void	tester_echo(t_main *main)
 		if (result == NULL)
 			break ;
 		printf("\033[1;90m---------------------------------------------\nTest (%i) \033[0m", i);
-
 		line = find_end(line);
 		head = sanitize_input(find_end(line));
 		replace_var(&head, main);
-
-		if (ft_strcmp((const char *)echo_command(head),(const char*)result) == 0)
+		if (ft_strcmp((const char *)echo_command(head),(const char*)find_end(result)) == 0)
 			printf("\033[1;92mOK\033[0m\n");
 		else
 		{

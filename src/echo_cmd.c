@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/20 17:15:54 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/06 11:19:47 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*echo_return(t_list *lst, int flag, int tmp)
 			result = ft_strdup(node->content);
 		else
 		{
-			if (node->head && n != 0)
+			if (node->head == 1 && n != 0  && ft_strlen(node->content) != 0)
 				result = ft_strfreejoin(result, ft_strfreejoin(ft_strdup(" "), ft_strdup(node->content)));
 			else
 				result = ft_strfreejoin(result, ft_strdup(node->content));
