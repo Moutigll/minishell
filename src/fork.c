@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 10:49:42 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:59:05 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,21 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 		dup2(pipex->out_fd, STDOUT_FILENO);
 	else
 		dup2(pipe_fd[1], STDOUT_FILENO);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-	close(pipex->pipe_fd[0]);
-	close(pipex->in_fd);
-	if (i != pipex->cmd_head->size - 1)
-		close(pipex->out_fd);
+
+	if (pipex->pipe_fd[0] != -1)
+		close(pipex->pipe_fd[0]);
+	if (pipex->in_fd != -1 && i == 0)
+		close(pipex->in_fd);
+	close(pipex->stdin_backup);
+	close(pipex->stdout_backup);
 	cmd = (t_command *)ft_lstget(pipex->cmd_head->head, i)->content;
-	if (cmd->args != NULL)
-	{
-		for (int j = 0; cmd->args[j] != NULL; j++)
-		{
-			ft_printf("Argument %d: %s\n", j, cmd->args[j]);
-		}
-	}
 	if (execve(cmd->command, cmd->args, envp) == -1)
 	{
 		perror("Error: Failed to execute command");
-		clean_pipex(pipex, NULL, 127);
 		exit(127);
 	}
 }
+
 
 void	exec_cmd(t_pipex *pipex, int i, char **envp)
 {

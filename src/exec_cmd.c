@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 10:35:03 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:35:46 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	init_pipex(t_pipex *pipex, t_command_head *cmd_head)
 	pipex->pipe_fd[0] = -1;
 	pipex->cmd_head = cmd_head;
 	pipex->cmd_head->error = 0;
+	pipex->stdin_backup = dup(STDIN_FILENO);
+	pipex->stdout_backup = dup(STDOUT_FILENO);
 }
 
 void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
@@ -50,6 +52,10 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 		close(pipex->pipe_fd[0]);
 	if (error)
 		perror(error);
+	dup2(pipex->stdin_backup, STDIN_FILENO);
+	dup2(pipex->stdout_backup, STDOUT_FILENO);
+	close(pipex->stdin_backup);
+	close(pipex->stdout_backup);
 	free(pipex);
 }
 
@@ -106,5 +112,6 @@ void	exec_cmds(t_command_head *cmd_head)
 		exec_cmd(pipex, i, cmd_head->envp);
 		i++;
 	}
+	printf("Commands executed\n");
 	clean_pipex(pipex, NULL, 0);
 }

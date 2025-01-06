@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/06 11:37:20 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:18:14 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct s_pipex
 	int				in_fd;
 	int				out_fd;
 	int				pipe_fd[2];
+	int				stdin_backup;
+	int				stdout_backup;
 	t_command_head	*cmd_head;
 }	t_pipex;
 

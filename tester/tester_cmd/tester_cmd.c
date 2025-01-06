@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:52:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 10:23:18 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:02:57 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	tester_cmd(char **env)
 	make_test(fd, env, i++);
 	make_test(fd, env, i++);
 	make_test(fd, env, i++);
+	make_test(fd, env, i++);
 	if (unlink("tester/tester_cmd/lock") == -1)
 	{
 		perror("Error deleting file");
@@ -100,10 +101,10 @@ void	tester_cmd(char **env)
 	close(fd);
 }
 
-int	main(int ac, char **av, char **env)
-{
-	(void)ac;
-	(void)av;
-	tester_cmd(env);
-	return (0);
-}
+// int	main(int ac, char **av, char **env)
+// {
+// 	(void)ac;
+// 	(void)av;
+// 	tester_cmd(env);
+// 	return (0);
+// }

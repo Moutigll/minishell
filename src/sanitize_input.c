@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sanitize_input.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:21:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2024/12/18 17:38:38 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:23:15 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ t_head	*sanitize_input(char *input)
 			process_word(start, &i, input, head);
 		if (input[i] == '"' || input[i] == '\'')
 			process_quote(&i, input, head);
-		i++;
+		if (input[i])
+			i++;
 	}
 	return (head);
 }
