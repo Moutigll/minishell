@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/06 13:18:14 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:32:35 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,18 +73,30 @@ typedef struct s_main
 void	error(char *message, int etat);
 void	print_list(t_list *lst);
 
+// env_cmd.c
+void	env_cmd(t_head *head, t_main **main);
+
 // export_cmd.c
 int		export_cmd(t_head *head, t_main **main);
 t_head	*return_head(t_head *head, int i);
 t_list	*return_lst(t_head *head, int i);
 
+// realoc.c
+char	**ft_realoc_ptr_unset(char **tab, int n);
+int		search_env(t_main *main, char *content);
+char	**ft_realoc_ptr(char **tab, char *str);
+char	*return_before(char *content);
+
 // detect_var.c
-void	verif_var(t_head *head, t_main **main);
+int		verif_var(t_head *head, t_main **main, int n);
 
 // parsing_var.c
 int		search_exist(char *name_var, char **g_env);
 void	replace_var(t_head **head, t_main *main);
 char	*return_name_var(char *content, char c);
+
+// attach.c
+char	*attach_block(t_head *head);
 
 // ft_listnode.c
 void	ft_listnode(t_list **lst_tmp, int tab);

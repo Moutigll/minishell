@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/06 12:13:49 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:31:01 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,12 @@ void	while_input(t_main **main)
 			replace_var(&head, *main);
 			if (ft_strlen((const char *)command) > 0)
 			{
-				verif_var(head, main);
+				verif_var(head, main, 0);
 				// print_list((*main)->lst_var);
 			}
+			env_cmd(head, main);
 			if (export_cmd(head, main))
-			{
-				printf("GOOD\n");
-			}
+				;
 			result = echo_command(head);
 			if (result)
 				printf("%s", result);
