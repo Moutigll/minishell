@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 08:57:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:51:42 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,29 @@ char	*check_paths(char **paths, char *cmd)
 	return (NULL);
 }
 
-void	resolve_command(t_command *cmd, char **paths, t_pipex *pipex)
+void	resolve_command(t_command *cmd, char **paths)
 {
+	if (!cmd->command || ft_strlen(cmd->command) == 0)
+	{
+		cmd->command = NULL;
+		return ;
+	}
 	if (cmd->command[0] == '/' || cmd->command[0] == '.')
 	{
 		if (access(cmd->command, X_OK) == -1)
-			clean_pipex(pipex, "Command not found", 1);
+		{
+			cmd->command = NULL;
+			return ;
+		}
 	}
 	else
 	{
 		cmd->command = check_paths(paths, cmd->command);
 		if (!cmd->command)
-			clean_pipex(pipex, "Command not found", 1);
+			return ;
 	}
 }
+
 
 void	get_path(t_pipex *pipex)
 {
@@ -82,7 +91,10 @@ void	get_path(t_pipex *pipex)
 	while (tmp)
 	{
 		cmd = tmp->content;
-		resolve_command(cmd, paths, pipex);
+		resolve_command(cmd, paths);
+		if (!cmd->command)
+			ft_putstr_fd("\033[33mWarning: Command is empty or not found\033[0m\n",
+				STDERR_FILENO);
 		tmp = tmp->next;
 	}
 	free_tab((void **)paths);

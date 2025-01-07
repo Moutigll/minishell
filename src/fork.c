@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 14:59:05 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/07 13:37:47 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,12 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 	close(pipex->stdin_backup);
 	close(pipex->stdout_backup);
 	cmd = (t_command *)ft_lstget(pipex->cmd_head->head, i)->content;
-	if (execve(cmd->command, cmd->args, envp) == -1)
+	if (cmd->command && cmd->args)
 	{
-		perror("Error: Failed to execute command");
-		exit(127);
+		if (execve(cmd->command, cmd->args, envp) == -1)
+			return (clean_pipex(pipex, "Error: Failed to execute command", 1));
 	}
 }
-
 
 void	exec_cmd(t_pipex *pipex, int i, char **envp)
 {

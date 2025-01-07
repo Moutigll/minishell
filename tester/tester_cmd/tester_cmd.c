@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:52:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 15:02:57 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:53:25 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	make_test(int fd, char **env, int i)
 
 	line = get_next_line(fd);
 	cmd_head = malloc(sizeof(t_command_head));
-	ft_printf("\nTEST (%i)\n%s", i, line);
+	ft_printf("\n\033[38;5;183mTEST (%i)\n%s\033[0m", i, line);
 	free(line);
 	line = get_next_line(fd);
 	line[ft_strlen(line) - 1] = '\0';
@@ -88,6 +88,7 @@ void	tester_cmd(char **env)
 	lock = open("tester/tester_cmd/lock", O_CREAT | O_WRONLY, 0000);
 	close(lock);
 	ft_printf("\n\033[0;33mFile lock without permissions created.\033[0m");
+	make_test(fd, env, i++);
 	make_test(fd, env, i++);
 	make_test(fd, env, i++);
 	make_test(fd, env, i++);

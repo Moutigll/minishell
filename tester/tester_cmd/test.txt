@@ -1,10 +1,10 @@
-Testing with no files
-Makefile
+Testing with no files > ls -l ./tester/tester_cmd
+NULL
 NULL
 0
 1
-cat
-cat
+ls
+ls -l ./tester/tester_cmd
 
 Testing out file whithout write permission
 NULL
@@ -30,12 +30,17 @@ tester/tester_cmd/lock
 ls
 -l
 
-Testing with no files and empty command
+Testing with no files wrong command
 NULL
 NULL
 0
-2
-cat
-cat .valgrindrc
-wc
-wc -ld
+1
+effwfe
+effwfe
+
+Testing with no files empty command
+NULL
+NULL
+0
+1
+ 
