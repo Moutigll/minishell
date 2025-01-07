@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 14:32:35 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:26:40 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ void	ft_listnode(t_list **lst_tmp, int tab);
 
 // check_equal.c
 int		check_equal(char *format, t_head *head, int tab);
+
+// decomp.c
+t_command_head	*return_main(t_head *head, t_main *main);
 
 // echo_cmd.c
 char	*echo_command(t_head *head);

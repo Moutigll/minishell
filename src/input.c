@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 14:31:01 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:31:39 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	print_list(t_list *lst)
 {
 	while (lst)
 	{
-		printf("%s\n", (char *)lst->content);
+		printf("|%s|\n", (char *)lst->content);
 		if (!lst->next)
 			break ;
 		lst = lst->next;
@@ -36,6 +36,7 @@ void	while_input(t_main **main)
 		{
 			head = sanitize_input(command);
 			replace_var(&head, *main);
+			exec_cmds(return_main(head, *main));
 			if (ft_strlen((const char *)command) > 0)
 			{
 				verif_var(head, main, 0);
