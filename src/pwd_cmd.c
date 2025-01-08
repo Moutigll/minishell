@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_cmd.c                                          :+:      :+:    :+:   */
+/*   pwd_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 13:56:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 11:35:27 by tle-goff         ###   ########.fr       */
+/*   Created: 2025/01/08 12:06:49 by tle-goff          #+#    #+#             */
+/*   Updated: 2025/01/08 13:04:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	env_cmd(t_head *head, t_main **main)
+int	pwd_cmd(t_head *head)
 {
-	char	*command;
-	int		i;
+	char	*attach;
+	char	*path;
+	int		tmp;
 
-	i = 0;
-	command = attach_block(head);
-	if (ft_strncmp((const char *)"env", (const char *)command, 3) == 0)
-	{
-		if (command[3] != ' ' && command[3] != '\0')
-			return (0);
-		while ((*main)->g_env[i])
-		{
-			printf("%s\n", (*main)->g_env[i]);
-			i++;
-		}
-		return (1);
-	}
-	return (0);
+	tmp = check_equal("pwd", head, 0);
+	if (tmp < 0)
+		return (0);
+	attach = attach_block(return_head(head, tmp));
+	if (ft_strlen((const char *)attach) > 0)
+		return (printf("pwd: too many arguments\n"), 1);
+	path = getcwd(NULL, 0);
+	printf("%s\n", path);
+	free(path);
+	return (1);
 }

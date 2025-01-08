@@ -3,14 +3,123 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 18:49:38 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:08:46 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static int	is_delimited(const char *s, int index)
+{
+	int	parentheses = 0;
+	int	braces = 0;
+	int	brackets = 0;
+
+	for (int i = 0; i < index; i++)
+	{
+		if (s[i] == '(')
+			parentheses++;
+		else if (s[i] == ')')
+			parentheses--;
+		else if (s[i] == '{')
+			braces++;
+		else if (s[i] == '}')
+			braces--;
+		else if (s[i] == '[')
+			brackets++;
+		else if (s[i] == ']')
+			brackets--;
+	}
+	return (parentheses > 0 || braces > 0 || brackets > 0);
+}
+
+static int	count_words(const char *s, char c)
+{
+	int	count = 0;
+	int	i = 0;
+
+	while (s[i])
+	{
+		while (s[i] == c && !is_delimited(s, i) && s[i])
+			i++;
+		if (s[i])
+		{
+			count++;
+			while ((s[i] != c || is_delimited(s, i)) && s[i])
+				i++;
+		}
+	}
+	return (count);
+}
+
+static char	*malloc_word(const char *s, char c, int *start)
+{
+	int		len = 0;
+	char	*word;
+
+	while (s[*start + len] && (s[*start + len] != c || is_delimited(s, *start + len)))
+		len++;
+	word = (char *)malloc(len + 1);
+	if (!word)
+		return (NULL);
+	word[len] = '\0';
+	for (int i = 0; i < len; i++)
+		word[i] = s[*start + i];
+	*start += len;
+	return (word);
+}
+
+static void	free_split(char **split, int words)
+{
+	int	i = 0;
+	while (i < words)
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
+static int	fill_array(const char *s, char c, char **split)
+{
+	int	index = 0;
+	int	i = 0;
+
+	while (s[i])
+	{
+		while (s[i] == c && !is_delimited(s, i) && s[i])
+			i++;
+		if (s[i])
+		{
+			split[index] = malloc_word(s, c, &i);
+			if (!split[index])
+			{
+				free_split(split, index);
+				return (0);
+			}
+			index++;
+		}
+	}
+	split[index] = NULL;
+	return (1);
+}
+
+static char	**ft_split_a(const char *s, char c)
+{
+	char	**split;
+
+	if (!s)
+		return (NULL);
+	split = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
+	if (!split)
+		return (NULL);
+	if (!fill_array(s, c, split))
+		return (NULL);
+	return (split);
+}
 
 // static char	*return_command(char *command_str, int *i)
 // {
@@ -103,21 +212,10 @@ static void	separated(t_head *head, t_list **lst_cmd)
 static t_command	*return_node(char *command)
 {
 	t_command	*cmd;
-	int			i;
 
-	i = 0;
 	cmd = malloc(sizeof(t_command));
-	while (command[i] && command[i] != ' ')
-		i++;
-	cmd->command = malloc(sizeof(char) * (i + i));
-	i = 0;
-	while (command[i] && command[i] != ' ')
-	{
-		cmd->command[i] = command[i];
-		i++;
-	}
-	cmd->command[i] = '\0';
-	cmd->args = ft_split((const char *)command, ' ');
+	cmd->args = ft_split_a((const char *)command, ' ');
+	cmd->command = ft_strdup((const char *)cmd->args[0]);
 	return (cmd);
 }
 
@@ -166,7 +264,6 @@ static t_list	*return_command_main(t_list *lst_cmd)
 // 			break ;
 // 		str = str->next;
 // 	}
-
 // }
 
 t_command_head	*return_main(t_head *head, t_main *main)
@@ -183,7 +280,7 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	head_main->here_doc = 0;
 	head_main->envp = main->g_env;
 	separated(head, &lst_cmd);
-	head_main->size = ft_lstsize(lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
+	head_main->size = ft_lstsize(lst_cmd);
 	return (head_main);
 }

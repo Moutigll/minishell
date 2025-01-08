@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 18:26:40 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 13:24:39 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,27 @@ void	error(char *message, int etat);
 void	print_list(t_list *lst);
 
 // env_cmd.c
-void	env_cmd(t_head *head, t_main **main);
+int		env_cmd(t_head *head, t_main **main);
 
 // export_cmd.c
 int		export_cmd(t_head *head, t_main **main);
 t_head	*return_head(t_head *head, int i);
 t_list	*return_lst(t_head *head, int i);
 
+// unset.c
+int		unset_cmd(t_head *head, t_main **main);
+
 // realoc.c
 char	**ft_realoc_ptr_unset(char **tab, int n);
 int		search_env(t_main *main, char *content);
 char	**ft_realoc_ptr(char **tab, char *str);
 char	*return_before(char *content);
+
+// pwd_cmd.c
+int		pwd_cmd(t_head *head);
+
+// cd_cmd.c
+int		cd_cmd(t_head *head);
 
 // detect_var.c
 int		verif_var(t_head *head, t_main **main, int n);

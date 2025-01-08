@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_cmd.c                                          :+:      :+:    :+:   */
+/*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 13:56:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 11:35:27 by tle-goff         ###   ########.fr       */
+/*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
+/*   Updated: 2025/01/08 12:06:25 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	env_cmd(t_head *head, t_main **main)
+int	cd_cmd(t_head *head)
 {
-	char	*command;
-	int		i;
+	char	*path;
+	int		tmp;
 
-	i = 0;
-	command = attach_block(head);
-	if (ft_strncmp((const char *)"env", (const char *)command, 3) == 0)
+
+	tmp = check_equal("cd", head, 0);
+	if (tmp >= 0)
 	{
-		if (command[3] != ' ' && command[3] != '\0')
-			return (0);
-		while ((*main)->g_env[i])
+		path = attach_block(return_head(head, tmp));
+		if (chdir(path) == -1)
 		{
-			printf("%s\n", (*main)->g_env[i]);
-			i++;
+			if (path[0] != '\0')
+				printf("%s: No such file or directory\n", path);
 		}
 		return (1);
 	}

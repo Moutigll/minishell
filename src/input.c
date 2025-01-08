@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 12:20:44 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:09:53 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,32 @@ void	print_list(t_list *lst)
 	}
 }
 
+static int	gest_command(t_head *head, t_main **main, char *command)
+{
+	char	*result;
+
+	result = echo_command(head);
+	if (ft_strlen((const char *)command) > 0)
+		verif_var(head, main, 0);
+	if (env_cmd(head, main))
+		return (1);
+	else if (cd_cmd(head))
+		return (1);
+	else if (unset_cmd(head, main))
+		return (1);
+	else if (pwd_cmd(head))
+		return (1);
+	else if (result)
+		return (printf("%s", result), free(result), 1);
+	else if (export_cmd(head, main))
+		return (1);
+	exec_cmds(return_main(head, *main));
+	return (0);
+}
+
 void	while_input(t_main **main)
 {
 	char	*command;
-	char	*result;
 	t_head	*head;
 
 	while (1)
@@ -36,21 +58,10 @@ void	while_input(t_main **main)
 		{
 			head = sanitize_input(command);
 			replace_var(&head, *main);
-			exec_cmds(return_main(head, *main));
-			if (ft_strlen((const char *)command) > 0)
-			{
-				verif_var(head, main, 0);
-				// print_list((*main)->lst_var);
-			}
-			env_cmd(head, main);
-			if (export_cmd(head, main))
-				;
-			result = echo_command(head);
-			if (result)
-				printf("%s", result);
+			gest_command(head, main, command);
 		}
-		print_list((*main)->lst_var);
-		//print_block(head);
+		// print_list((*main)->lst_var);
+		// print_block(head);
 		free(command);
 	}
 }

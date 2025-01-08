@@ -16,7 +16,10 @@ MINISHELL_SRCS =	check_equal.c \
 					get_path.c \
 					detect_var.c \
 					export_cmd.c \
+					unset_cmd.c \
+					pwd_cmd.c \
 					env_cmd.c \
+					cd_cmd.c \
 					realoc.c \
 					input.c \
 					open_files.c \
