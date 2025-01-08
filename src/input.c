@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 14:09:53 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:12:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,13 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 	return (0);
 }
 
+static void	print_head(t_command_head *head_cmd)
+{
+	printf("here_doc = %s\n", head_cmd->here_doc);
+	printf("in_fd = %s\n", head_cmd->in_fd);
+	printf("out_fd = %s\n", head_cmd->out_fd);
+}
+
 void	while_input(t_main **main)
 {
 	char	*command;
@@ -59,6 +66,7 @@ void	while_input(t_main **main)
 			head = sanitize_input(command);
 			replace_var(&head, *main);
 			gest_command(head, main, command);
+			print_head(return_main(head, *main));
 		}
 		// print_list((*main)->lst_var);
 		// print_block(head);

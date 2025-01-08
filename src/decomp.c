@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 14:08:46 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:12:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,10 +274,11 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	lst_cmd = NULL;
 	ft_lstadd_back(&lst_cmd, ft_lstnew("\0"));
 	head_main = malloc(sizeof(t_command_head));
-	head_main->in_fd = NULL;
-	head_main->out_fd = NULL;
+	head_main->in_fd = return_fd(head, '<');
+	head_main->out_fd = return_fd(head, '>');
 	head_main->error = 0;
 	head_main->here_doc = 0;
+	head_main->out_mode = 0;
 	head_main->envp = main->g_env;
 	separated(head, &lst_cmd);
 	head_main->head = return_command_main(lst_cmd);

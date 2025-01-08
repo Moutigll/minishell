@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:36:07 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 14:39:52 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:16:49 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int		search_env(t_main *main, char *content)
 	while (main->g_env[i])
 	{
 		if (ft_strcmp((const char *)return_before(main->g_env[i]), (const char *)content) == 0)
-			return (1);
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 char	**ft_realoc_ptr_unset(char **tab, int n)

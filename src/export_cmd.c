@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 15:43:38 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:19:23 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_list	*return_lst(t_head *head, int i)
 	return (lst);
 }
 
-static int	find_block(t_head *head, int *n, char **content_block, int boolean)
+int	find_block(t_head *head, int *n, char **content_block, int boolean)
 {
 	t_node	*node;
 	t_list	*lst;
@@ -149,6 +149,7 @@ static t_list *remove_node_by_content(t_list *lst, char *str)
 
 int	export_cmd(t_head *head, t_main **main)
 {
+	int		result;
 	char	*content_tmp;
 	int		tmp;
 	int		n;
@@ -164,15 +165,19 @@ int	export_cmd(t_head *head, t_main **main)
 		while (n != -1)
 		{
 			find_block(return_head(head, i), &n, &content_tmp, 1);
-			if (verif_var(return_head(head, i), main, 1) == 0)
+			result = verif_var(return_head(head, i), main, 1);
+			if (result == 0)
 			{
 				remove_last_element(&(*main)->lst_var);
 				(*main)->g_env = ft_realoc_ptr((*main)->g_env, content_tmp);
 			}
-			else
+			else if (result != -10)
 			{
-				(*main)->g_env = ft_realoc_ptr((*main)->g_env, search_lst_var((*main)->lst_var, content_tmp));
-				(*main)->lst_var = remove_node_by_content((*main)->lst_var, search_lst_var((*main)->lst_var, content_tmp));
+				if (search_env(*main, content_tmp) == -1)
+				{
+					(*main)->g_env = ft_realoc_ptr((*main)->g_env, search_lst_var((*main)->lst_var, content_tmp));
+					(*main)->lst_var = remove_node_by_content((*main)->lst_var, search_lst_var((*main)->lst_var, content_tmp));
+				}
 			}
 			i += find_block(return_head(head, i), &n, &content_tmp, 0) - 1;
 			tmp++;

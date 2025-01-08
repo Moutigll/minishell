@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 13:07:29 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 14:04:50 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 16:55:15 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 int	unset_cmd(t_head *head, t_main **main)
 {
 	char	*result;
-	int		tab;
 	int		tmp;
 	int		n;
+	int		tab;
 
 	tmp = check_equal("unset", head, 0);
 	n = tmp;
-	tab = 0;
 	if (tmp >= 0)
 	{
 		while (n != -1 && *main)
 		{
-			result = attach_block(return_head(head, tmp));
-			// tab = search_env(*main, result);
-			printf("%s\n", result);
+			tmp += find_block(return_head(head, tmp), &n, &result, 1) - 1;
+			tab = search_env(*main, result);
+			if (tab != -1)
+				(*main)->g_env = ft_realoc_ptr_unset((*main)->g_env, tab);
 		}
 		return (1);
 	}

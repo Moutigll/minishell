@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 14:46:22 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:19:33 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,12 @@ static int	check_correct(char *content)
 	return (0);
 }
 
+static void	replace_var_env(char *content, t_main **main, int n)
+{
+	free((*main)->g_env[n]);
+	(*main)->g_env[n] = ft_strdup(content);
+}
+
 int	verif_var(t_head *head, t_main **main, int n)
 {
 	char	*name_var;
@@ -248,9 +254,10 @@ int	verif_var(t_head *head, t_main **main, int n)
 		return (-1);
 	if (i == 0)
 	{
-		// val_var = return_name_var(&(node->content)[ft_strlen((const char *)name_var)], '=');
 		val_var = return_value(head->head, name_var, node);
 		i = change_var(name_var, val_var, main);
+		if (search_env(*main, name_var) != -1)
+			return (replace_var_env(ft_strjoin((const char *)name_var, (const char *)val_var), main, search_env(*main, name_var)), -10);
 		if (i != -1)
 			ft_lstadd_back(&(*main)->lst_var, ft_lstnew(ft_strfreejoin(name_var, val_var)));
 	}
@@ -260,6 +267,8 @@ int	verif_var(t_head *head, t_main **main, int n)
 		if (val_var == NULL || check_correct(val_var) == 0)
 			return (-1);
 		i = change_var(name_var, val_var, main);
+		if (search_env(*main, name_var) != -1)
+			return (replace_var_env(ft_strjoin((const char *)name_var, (const char *)val_var), main, search_env(*main, name_var)), -10);
 		if (i != -1)
 			ft_lstadd_back(&(*main)->lst_var, ft_lstnew(val_var));
 	}

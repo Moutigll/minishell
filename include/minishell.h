@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 13:24:39 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:12:46 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_command_head
 	char		*out_fd;
 	char		**envp;
 	char		*here_doc;
+	int			out_mode;
 	int			size;
 	int			error;
 }	t_command_head;
@@ -77,6 +78,7 @@ void	print_list(t_list *lst);
 int		env_cmd(t_head *head, t_main **main);
 
 // export_cmd.c
+int		find_block(t_head *head, int *n, char **content_block, int boolean);
 int		export_cmd(t_head *head, t_main **main);
 t_head	*return_head(t_head *head, int i);
 t_list	*return_lst(t_head *head, int i);
@@ -92,6 +94,9 @@ char	*return_before(char *content);
 
 // pwd_cmd.c
 int		pwd_cmd(t_head *head);
+
+// fd_take.c
+char	*return_fd(t_head *head, char c);
 
 // cd_cmd.c
 int		cd_cmd(t_head *head);
