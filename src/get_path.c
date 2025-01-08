@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/07 12:51:42 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/08 12:45:41 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	resolve_command(t_command *cmd, char **paths)
 	}
 }
 
-
 void	get_path(t_pipex *pipex)
 {
 	char		**paths;
@@ -83,18 +82,14 @@ void	get_path(t_pipex *pipex)
 
 	paths = get_env_paths(pipex->cmd_head->envp);
 	if (!paths)
-	{
-		clean_pipex(pipex, "PATH not found in environment", 1);
-		return ;
-	}
+		return (clean_pipex(pipex, "PATH not found in environment", 1));
 	tmp = pipex->cmd_head->head;
 	while (tmp)
 	{
 		cmd = tmp->content;
 		resolve_command(cmd, paths);
 		if (!cmd->command)
-			ft_putstr_fd("\033[33mWarning: Command is empty or not found\033[0m\n",
-				STDERR_FILENO);
+			ft_putstr_fd("\033[33mWarning: Command not found\033[0m\n", 2);
 		tmp = tmp->next;
 	}
 	free_tab((void **)paths);

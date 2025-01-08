@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/18 16:07:12 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/07 19:07:15 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static char	*prompt_return(char *path)
 	user = getenv("USER");
 	end_user = ft_strjoin(user, "@");
 	host = get_next_line(fd);
+	close(fd);
 	end_host = ft_strcut(host, '.');
 	free(host);
 	return (return_join(end_user, end_host, path));

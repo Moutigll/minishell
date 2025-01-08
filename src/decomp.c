@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 18:26:53 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/07 18:49:38 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,9 +181,9 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	head_main->out_fd = NULL;
 	head_main->error = 0;
 	head_main->here_doc = 0;
-	head_main->size = ft_lstsize(lst_cmd);
 	head_main->envp = main->g_env;
 	separated(head, &lst_cmd);
+	head_main->size = ft_lstsize(lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
 	return (head_main);
 }

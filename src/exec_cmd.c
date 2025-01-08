@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 14:35:46 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/08 13:51:34 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,5 @@ void	exec_cmds(t_command_head *cmd_head)
 		exec_cmd(pipex, i, cmd_head->envp);
 		i++;
 	}
-	printf("Commands executed\n");
 	clean_pipex(pipex, NULL, 0);
 }

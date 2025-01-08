@@ -3,8 +3,8 @@ NULL
 NULL
 0
 1
-ls
-ls -l ./tester/tester_cmd
+cat
+cat Makefile
 
 Testing out file whithout write permission
 NULL
@@ -38,9 +38,12 @@ NULL
 effwfe
 effwfe
 
-Testing with no files empty command
+Testing ls + wc
 NULL
 NULL
 0
-1
- 
+2
+sleep
+sleep 2
+sleep
+sleep 2
