@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 13:27:16 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:32:20 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,22 @@ static char	*echo_return(t_list *lst, int flag, int tmp)
 	int		n;
 
 	n = 0;
+	result = "\0";
 	ft_listnode(&lst, tmp);
 	while (lst)
 	{
 		node = lst->content;
 		if (n == 0 && (int)ft_strlen((const char *)node->content) != 0)
+		{
+			printf("1\n");
 			result = ft_strdup(node->content);
+		}
 		else
 		{
 			if (node->head == 1 && n != 0  && ft_strlen(node->content) != 0)
-				result = ft_strfreejoin(result, ft_strfreejoin(ft_strdup(" "), ft_strdup(node->content)));
+				result = ft_strjoin(result, ft_strjoin(ft_strdup(" "), ft_strdup(node->content)));
 			else
-				result = ft_strfreejoin(result, ft_strdup(node->content));
+				result = ft_strjoin(result, ft_strdup(node->content));
 		}
 		if (!lst->next)
 			break ;

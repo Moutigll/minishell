@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 18:12:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/09 19:51:13 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,16 +266,46 @@ static t_list	*return_command_main(t_list *lst_cmd)
 // 	}
 // }
 
+static char	*return_last(char **fd)
+{
+	int	i;
+
+	i = 0;
+	while (fd[i])
+		i++;
+	if (i == 0)
+		return (NULL);
+	return (fd[i]);
+}
+
+static void	print_head_second(char **fd, char *str)
+{
+	int	i;
+
+	i = 0;
+	while (fd[i])
+	{
+		printf("%s = %s\n", str,  fd[i]);
+		i++;
+	}
+}
+
 t_command_head	*return_main(t_head *head, t_main *main)
 {
 	t_command_head	*head_main;
 	t_list			*lst_cmd;
+	char			**out_fd;
+	char			**in_fd;
 
+	in_fd = return_fd(head, '<');
+	out_fd = return_fd(head, '>');
+	print_head_second(out_fd, "out");
+	print_head_second(in_fd, "in");
 	lst_cmd = NULL;
 	ft_lstadd_back(&lst_cmd, ft_lstnew("\0"));
 	head_main = malloc(sizeof(t_command_head));
-	head_main->in_fd = return_fd(head, '<');
-	head_main->out_fd = return_fd(head, '>');
+	head_main->in_fd = return_last(in_fd);
+	head_main->out_fd = return_last(out_fd);
 	head_main->error = 0;
 	head_main->here_doc = 0;
 	head_main->out_mode = 0;

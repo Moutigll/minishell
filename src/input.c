@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 18:12:08 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:39:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 	else if (pwd_cmd(head))
 		return (1);
 	else if (result)
-		return (printf("%s", result), free(result), 1);
+		return (printf("->%s", result), free(result), 1);
 	else if (export_cmd(head, main))
 		return (1);
 	exec_cmds(return_main(head, *main));
@@ -48,9 +48,21 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 
 static void	print_head(t_command_head *head_cmd)
 {
+	int	i;
+
+	i = 0;
 	printf("here_doc = %s\n", head_cmd->here_doc);
-	printf("in_fd = %s\n", head_cmd->in_fd);
-	printf("out_fd = %s\n", head_cmd->out_fd);
+	// while (head_cmd->in_fd[i])
+	// {
+	// 	printf("in_fd = %s\n", head_cmd->in_fd[i]);
+	// 	i++;
+	// }
+	// i = 0;
+	// while (head_cmd->out_fd[i])
+	// {
+	// 	printf("out_fd = %s\n", head_cmd->out_fd[i]);
+	// 	i++;
+	// }
 }
 
 void	while_input(t_main **main)
@@ -64,8 +76,11 @@ void	while_input(t_main **main)
 		if (parsing_error(command, 0))
 		{
 			head = sanitize_input(command);
-			replace_var(&head, *main);
-			gest_command(head, main, command);
+			if (ft_strlen(command) > 0)
+			{
+				replace_var(&head, *main);
+				gest_command(head, main, command);
+			}
 			print_head(return_main(head, *main));
 		}
 		// print_list((*main)->lst_var);
