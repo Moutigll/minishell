@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 18:39:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/09 22:13:41 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 	else if (pwd_cmd(head))
 		return (1);
 	else if (result)
-		return (printf("->%s", result), free(result), 1);
+		return (printf("%s", result), free(result), 1);
 	else if (export_cmd(head, main))
 		return (1);
 	exec_cmds(return_main(head, *main));
@@ -51,7 +51,8 @@ static void	print_head(t_command_head *head_cmd)
 	int	i;
 
 	i = 0;
-	printf("here_doc = %s\n", head_cmd->here_doc);
+	(void)head_cmd;
+	//printf("here_doc = %s\n", head_cmd->here_doc);
 	// while (head_cmd->in_fd[i])
 	// {
 	// 	printf("in_fd = %s\n", head_cmd->in_fd[i]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 18:37:05 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/09 21:13:53 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,85 +71,86 @@ typedef struct s_main
 # define ERR_QUOTE "Error\nQuote open !"
 
 // main.c
-void	error(char *message, int etat);
-void	print_list(t_list *lst);
+void			error(char *message, int etat);
+void			print_list(t_list *lst);
 
 // env_cmd.c
-int		env_cmd(t_head *head, t_main **main);
+int				env_cmd(t_head *head, t_main **main);
 
 // export_cmd.c
-int		find_block(t_head *head, int *n, char **content_block, int boolean);
-int		export_cmd(t_head *head, t_main **main);
-t_head	*return_head(t_head *head, int i);
-t_list	*return_lst(t_head *head, int i);
+int				find_block(t_head *head,
+					int *n, char **content_block, int boolean);
+int				export_cmd(t_head *head, t_main **main);
+t_head			*return_head(t_head *head, int i);
+t_list			*return_lst(t_head *head, int i);
 
 // unset.c
-int		unset_cmd(t_head *head, t_main **main);
+int				unset_cmd(t_head *head, t_main **main);
 
 // realoc.c
-char	**ft_realoc_ptr_unset(char **tab, int n);
-int		search_env(t_main *main, char *content);
-char	**ft_realoc_ptr(char **tab, char *str);
-char	*return_before(char *content);
+char			**ft_realoc_ptr_unset(char **tab, int n);
+int				search_env(t_main *main, char *content);
+char			**ft_realoc_ptr(char **tab, char *str);
+char			*return_before(char *content);
 
 // pwd_cmd.c
-int		pwd_cmd(t_head *head);
+int				pwd_cmd(t_head *head);
 
 // fd_take.c
-char	**return_fd(t_head *head, char c);
+char			**return_fd(t_head *head, char c);
 
 // cd_cmd.c
-int		cd_cmd(t_head *head);
+int				cd_cmd(t_head *head);
 
 // detect_var.c
-int		verif_var(t_head *head, t_main **main, int n);
+int				verif_var(t_head *head, t_main **main, int n);
 
 // parsing_var.c
-int		search_exist(char *name_var, char **g_env);
-void	replace_var(t_head **head, t_main *main);
-char	*return_name_var(char *content, char c);
+int				search_exist(char *name_var, char **g_env);
+void			replace_var(t_head **head, t_main *main);
+char			*return_name_var(char *content, char c);
 
 // attach.c
-char	*attach_block(t_head *head);
+char			*attach_block(t_head *head);
 
 // ft_listnode.c
-void	ft_listnode(t_list **lst_tmp, int tab);
+void			ft_listnode(t_list **lst_tmp, int tab);
 
 // check_equal.c
-int		check_equal(char *format, t_head *head, int tab);
+int				check_equal(char *format, t_head *head, int tab);
 
 // decomp.c
 t_command_head	*return_main(t_head *head, t_main *main);
 
 // echo_cmd.c
-char	*echo_command(t_head *head);
+char			*echo_command(t_head *head);
 
 // input.c
-void	while_input(t_main **main);
+void			while_input(t_main **main);
 
 // prompt.c
-char	*read_cmd(void);
+char			*read_cmd(void);
 
 // parsing.c
-int		parsing_error(char *command, int etat);
+int				parsing_error(char *command, int etat);
 
 // sanitize.c
-t_head	*sanitize_input(char *input);
+t_head			*sanitize_input(char *input);
 
 // file_tmp.c
-void	print_block(t_head *head);
+void			print_block(t_head *head);
 
 // exec_cmd.c
-void	exec_cmds(t_command_head *cmd_head);
-void	clean_pipex(t_pipex *pipex, char *error, int exit_status);
+void			exec_cmds(t_command_head *cmd_head);
+void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
 
 // open_files.c
-void	open_fds(t_pipex *pipex, t_command_head *head);
+void			open_fds(t_pipex *pipex, t_command_head *head);
 
 // get_path.c
-void	get_path(t_pipex *pipex);
+void			get_path(t_pipex *pipex);
 
 // fork.c
-void	exec_cmd(t_pipex *pipex, int i, char **envp);
+void			exec_cmd(t_pipex *pipex, int i, char **envp, pid_t *pid_tab);
 
 #endif

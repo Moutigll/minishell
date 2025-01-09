@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 16:32:20 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/09 22:34:14 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static char	*echo_return(t_list *lst, int flag, int tmp)
 		node = lst->content;
 		if (n == 0 && (int)ft_strlen((const char *)node->content) != 0)
 		{
-			printf("1\n");
+			//printf("1\n");
 			result = ft_strdup(node->content);
 		}
 		else

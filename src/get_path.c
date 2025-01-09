@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/08 12:45:41 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:20:48 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ char	**get_env_paths(char **envp)
 			return (ft_split(envp[index] + 5, ':'));
 		index++;
 	}
+	ft_putstr_fd("\033[33mWarning: PATH not found in environment, cannot proceed\033[0m\n", 2);
 	return (NULL);
 }
 
@@ -37,17 +38,22 @@ char	*check_paths(char **paths, char *cmd)
 	{
 		path = ft_strjoin(paths[i], "/");
 		if (!path)
-			return (NULL);
+			return ((perror("Error: Memory allocation failed for path")), NULL);
 		tmp = path;
 		path = ft_strjoin(path, cmd);
 		free(tmp);
 		if (!path)
-			return (NULL);
+			return (
+				(perror("Error: Memory allocation failed for command path")),
+				NULL);
 		if (access(path, X_OK) == 0)
 			return (path);
 		free(path);
 		i++;
 	}
+	ft_putstr_fd("\033[33mWarning: Command not found in PATH: \033[0m", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd("\n", 2);
 	return (NULL);
 }
 
@@ -55,6 +61,7 @@ void	resolve_command(t_command *cmd, char **paths)
 {
 	if (!cmd->command || ft_strlen(cmd->command) == 0)
 	{
+		write(STDERR_FILENO, "Error: Empty command\n", 21);
 		cmd->command = NULL;
 		return ;
 	}
@@ -62,6 +69,7 @@ void	resolve_command(t_command *cmd, char **paths)
 	{
 		if (access(cmd->command, X_OK) == -1)
 		{
+			perror("Error: Command not accessible");
 			cmd->command = NULL;
 			return ;
 		}
@@ -82,14 +90,15 @@ void	get_path(t_pipex *pipex)
 
 	paths = get_env_paths(pipex->cmd_head->envp);
 	if (!paths)
-		return (clean_pipex(pipex, "PATH not found in environment", 1));
+	{
+		clean_pipex(pipex, NULL, 1);
+		return ;
+	}
 	tmp = pipex->cmd_head->head;
 	while (tmp)
 	{
 		cmd = tmp->content;
 		resolve_command(cmd, paths);
-		if (!cmd->command)
-			ft_putstr_fd("\033[33mWarning: Command not found\033[0m\n", 2);
 		tmp = tmp->next;
 	}
 	free_tab((void **)paths);

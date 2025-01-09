@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 19:51:13 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/09 22:34:56 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,17 +278,17 @@ static char	*return_last(char **fd)
 	return (fd[i]);
 }
 
-static void	print_head_second(char **fd, char *str)
-{
-	int	i;
+// static void	print_head_second(char **fd, char *str)
+// {
+// 	int	i;
 
-	i = 0;
-	while (fd[i])
-	{
-		printf("%s = %s\n", str,  fd[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (fd[i])
+// 	{
+// 		printf("%s = %s\n", str,  fd[i]);
+// 		i++;
+// 	}
+// }
 
 t_command_head	*return_main(t_head *head, t_main *main)
 {
@@ -299,8 +299,8 @@ t_command_head	*return_main(t_head *head, t_main *main)
 
 	in_fd = return_fd(head, '<');
 	out_fd = return_fd(head, '>');
-	print_head_second(out_fd, "out");
-	print_head_second(in_fd, "in");
+	//print_head_second(out_fd, "out");
+	//print_head_second(in_fd, "in");
 	lst_cmd = NULL;
 	ft_lstadd_back(&lst_cmd, ft_lstnew("\0"));
 	head_main = malloc(sizeof(t_command_head));

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/08 13:51:34 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/09 23:00:19 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ void	handle_here_doc(char *delimiter, t_pipex *pipex)
 void	exec_cmds(t_command_head *cmd_head)
 {
 	t_pipex		*pipex;
+	pid_t		*pid_tab;
 	int			i;
+	int			exit_code;
+	int			status;
 
 	if (!cmd_head || !cmd_head->head)
 		return ;
@@ -98,19 +101,44 @@ void	exec_cmds(t_command_head *cmd_head)
 	init_pipex(pipex, cmd_head);
 	open_fds(pipex, cmd_head);
 	if (cmd_head->error)
-		return ;
+		return (clean_pipex(pipex, NULL, 1));
 	if (cmd_head->here_doc)
 		handle_here_doc(cmd_head->here_doc, pipex);
 	if (cmd_head->error)
-		return ;
+		return (clean_pipex(pipex, NULL, 1));
 	get_path(pipex);
 	if (cmd_head->error)
-		return ;
+		return (clean_pipex(pipex, NULL, 1));
+	pid_tab = malloc(sizeof(pid_t) * cmd_head->size);
+	if (!pid_tab)
+		return (clean_pipex(pipex, "Malloc error", 1));
 	i = 0;
 	while (i < cmd_head->size)
 	{
-		exec_cmd(pipex, i, cmd_head->envp);
+		exec_cmd(pipex, i, cmd_head->envp, pid_tab);
 		i++;
 	}
+	i = 0;
+	while (i < cmd_head->size)
+	{
+		if (waitpid(pid_tab[i], &status, 0) == -1)
+			perror("Error: Failed to wait for child process");
+		else if (WIFEXITED(status))
+		{
+			exit_code = WEXITSTATUS(status);
+			if (exit_code != 0)
+			{
+				ft_putstr_fd("Command ", 2);
+				ft_putstr_fd(((t_command *)ft_lstget(cmd_head->head, i)->content)->command, 2);
+				ft_putstr_fd(" PID: ", 2);
+				ft_putnbr_fd(pid_tab[i], 2);
+				ft_putstr_fd(" exited with status ", 2);
+				ft_putnbr_fd(exit_code, 2);
+				ft_putstr_fd("\n", 2);
+			}
+		}
+		i++;
+	}
+	free(pid_tab);
 	clean_pipex(pipex, NULL, 0);
 }
