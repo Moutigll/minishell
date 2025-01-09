@@ -1,3 +1,0 @@
-ele-lean@c1r2p5:~/minishell$ ls -lR / | wc -l
-4001563
-ele-lean@c1r2p5:~/minishell$ 

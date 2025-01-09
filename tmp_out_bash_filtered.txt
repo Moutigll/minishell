@@ -1,1 +1,0 @@
-./tester/tester_cmd/tester.sh
