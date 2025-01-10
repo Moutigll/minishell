@@ -6,11 +6,27 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:48:18 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/10 18:51:28 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/10 21:08:10 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "test.h"
+
+void	free_tab(void **tab)
+{
+	int	i;
+
+	if (!tab)
+		return ;
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}
+
 
 void	free_redirection(t_redirection *redir)
 {
@@ -38,6 +54,7 @@ void	free_command(t_command *command)
 		}
 		free(command->redir);
 	}
+	free(command->command);
 	free(command);
 }
 

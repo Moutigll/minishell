@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 17:48:44 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/10 18:57:38 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/10 19:38:03 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_tree	*init_treenode(t_operator operator,
 		return (NULL);
 	node->operator = operator;
 	node->redir = redir;
+	node->node_redir = node_redir;
 	return (node);
 }
 
@@ -38,4 +39,16 @@ t_node_redir	*init_node_redir(void *left, void *right,
 	node->left_type = left_type;
 	node->right_type = right_type;
 	return (node);
+}
+
+t_redirection	*init_redirection(t_redirection_type type, char *file)
+{
+	t_redirection	*redirection;
+
+	redirection = malloc(sizeof(t_redirection));
+	if (!redirection)
+		return (NULL);
+	redirection->type = type;
+	redirection->file = file;
+	return (redirection);
 }
