@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 21:13:53 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:43:54 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char			*return_before(char *content);
 int				pwd_cmd(t_head *head);
 
 // fd_take.c
-char			**return_fd(t_head *head, char c);
+char			**return_fd(char *content, char *c);
 
 // cd_cmd.c
 int				cd_cmd(t_head *head);
@@ -111,6 +111,7 @@ void			replace_var(t_head **head, t_main *main);
 char			*return_name_var(char *content, char c);
 
 // attach.c
+char			*attach_block_quote(t_head *head);
 char			*attach_block(t_head *head);
 
 // ft_listnode.c
@@ -146,6 +147,8 @@ void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
 
 // open_files.c
 void			open_fds(t_pipex *pipex, t_command_head *head);
+void			fake_open_infile(char *file);
+void			fake_open_outfile(char *file, int mode);
 
 // get_path.c
 void			get_path(t_pipex *pipex);

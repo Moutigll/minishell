@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 22:34:56 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:51:58 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,27 +121,6 @@ static char	**ft_split_a(const char *s, char c)
 	return (split);
 }
 
-// static char	*return_command(char *command_str, int *i)
-// {
-// 	char	*command;
-// 	int			j;
-
-// 	j = 0;
-// 	command = malloc(sizeof(t_command));
-// 	while (command_str[*i + j] && command_str[*i + j] != '|')
-// 		j++;
-// 	command = malloc(sizeof(char) * (j + 1));
-// 	j = 0;
-// 	while (command_str[*i + j] && command_str[*i + j] != '|')
-// 	{
-// 		command[j] = command_str[*i + j];
-// 		j++;
-// 	}
-// 	command[j++] = '\0';
-// 	*i += j;
-// 	return (command);
-// }
-
 static void	add_lst(t_list **lst_cmd, char *command, int n, int j)
 {
 	t_list	*lst;
@@ -244,71 +223,56 @@ static t_list	*return_command_main(t_list *lst_cmd)
 	return (lst_main_cmd);
 }
 
-// static void	print_head(t_list *str)
-// {
-// 	t_command	*node;
-// 	int			i;
+static void print_hole(char **str, char *s)
+{
+	int	i = 0;
 
-// 	while (str)
-// 	{
-// 		i = 0;
-// 		node = str->content;
-// 		printf("Command = %s\n", node->command);
-// 		while (node->args[i])
-// 		{
-// 			printf("Args[%i] = %s\n", i, node->args[i]);
-// 			i++;
-// 		}
-// 		printf("\n");
-// 		if (!str->next)
-// 			break ;
-// 		str = str->next;
-// 	}
-// }
+	while (str[i])
+	{
+		printf("%s%s\n", s, str[i]);
+		i++;
+	}
+}
 
-static char	*return_last(char **fd)
+static int	return_last(char **str)
 {
 	int	i;
 
 	i = 0;
-	while (fd[i])
+	while (str[i])
 		i++;
-	if (i == 0)
-		return (NULL);
-	return (fd[i]);
+	return (i);
 }
-
-// static void	print_head_second(char **fd, char *str)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (fd[i])
-// 	{
-// 		printf("%s = %s\n", str,  fd[i]);
-// 		i++;
-// 	}
-// }
 
 t_command_head	*return_main(t_head *head, t_main *main)
 {
+	char			**append;
+	char			**here_doc;
 	t_command_head	*head_main;
 	t_list			*lst_cmd;
 	char			**out_fd;
 	char			**in_fd;
 
-	in_fd = return_fd(head, '<');
-	out_fd = return_fd(head, '>');
-	//print_head_second(out_fd, "out");
-	//print_head_second(in_fd, "in");
+	in_fd = return_fd(attach_block_quote(head), "<");
+	out_fd = return_fd(attach_block_quote(head), ">");
+	here_doc = return_fd(attach_block_quote(head), "<<");
+	append = return_fd(attach_block_quote(head), ">>");
+
+	print_hole(in_fd, "in = ");
+	print_hole(out_fd, "out = ");
+	print_hole(here_doc, "here = ");
+	print_hole(append, "append = ");
+
 	lst_cmd = NULL;
 	ft_lstadd_back(&lst_cmd, ft_lstnew("\0"));
 	head_main = malloc(sizeof(t_command_head));
-	head_main->in_fd = return_last(in_fd);
-	head_main->out_fd = return_last(out_fd);
+	head_main->in_fd = in_fd[return_last(in_fd)];
+	head_main->out_fd = out_fd[return_last(out_fd)];
 	head_main->error = 0;
-	head_main->here_doc = 0;
+	head_main->here_doc = here_doc[return_last(here_doc)];
 	head_main->out_mode = 0;
+	if (append != NULL)
+		head_main->out_mode = 1;
 	head_main->envp = main->g_env;
 	separated(head, &lst_cmd);
 	head_main->head = return_command_main(lst_cmd);

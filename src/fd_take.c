@@ -6,118 +6,112 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 17:33:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 19:53:35 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:24:49 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	count_tab(t_head *head)
+static char	*ft_strjoin_char(char const *s1, char c)
 {
-	int		count;
-	t_node	*node;
-	t_list	*lst;
-	int		i;
+	size_t	s1_len;
+	size_t	i;
+	char	*result;
 
-	count = 0;
-	lst = head->head;
-	while (lst)
+	s1_len = ft_strlen(s1);
+	result = (char *)malloc(s1_len + 2);
+	if (!result)
+		return (0);
+	i = 0;
+	while (s1[i])
 	{
-		i = 0;
-		node = lst->content;
-		while (node->content[i])
-		{
-			if (node->content[i] == '<' && node->type == 2)
-				count++;
-			i++;
-		}
-		if (!lst->next)
-			break ;
-		lst = lst->next;
+		result[i] = s1[i];
+		i++;
 	}
-	return (count);
+	result[i++] = c;
+	result[i] = '\0';
+	return (result);
 }
 
-static char	*return_fd_char(t_node *content, int *boolean, char c)
+
+static void	return_malloc_char(char *content, char *c, char **result)
 {
-	char	*result;
+	int		boolean;
+	int		count;
+	int		tab;
 	int		i;
 	int		j;
 
 	i = 0;
-	j = 0;
-	if (*boolean == 0)
+	tab = 0;
+	boolean = 0;
+	while (content[i])
 	{
-		while (content->content[i] && content->content[i] != c)
-			i++;
-		if (content->content[i] == c)
+		count = 0;
+		j = 0;
+		if (boolean == 1 && (content[i] == '|' || content[i] == '<' || content[i] == '>'))
 		{
-			i++;
-			*boolean = 1;
+			boolean = 0;
+			tab++;
 		}
+		else if (boolean == 1)
+		{
+			result[tab] = ft_strjoin_char(result[tab], content[i]);
+		}
+		while (boolean == 0 && c[j] && content[i + j] == c[j])
+		{
+			count++;
+			j++;
+		}
+		if (boolean == 0 && (int)ft_strlen(c) == count && content[i + j] != c[0])
+		{
+			i += (int)ft_strlen(c);
+			boolean = 1;
+			result[tab] = ft_strdup("\0");
+		}
+		if (content[i + j] == c[0])
+			i++;
+		i++;
 	}
-	if (*boolean == 1 && i > 0)
-		return (NULL);
-	while (content->content[i + j] && content->content[i + j] != '<' && content->content[i + j] != '>' && content->content[i + j] != '|')
-		j++;
-	result = malloc(sizeof(char) * (j + 1));
-	j = 0;
-	while (content->content[i + j] && content->content[i + j] != '<' && content->content[i + j] != '>' && content->content[i + j] != '|')
+}
+
+static int	return_malloc_size(char *content, char *c)
+{
+	int		result;
+	int		count;
+	int		i;
+	int		j;
+
+	i = 0;
+	result = 0;
+	while (content[i])
 	{
-		result[j] = content->content[i + j];
-		j++;
+		count = 0;
+		j = 0;
+		while (c[j] && content[i + j] == c[j])
+		{
+			count++;
+			j++;
+		}
+		if ((int)ft_strlen(c) == count && content[i + j] != c[0])
+			result++;
+		if (content[i + j] == c[0])
+			i++;
+		i++;
 	}
-	if ((content->content[i + j] == '<' || content->content[i + j] == '>' || content->content[i + j] == '|') && content->type == 2)
-	{
-		if (content->content[i + j] == c)
-			*boolean = 2;
-		else
-			*boolean = 3;
-	}
-	result[j] = '\0';
 	return (result);
 }
 
-char	**return_fd(t_head *head, char c)
+char **return_fd(char *content, char *c)
 {
 	char	**result;
-	int		boolean;
-	t_node	*node;
-	t_list	*lst;
-	int		tab;
-	char	*tmp;
+	int		i;
 
-	tab = 0;
-	boolean = 0;
-	lst = head->head;
-	result = malloc(sizeof(char *) * (count_tab(head) + 1));
-	result[tab] = "\0";
-	while (lst)
-	{
-		node = lst->content;
-		tmp = return_fd_char(node, &boolean, c);
-		if (tmp != NULL && ft_strlen(tmp) > 0)
-		{
-			if (node->head == 1)
-				result[tab] = ft_strjoin((const char *)result[tab], (const char *)" ");
-			result[tab] = ft_strjoin((const char *)result[tab], (const char *)tmp);
-		}
-		tmp = NULL;
-		if (boolean >= 2)
-		{
-			tab++;
-			result[tab] = "\0";
-			if (boolean == 3)
-				boolean = 0;
-			else
-				boolean = 1;
-		}
-		if (!lst->next)
-			break ;
-		lst = lst->next;
-	}
-	if (result[tab][0] != '\0')
-		tab++;
-	result[tab] = 0;
+	i = 0;
+	result = malloc(sizeof(char *) * (return_malloc_size(content, c) + 1));
+	return_malloc_char(content, c, result);
+	while (result[i])
+		i++;
+	result[i] = 0;
 	return (result);
 }

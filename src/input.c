@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 22:13:41 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:56:34 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,12 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 	return (0);
 }
 
-static void	print_head(t_command_head *head_cmd)
-{
-	int	i;
-
-	i = 0;
-	(void)head_cmd;
-	//printf("here_doc = %s\n", head_cmd->here_doc);
-	// while (head_cmd->in_fd[i])
-	// {
-	// 	printf("in_fd = %s\n", head_cmd->in_fd[i]);
-	// 	i++;
-	// }
-	// i = 0;
-	// while (head_cmd->out_fd[i])
-	// {
-	// 	printf("out_fd = %s\n", head_cmd->out_fd[i]);
-	// 	i++;
-	// }
-}
+// static void	print_head(t_command_head *head_cmd)
+// {
+// 	printf("here_doc = %s\n", head_cmd->here_doc);
+// 	printf("in_fd = %s\n", head_cmd->in_fd);
+// 	printf("out_fd = %s\n", head_cmd->out_fd);
+// }
 
 void	while_input(t_main **main)
 {
@@ -82,7 +69,7 @@ void	while_input(t_main **main)
 				replace_var(&head, *main);
 				gest_command(head, main, command);
 			}
-			print_head(return_main(head, *main));
+			// print_head(return_main(head, *main));
 		}
 		// print_list((*main)->lst_var);
 		// print_block(head);
