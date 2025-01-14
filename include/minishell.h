@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/13 14:43:54 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:03:50 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,9 @@ int				pwd_cmd(t_head *head);
 
 // fd_take.c
 char			**return_fd(char *content, char *c);
+
+// exit_cmd.c
+void			exit_cmd(t_head *head);
 
 // cd_cmd.c
 int				cd_cmd(t_head *head);

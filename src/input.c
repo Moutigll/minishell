@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/10 12:56:34 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/14 15:41:16 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ void	print_list(t_list *lst)
 
 static int	gest_command(t_head *head, t_main **main, char *command)
 {
-	char	*result;
+	// char	*result;
 
-	result = echo_command(head);
+	// result = echo_command(head);
+	exit_cmd(head);
 	if (ft_strlen((const char *)command) > 0)
 		verif_var(head, main, 0);
 	if (env_cmd(head, main))
@@ -38,8 +39,8 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 		return (1);
 	else if (pwd_cmd(head))
 		return (1);
-	else if (result)
-		return (printf("%s", result), free(result), 1);
+	// else if (result)
+	// 	return (printf("%s", result), free(result), 1);
 	else if (export_cmd(head, main))
 		return (1);
 	exec_cmds(return_main(head, *main));
@@ -63,6 +64,7 @@ void	while_input(t_main **main)
 		command = readline(read_cmd());
 		if (parsing_error(command, 0))
 		{
+			add_history(command);
 			head = sanitize_input(command);
 			if (ft_strlen(command) > 0)
 			{

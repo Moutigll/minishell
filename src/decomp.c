@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/13 14:51:58 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:09:03 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,12 @@ static void	add_lst(t_list **lst_cmd, char *command, int n, int j)
 	while (lst)
 	{
 		if (!lst->next)
-			break ;
+			break;
 		lst = lst->next;
 	}
 	if (n == 1 && j != 0)
-		lst->content = ft_strjoin((const char *)lst->content, (const char *)" ");
-	lst->content = ft_strjoin((const char *)lst->content, (const char *)command);
+		lst->content = ft_strjoin((const char *)lst->content, " ");
+	lst->content = ft_strjoin((const char *)lst->content, command);
 }
 
 static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
@@ -142,16 +142,19 @@ static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
 	char	*result;
 	int		tmp;
 	int		i;
+	int		skip;
 
 	i = 0;
+	skip = 0;
 	while (node->content[i])
 	{
-		if (node->content[i] == '|' && node->type == 2)
-			break ;
+		if ((node->content[i] == '|' || node->content[i] == '<' || node->content[i] == '>') && node->type == 2)
+			break;
+		skip = 1;
 		i++;
 	}
 	tmp = i;
-	result = malloc(sizeof(char) * (i + 1));
+	result = malloc(sizeof(char) * (tmp + 1));
 	i = 0;
 	while (tmp--)
 	{
@@ -160,7 +163,8 @@ static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
 	}
 	result[i] = '\0';
 	*k += i;
-	add_lst(lst_cmd, result, node->head, j);
+	if (skip == 1)
+		add_lst(lst_cmd, result, node->head, j);
 	if (node->content[i] == '|' && node->type == 2)
 		ft_lstadd_back(lst_cmd, ft_lstnew("\0"));
 }
@@ -174,15 +178,30 @@ static void	separated(t_head *head, t_list **lst_cmd)
 	int		j;
 
 	j = 0;
+	i = 0;
 	result = "\0";
 	lst = head->head;
 	while (lst)
 	{
-		i = 0;
 		node = lst->content;
+		if (i == -1)
+		{
+			lst = lst->next;
+			i = 0;
+			j++;
+			continue ;
+		}
+		i = 0;
+		if (node->content[0] == '>' || node->content[0] == '<')
+		{
+			lst = lst->next;
+			j++;
+			i = -1;
+			continue ;
+		}
 		return_command(node, &i, lst_cmd, j);
 		if (!lst->next)
-			break ;
+			break;
 		lst = lst->next;
 		j++;
 	}
@@ -241,14 +260,49 @@ static int	return_last(char **str)
 	i = 0;
 	while (str[i])
 		i++;
-	return (i);
+	if (i == 0)
+		return (0);
+	return (i - 1);
+}
+
+static void test_out(char **str, int n)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (str[i])
+		i++;
+	while (j < i - 1)
+	{
+		n = 0;
+		// fake_open_outfile(str[j], n);
+		j++;
+	}
+}
+
+static void test_in(char **str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (str[i])
+		i++;
+	while (j < i - 1)
+	{
+		// fake_open_infile(str[j]);
+		j++;
+	}
 }
 
 t_command_head	*return_main(t_head *head, t_main *main)
 {
-	char			**append;
-	char			**here_doc;
 	t_command_head	*head_main;
+	char			**here_doc;
+	char			**append;
 	t_list			*lst_cmd;
 	char			**out_fd;
 	char			**in_fd;
@@ -273,8 +327,11 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	head_main->out_mode = 0;
 	if (append != NULL)
 		head_main->out_mode = 1;
+	test_in(in_fd);
+	test_out(out_fd, head_main->out_mode);
 	head_main->envp = main->g_env;
 	separated(head, &lst_cmd);
+	print_list(lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
 	return (head_main);

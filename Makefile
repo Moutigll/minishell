@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -I include -I libft/include
+CFLAGS = -Wall -Werror -Wextra -g -O0 -fsanitize=address -I include -I libft/include
 NAME = minishell
 TESTER = minishell_tester
 SRC_DIR = src
@@ -20,6 +20,7 @@ MINISHELL_SRCS =	check_equal.c \
 					unset_cmd.c \
 					fd_take.c \
 					pwd_cmd.c \
+					exit_cmd.c \
 					env_cmd.c \
 					cd_cmd.c \
 					realoc.c \
