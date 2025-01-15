@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 17:33:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/14 15:20:54 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/15 14:05:31 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,7 @@ char **return_fd(char *content, char *c)
 	int		i;
 
 	i = 0;
-	// result = malloc(sizeof(char *) * (return_malloc_size(content, c) + 1));
 	result = ft_calloc((return_malloc_size(content, c) + 1), sizeof(char *));
 	return_malloc_char(content, c, result);
-	// while (result[i])
-	// 	i++;
-	// result[i] = 0;
 	return (result);
 }

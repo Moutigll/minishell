@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tester_block.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:32:29 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/19 15:56:40 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:06:59 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,9 @@ void	tester_block(void)
 	ft_printf("\033[32m%d/%d tests passed\033[0m\n", passed, total);
 	close(fd);
 	return ;
+}
+
+int main(void)
+{
+	tester_block();
 }

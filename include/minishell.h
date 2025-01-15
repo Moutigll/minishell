@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 12:16:33 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:50:17 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # include "signal.h"
 # include "stdio.h"
 # include <sys/wait.h>
+
+typedef struct s_main
+{
+	t_list	*lst_var;
+	char	**g_env;
+}	t_main;
 
 typedef struct s_head
 {
@@ -42,6 +48,7 @@ typedef struct s_command_head
 	char		*here_doc;
 	int			out_mode;
 	t_head		*list_head;
+	t_main		*main;
 	int			size;
 	int			error;
 }	t_command_head;
@@ -61,12 +68,6 @@ typedef struct s_pipex
 	int				stdout_backup;
 	t_command_head	*cmd_head;
 }	t_pipex;
-
-typedef struct s_main
-{
-	t_list	*lst_var;
-	char	**g_env;
-}	t_main;
 
 // define
 # define ERR_QUOTE "Error\nQuote open !"
@@ -101,7 +102,9 @@ int				pwd_cmd(t_head *head);
 char			**return_fd(char *content, char *c);
 
 // exit_cmd.c
-void			exit_cmd(t_head *head);
+void			free_total(t_head *head, t_main *main);
+void			exit_cmd(t_head *head, t_main *main);
+void			free_head(t_head *head);
 
 // cd_cmd.c
 int				cd_cmd(t_head *head);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 12:33:42 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:03:03 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ char	*echo_command(t_head *head)
 			flag = 1;
 		if (tmp_2 > tmp)
 			tmp = tmp_2;
-		printf("flag = %i\n", flag);
 		return (echo_return(head->head, flag, tmp));
 	}
 	return (NULL);

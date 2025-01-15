@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/15 12:33:58 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:50:04 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 {
 	t_command	*cmd;
+	t_command_head *head;
 
+	head = pipex->cmd_head;
 	if (i == 0)
 		dup2(pipex->in_fd, STDIN_FILENO);
 	else
@@ -41,6 +43,7 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 		printf("%s", l);
 		free(l);
 		clean_pipex(pipex, NULL, 0);
+		free_total(head->list_head, head->main);
 		exit(0);
 	}
 	if (cmd->command && cmd->args)
@@ -49,6 +52,7 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 			return (clean_pipex(pipex, "Error: Failed to execute command", 1));
 	}
 	clean_pipex(pipex, NULL, 127);
+	free_total(head->list_head, head->main);
 	exit(0);
 }
 

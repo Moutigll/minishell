@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 12:24:22 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:03:09 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ static void	add_lst(t_list **lst_cmd, char *command, int n, int j)
 	if (n == 1 && j != 0)
 		lst->content = ft_strjoin((const char *)lst->content, " ");
 	lst->content = ft_strjoin((const char *)lst->content, command);
+	free(command);
 }
 
 static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
@@ -306,11 +307,14 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	t_list			*lst_cmd;
 	char			**out_fd;
 	char			**in_fd;
+	char			*attach;
 
-	in_fd = return_fd(attach_block_quote(head), "<");
-	out_fd = return_fd(attach_block_quote(head), ">");
-	here_doc = return_fd(attach_block_quote(head), "<<");
-	append = return_fd(attach_block_quote(head), ">>");
+	attach = attach_block_quote(head);
+	in_fd = return_fd(attach, "<");
+	out_fd = return_fd(attach, ">");
+	here_doc = return_fd(attach, "<<");
+	append = return_fd(attach, ">>");
+	free(attach);
 
 	print_hole(in_fd, "in = ");
 	print_hole(out_fd, "out = ");
@@ -320,6 +324,7 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	ft_lstadd_back(&lst_cmd, ft_lstnew("\0"));
 	head_main = malloc(sizeof(t_command_head));
 	head_main->list_head = head;
+	head_main->main = main;
 	head_main->in_fd = in_fd[return_last(in_fd)];
 	head_main->out_fd = out_fd[return_last(out_fd)];
 	head_main->error = 0;
@@ -331,8 +336,12 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	test_out(out_fd, head_main->out_mode);
 	head_main->envp = main->g_env;
 	separated(head, &lst_cmd);
-	print_list(lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
+	ft_lstclear(&lst_cmd, free);
+	free_tab((void **)in_fd);
+	free_tab((void **)out_fd);
+	free_tab((void **)here_doc);
+	free_tab((void **)append);
 	return (head_main);
 }

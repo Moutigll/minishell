@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:56:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 11:35:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:31:22 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	env_cmd(t_head *head, t_main **main)
 	if (ft_strncmp((const char *)"env", (const char *)command, 3) == 0)
 	{
 		if (command[3] != ' ' && command[3] != '\0')
+		{
+			free(command);
 			return (0);
+		}
 		while ((*main)->g_env[i])
 		{
 			printf("%s\n", (*main)->g_env[i]);
@@ -30,5 +33,6 @@ int	env_cmd(t_head *head, t_main **main)
 		}
 		return (1);
 	}
+	free(command);
 	return (0);
 }

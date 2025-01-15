@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/14 15:41:16 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:38:37 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,11 @@ void	print_list(t_list *lst)
 
 static int	gest_command(t_head *head, t_main **main, char *command)
 {
-	// char	*result;
-
-	// result = echo_command(head);
-	exit_cmd(head);
+	t_command_head	*head_main;
 	if (ft_strlen((const char *)command) > 0)
 		verif_var(head, main, 0);
+	free(command);
+	exit_cmd(head, *main);
 	if (env_cmd(head, main))
 		return (1);
 	else if (cd_cmd(head))
@@ -39,11 +38,12 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 		return (1);
 	else if (pwd_cmd(head))
 		return (1);
-	// else if (result)
-	// 	return (printf("%s", result), free(result), 1);
 	else if (export_cmd(head, main))
 		return (1);
-	exec_cmds(return_main(head, *main));
+	head_main = return_main(head, *main);
+	exec_cmds(head_main);
+	free(head_main);
+	ft_lstclear(&head->head, free);
 	return (0);
 }
 
@@ -57,11 +57,14 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 void	while_input(t_main **main)
 {
 	char	*command;
+	char	*prompt;
 	t_head	*head;
 
 	while (1)
 	{
-		command = readline(read_cmd());
+		prompt = read_cmd();
+		command = readline(prompt);
+		free(prompt);
 		if (parsing_error(command, 0))
 		{
 			add_history(command);
@@ -71,10 +74,7 @@ void	while_input(t_main **main)
 				replace_var(&head, *main);
 				gest_command(head, main, command);
 			}
-			// print_head(return_main(head, *main));
 		}
-		// print_list((*main)->lst_var);
-		// print_block(head);
-		free(command);
+		free_head(head);
 	}
 }
