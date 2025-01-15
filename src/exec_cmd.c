@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/15 12:00:17 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:10:31 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,10 @@ void	exec_cmds(t_command_head *cmd_head)
 	if (cmd_head->here_doc)
 		handle_here_doc(cmd_head->here_doc, pipex);
 	if (cmd_head->error)
-		return (clean_pipex(pipex, NULL, 1));
+		return ;
 	get_path(pipex);
 	if (cmd_head->error)
-		return (clean_pipex(pipex, NULL, 1));
+		return ;
 	pid_tab = malloc(sizeof(pid_t) * cmd_head->size);
 	if (!pid_tab)
 		return (clean_pipex(pipex, "Malloc error", 1));

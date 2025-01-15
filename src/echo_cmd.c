@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 22:34:14 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:33:42 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,14 @@ static char	*echo_return(t_list *lst, int flag, int tmp)
 	while (lst)
 	{
 		node = lst->content;
-		if (n == 0 && (int)ft_strlen((const char *)node->content) != 0)
+		if (ft_strcmp("|", node->content) == 0)
 		{
-			//printf("1\n");
-			result = ft_strdup(node->content);
+			if (flag == 0)
+				result = ft_strfreejoin(result, ft_strdup("\n"));
+			return (result);
 		}
+		if (n == 0 && (int)ft_strlen((const char *)node->content) != 0)
+			result = ft_strdup(node->content);
 		else
 		{
 			if (node->head == 1 && n != 0  && ft_strlen(node->content) != 0)
@@ -63,6 +66,7 @@ char	*echo_command(t_head *head)
 			flag = 1;
 		if (tmp_2 > tmp)
 			tmp = tmp_2;
+		printf("flag = %i\n", flag);
 		return (echo_return(head->head, flag, tmp));
 	}
 	return (NULL);

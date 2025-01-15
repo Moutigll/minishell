@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/14 16:09:03 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:24:22 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,10 +316,10 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	print_hole(out_fd, "out = ");
 	print_hole(here_doc, "here = ");
 	print_hole(append, "append = ");
-
 	lst_cmd = NULL;
 	ft_lstadd_back(&lst_cmd, ft_lstnew("\0"));
 	head_main = malloc(sizeof(t_command_head));
+	head_main->list_head = head;
 	head_main->in_fd = in_fd[return_last(in_fd)];
 	head_main->out_fd = out_fd[return_last(out_fd)];
 	head_main->error = 0;

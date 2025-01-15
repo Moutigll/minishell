@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/15 11:17:35 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:33:58 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 	i = 0;
 	if (cmd->command && ft_strcmp(cmd->command, "echo") == 0)
 	{
-		printf("test");
+		char *l = echo_command(pipex->cmd_head->list_head);
+		printf("%s", l);
+		free(l);
+		clean_pipex(pipex, NULL, 0);
 		exit(0);
 	}
 	if (cmd->command && cmd->args)
