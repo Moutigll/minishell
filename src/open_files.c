@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/13 16:45:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:55:37 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,9 @@ void	open_outfile(t_pipex *pipex, t_command_head *head)
 		flags |= O_TRUNC;
 	if (head->out_fd)
 	{
-		if (access(head->out_fd, F_OK) == -1)
-			perror("Error: Outfile does not exist");
-		else if (access(head->out_fd, W_OK) == -1)
-			return (clean_pipex(pipex, "Outfile is not writable", 1));
 		pipex->out_fd = open(head->out_fd, flags, 0644);
+		if (access(head->out_fd, W_OK) == -1)
+			return (clean_pipex(pipex, "Outfile is not writable", 1));
 		if (pipex->out_fd == -1)
 			clean_pipex(pipex, "Can't open outfile", 1);
 	}
@@ -80,9 +78,7 @@ void	fake_open_outfile(char *file, int mode)
 		flags |= O_APPEND;
 	else
 		flags |= O_TRUNC;
-	if (access(file, F_OK) == -1)
-		perror("Error: Outfile does not exist");
-	else if (access(file, W_OK) == -1)
+	if (access(file, W_OK) == -1)
 		perror("Error: Outfile is not writable");
 	fd = open(file, flags, 0644);
 	if (fd == -1)

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/09 18:20:48 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:50:11 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void	get_path(t_pipex *pipex)
 	while (tmp)
 	{
 		cmd = tmp->content;
-		resolve_command(cmd, paths);
+		if (ft_strcmp(cmd->command, "echo") != 0)
+			resolve_command(cmd, paths);
 		tmp = tmp->next;
 	}
 	free_tab((void **)paths);

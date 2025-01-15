@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/10 00:23:59 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:17:35 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 	if (pipe_fd[1] != STDIN_FILENO && pipe_fd[1] != STDOUT_FILENO)
 		close(pipe_fd[1]);
 	i = 0;
+	if (cmd->command && ft_strcmp(cmd->command, "echo") == 0)
+	{
+		printf("test");
+		exit(0);
+	}
 	if (cmd->command && cmd->args)
 	{
 		if (execve(cmd->command, cmd->args, envp) == -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/14 15:13:59 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/15 12:00:17 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	exec_cmds(t_command_head *cmd_head)
 	init_pipex(pipex, cmd_head);
 	open_fds(pipex, cmd_head);
 	if (cmd_head->error)
-		return (clean_pipex(pipex, NULL, 1));
+		return ;
 	if (cmd_head->here_doc)
 		handle_here_doc(cmd_head->here_doc, pipex);
 	if (cmd_head->error)
@@ -126,7 +126,7 @@ void	exec_cmds(t_command_head *cmd_head)
 		else if (WIFEXITED(status))
 		{
 			exit_code = WEXITSTATUS(status);
-			if (exit_code != 0)
+			if (exit_code != 0 && ((t_command *)ft_lstget(cmd_head->head, i)->content)->command)
 			{
 				ft_putstr_fd("Command ", 2);
 				ft_putstr_fd(((t_command *)ft_lstget(cmd_head->head, i)->content)->command, 2);
