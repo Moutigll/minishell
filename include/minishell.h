@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 15:50:17 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:33:59 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "signal.h"
 # include "stdio.h"
 # include <sys/wait.h>
+# include <errno.h>
 
 typedef struct s_main
 {
@@ -66,6 +67,7 @@ typedef struct s_pipex
 	int				pipe_fd[2];
 	int				stdin_backup;
 	int				stdout_backup;
+	pid_t			*pid_tab;
 	t_command_head	*cmd_head;
 }	t_pipex;
 
@@ -150,7 +152,6 @@ void			print_block(t_head *head);
 
 // exec_cmd.c
 void			exec_cmds(t_command_head *cmd_head);
-void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
 
 // open_files.c
 void			open_fds(t_pipex *pipex, t_command_head *head);
@@ -162,5 +163,10 @@ void			get_path(t_pipex *pipex);
 
 // fork.c
 void			exec_cmd(t_pipex *pipex, int i, char **envp, pid_t *pid_tab);
+
+// exec_utils.c
+void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
+void			handle_here_doc(char *delimiter, t_pipex *pipex);
+void			init_pipex(t_pipex *pipex, t_command_head *cmd_head);
 
 #endif

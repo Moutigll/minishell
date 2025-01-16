@@ -9,6 +9,7 @@ OBJ_DIR = obj
 MINISHELL_SRCS =	check_equal.c \
 					echo_cmd.c \
 					exec_cmd.c \
+					exec_utils.c \
 					file_tmp.c \
 					fork.c \
 					ft_listnode.c \

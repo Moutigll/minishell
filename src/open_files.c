@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/15 11:55:37 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:37:02 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,17 @@
 
 void	open_infile(t_pipex *pipex, t_command_head *head)
 {
+	if (pipex->in_fd != -1)
+		close(pipex->in_fd);
 	if (head->in_fd)
 	{
-		if (access(head->in_fd, R_OK) == -1)
-			return (clean_pipex(pipex, "Infile is not readable", 1));
 		pipex->in_fd = open(head->in_fd, O_RDONLY);
 		if (pipex->in_fd == -1)
-			return (clean_pipex(pipex, "Can't open infile", 1));
+			return (clean_pipex(pipex, "Can't open infile", 11));
 	}
 	else
 	{
 		pipex->in_fd = pipex->stdin_backup;
-		if (pipex->in_fd == -1)
-			clean_pipex(pipex, "infile: Error accessing STDIN", 1);
 	}
 }
 
@@ -34,6 +32,8 @@ void	open_outfile(t_pipex *pipex, t_command_head *head)
 {
 	int	flags;
 
+	if (pipex->out_fd != -1)
+		close(pipex->out_fd);
 	flags = O_WRONLY | O_CREAT;
 	if (head->out_mode == 1)
 		flags |= O_APPEND;
@@ -42,16 +42,12 @@ void	open_outfile(t_pipex *pipex, t_command_head *head)
 	if (head->out_fd)
 	{
 		pipex->out_fd = open(head->out_fd, flags, 0644);
-		if (access(head->out_fd, W_OK) == -1)
-			return (clean_pipex(pipex, "Outfile is not writable", 1));
 		if (pipex->out_fd == -1)
-			clean_pipex(pipex, "Can't open outfile", 1);
+			clean_pipex(pipex, "Can't open outfile", 21);
 	}
 	else
 	{
 		pipex->out_fd = STDOUT_FILENO;
-		if (pipex->out_fd == -1)
-			clean_pipex(pipex, "Error accessing STDOUT", 1);
 	}
 }
 

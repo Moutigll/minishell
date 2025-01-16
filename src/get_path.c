@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/13 15:50:11 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:43:10 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ char	**get_env_paths(char **envp)
 			return (ft_split(envp[index] + 5, ':'));
 		index++;
 	}
-	ft_putstr_fd("\033[33mWarning: PATH not found in environment, cannot proceed\033[0m\n", 2);
+	ft_putstr_fd("\033[33mWarning: PATH not found in \
+environment, cannot proceed\033[0m\n", 2);
 	return (NULL);
 }
 
@@ -43,9 +44,7 @@ char	*check_paths(char **paths, char *cmd)
 		path = ft_strjoin(path, cmd);
 		free(tmp);
 		if (!path)
-			return (
-				(perror("Error: Memory allocation failed for command path")),
-				NULL);
+			return ((perror("Error: Memory allocation failed")), NULL);
 		if (access(path, X_OK) == 0)
 			return (path);
 		free(path);
@@ -89,11 +88,6 @@ void	get_path(t_pipex *pipex)
 	t_command	*cmd;
 
 	paths = get_env_paths(pipex->cmd_head->envp);
-	if (!paths)
-	{
-		clean_pipex(pipex, NULL, 1);
-		return ;
-	}
 	tmp = pipex->cmd_head->head;
 	while (tmp)
 	{
