@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 16:03:09 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:27:51 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ static char	**ft_split_a(const char *s, char c)
 static void	add_lst(t_list **lst_cmd, char *command, int n, int j)
 {
 	t_list	*lst;
+	char	*tmp;
 
 	lst = *lst_cmd;
 	while (lst)
@@ -133,8 +134,16 @@ static void	add_lst(t_list **lst_cmd, char *command, int n, int j)
 		lst = lst->next;
 	}
 	if (n == 1 && j != 0)
-		lst->content = ft_strjoin((const char *)lst->content, " ");
-	lst->content = ft_strjoin((const char *)lst->content, command);
+	{
+		tmp = lst->content;
+		lst->content = ft_strjoin((const char *)tmp, " ");
+		if ((int)ft_strlen(tmp) > 0)
+			free(tmp);
+	}
+	tmp = lst->content;
+	lst->content = ft_strjoin((const char *)tmp, command);
+	if ((int)ft_strlen(tmp) > 0)
+		free(tmp);
 	free(command);
 }
 
