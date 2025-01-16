@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 12:36:54 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:04:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	handle_echo_command(t_pipex *pipex, t_command_head *cmd_head)
 	printf("%s", string);
 	free(string);
 	clean_pipex(pipex, NULL, 0);
-	free_total(cmd_head->list_head, cmd_head->main);
+	free_total(cmd_head->list_head, cmd_head->main, cmd_head);
 	exit(0);
 }
 
@@ -63,7 +63,7 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 			clean_pipex(pipex, "Error: Failed to execute command", 1);
 	}
 	clean_pipex(pipex, NULL, 127);
-	free_total(cmd_head->list_head, cmd_head->main);
+	free_total(cmd_head->list_head, cmd_head->main, cmd_head);
 	exit(127);
 }
 

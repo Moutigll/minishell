@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/08 17:19:23 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:43:18 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ static t_list *remove_node_by_content(t_list *lst, char *str)
 
 int	export_cmd(t_head *head, t_main **main)
 {
+	t_head	*node;
 	int		result;
 	char	*content_tmp;
 	int		tmp;
@@ -164,8 +165,10 @@ int	export_cmd(t_head *head, t_main **main)
 		tmp = 0;
 		while (n != -1)
 		{
-			find_block(return_head(head, i), &n, &content_tmp, 1);
-			result = verif_var(return_head(head, i), main, 1);
+			node = return_head(head, i);
+			find_block(node, &n, &content_tmp, 1);
+			result = verif_var(node, main, 1);
+
 			if (result == 0)
 			{
 				remove_last_element(&(*main)->lst_var);
@@ -179,7 +182,8 @@ int	export_cmd(t_head *head, t_main **main)
 					(*main)->lst_var = remove_node_by_content((*main)->lst_var, search_lst_var((*main)->lst_var, content_tmp));
 				}
 			}
-			i += find_block(return_head(head, i), &n, &content_tmp, 0) - 1;
+			i += find_block(node, &n, &content_tmp, 0) - 1;
+			free(node);
 			tmp++;
 		}
 		return (1);

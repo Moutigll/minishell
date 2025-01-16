@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 15:25:04 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:25:23 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ void	free_head(t_head *head)
 	free(head);
 }
 
-void	free_total(t_head *head, t_main *main)
+void	free_total(t_head *head, t_main *main, t_command_head *head_main)
 {
 	free_tab((void **)main->g_env);
 	ft_lstclear(&main->lst_var, free);
 	free_head(head);
+	if (head_main)
+		free(head_main);
+	free(main);
 }
 
 void	exit_cmd(t_head *head, t_main *main)
@@ -50,9 +53,8 @@ void	exit_cmd(t_head *head, t_main *main)
 	if (ft_strncmp(block, "exit", 4) == 0 && (block[4] == '\0' || block[4] == ' '))
 	{
 		clear_history();
-		free_total(head, main);
+		free_total(head, main, NULL);
 		free(block);
-		free(main);
 		exit(1);
 	}
 	free(block);

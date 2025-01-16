@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:56:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 15:31:22 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:38:59 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	env_cmd(t_head *head, t_main **main)
 			printf("%s\n", (*main)->g_env[i]);
 			i++;
 		}
+		free(command);
 		return (1);
 	}
 	free(command);

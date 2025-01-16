@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 12:12:43 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:51:33 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ static char	*return_var_equal(char *content)
 static char	*name_var_quote(t_head *head)
 {
 	char	*result;
+	char	*tmp_2;
+	char	*tmp;
 	t_node	*node;
 	t_list	*lst;
 	int		i;
@@ -146,7 +148,12 @@ static char	*name_var_quote(t_head *head)
 		while (node->content[i] && node->content[i] != '=')
 			i++;
 		if (node->content[i] == '=')
-			return (ft_strjoin((const char *)result, (const char *)return_var_equal(node->content)));
+		{
+			tmp_2 = return_var_equal(node->content);
+			tmp = ft_strjoin((const char *)result, (const char *)tmp_2);
+			free(tmp_2);
+			return (tmp);
+		}
 		result = ft_strjoin((const char *)result, (const char *)node->content);
 		if (!lst->next)
 			break ;
@@ -163,7 +170,7 @@ char	*return_name(t_head *head, int n)
 
 	node = head->head->content;
 	result = check_quote_var(head);
-	if (n == 0 && result == -1/* (result == -1 || result > 0) */)
+	if (n == 0 && result == -1)
 		return (NULL);
 	if (n == 0)
 		return (return_name_var(node->content, '='));
