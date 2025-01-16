@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 12:43:10 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:48:25 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,14 @@ char	*check_paths(char **paths, char *cmd)
 		if (!path)
 			return ((perror("Error: Memory allocation failed")), NULL);
 		if (access(path, X_OK) == 0)
-			return (path);
+			return ((free(cmd)), path);
 		free(path);
 		i++;
 	}
 	ft_putstr_fd("\033[33mWarning: Command not found in PATH: \033[0m", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd("\n", 2);
+	free(cmd);
 	return (NULL);
 }
 

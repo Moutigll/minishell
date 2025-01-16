@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 15:38:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:25:29 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 	head_main = return_main(head, *main);
 	exec_cmds(head_main);
 	free(head_main);
-	ft_lstclear(&head->head, free);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 11:42:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:25:04 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 
 void	free_head(t_head *head)
 {
+	t_list	*lst_tmp;
 	t_node	*node;
-	t_list	*lst;
 
-	lst = head->head;
-	while (lst)
+	if (!head)
+		return;
+	while (head->head)
 	{
-		node = lst->content;
+		node = head->head->content;
 		free(node->content);
-		if (!lst->next)
-			break ;
-		lst = lst->next;
+		free(node);
+		lst_tmp = head->head;
+		head->head = head->head->next;
+		free(lst_tmp);
 	}
-	ft_lstclear(&lst, free);
 	free(head);
 }
 

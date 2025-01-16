@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 12:27:51 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:49:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,8 @@ static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
 	*k += i;
 	if (skip == 1)
 		add_lst(lst_cmd, result, node->head, j);
+	else
+		free(result);
 	if (node->content[i] == '|' && node->type == 2)
 		ft_lstadd_back(lst_cmd, ft_lstnew("\0"));
 }
@@ -239,12 +241,14 @@ static int	return_space(char *command)
 
 static t_list	*return_command_main(t_list *lst_cmd)
 {
-	t_list	*lst_main_cmd;
+	t_list		*lst_main_cmd;
+	t_command	*cmd;
 
 	lst_main_cmd = NULL;
 	while (lst_cmd)
 	{
-		ft_lstadd_back(&lst_main_cmd, ft_lstnew(return_node(&(lst_cmd->content)[return_space(lst_cmd->content)])));
+		cmd = return_node(&(lst_cmd->content)[return_space(lst_cmd->content)]);
+		ft_lstadd_back(&lst_main_cmd, ft_lstnew(cmd));
 		if (!lst_cmd->next)
 			break ;
 		lst_cmd = lst_cmd->next;
