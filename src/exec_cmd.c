@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 12:36:44 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:10:58 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ static pid_t	*allocate_pid_table(t_pipex *pipex, t_command_head *cmd_head)
 }
 
 static void	execute_all_commands(t_pipex *pipex,
-	t_command_head *cmd_head, pid_t *pid_tab)
+	t_command_head *cmd_head)
 {
 	int	i;
 
 	i = 0;
 	while (i < cmd_head->size)
 	{
-		exec_cmd(pipex, i, cmd_head->envp, pid_tab);
+		exec_cmd(pipex, i, cmd_head->envp);
 		i++;
 	}
 }
@@ -83,18 +83,16 @@ static void	handle_waiting(t_command_head *cmd_head, pid_t *pid_tab)
 void	exec_cmds(t_command_head *cmd_head)
 {
 	t_pipex	*pipex;
-	pid_t	*pid_tab;
 
 	if (!cmd_head || !cmd_head->head)
 		return ;
 	init_and_prepare_pipex(&pipex, cmd_head);
 	if (cmd_head->error || !pipex)
 		return ;
-	pid_tab = allocate_pid_table(pipex, cmd_head);
-	if (!pid_tab)
+	pipex->pid_tab = allocate_pid_table(pipex, cmd_head);
+	if (!pipex->pid_tab)
 		return ;
-	execute_all_commands(pipex, cmd_head, pid_tab);
-	handle_waiting(cmd_head, pid_tab);
-	free(pid_tab);
+	execute_all_commands(pipex, cmd_head);
+	handle_waiting(cmd_head, pipex->pid_tab);
 	clean_pipex(pipex, NULL, 0);
 }

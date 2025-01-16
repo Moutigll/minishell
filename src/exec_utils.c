@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 15:40:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:11:17 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 	free_fds(pipex);
 	if (error)
 		perror(error);
+	if (pipex->pid_tab)
+		free(pipex->pid_tab);
 	dup2(pipex->stdin_backup, STDIN_FILENO);
 	dup2(pipex->stdout_backup, STDOUT_FILENO);
 	close(pipex->stdin_backup);

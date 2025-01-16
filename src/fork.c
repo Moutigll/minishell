@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 16:04:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 17:10:10 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 	exit(127);
 }
 
-void	exec_cmd(t_pipex *pipex, int i, char **envp, pid_t *pid_tab)
+void	exec_cmd(t_pipex *pipex, int i, char **envp)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -86,7 +86,7 @@ void	exec_cmd(t_pipex *pipex, int i, char **envp, pid_t *pid_tab)
 	}
 	if (pid == 0)
 		handle_child_process(pipex, i, pipe_fd, envp);
-	pid_tab[i] = pid;
+	pipex->pid_tab[i] = pid;
 	close(pipe_fd[1]);
 	pipex->pipe_fd[0] = pipe_fd[0];
 	if (i == 0)

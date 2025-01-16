@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 16:04:21 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:57:24 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ void			fake_open_outfile(char *file, int mode);
 void			get_path(t_pipex *pipex);
 
 // fork.c
-void			exec_cmd(t_pipex *pipex, int i, char **envp, pid_t *pid_tab);
+void			exec_cmd(t_pipex *pipex, int i, char **envp);
 
 // exec_utils.c
 void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
