@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 16:02:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:37:07 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,6 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 		verif_var(head, main, 0);
 	free(command);
 	exit_cmd(head, *main);
-	if (env_cmd(head, main))
-		return (1);
-	else if (cd_cmd(head))
-		return (1);
-	else if (unset_cmd(head, main))
-		return (1);
-	else if (pwd_cmd(head))
-		return (1);
-	else if (export_cmd(head, main))
-		return (1);
 	head_main = return_main(head, *main);
 	exec_cmds(head_main);
 	free(head_main);

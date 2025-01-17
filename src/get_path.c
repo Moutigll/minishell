@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 15:48:25 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:01:53 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	get_path(t_pipex *pipex)
 	while (tmp)
 	{
 		cmd = tmp->content;
-		if (ft_strcmp(cmd->command, "echo") != 0)
+		if (ft_strcmp(cmd->command, "echo") != 0 && ft_strcmp(cmd->command, "pwd") != 0 && ft_strcmp(cmd->command, "unset") != 0 && ft_strcmp(cmd->command, "export") != 0 && ft_strcmp(cmd->command, "env") != 0)
 			resolve_command(cmd, paths);
 		tmp = tmp->next;
 	}

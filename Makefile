@@ -20,7 +20,6 @@ MINISHELL_SRCS =	check_equal.c \
 					export_cmd.c \
 					unset_cmd.c \
 					fd_take.c \
-					pwd_cmd.c \
 					exit_cmd.c \
 					env_cmd.c \
 					cd_cmd.c \
