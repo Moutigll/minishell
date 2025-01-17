@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/17 14:46:28 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:57:16 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	is_func_cmd(char *command,
 	int		i;
 
 	i = 0;
+	if (!command)
+		return ;
 	if (ft_strcmp(command, "echo") == 0)
 	{
 		string = echo_command(pipex->cmd_head->list_head);
@@ -61,16 +63,13 @@ void	is_func_cmd(char *command,
 		}
 		i = 1;
 	}
-	if (ft_strcmp(command, "unset") == 0)
+	if (ft_strcmp(command, "env") == 0)
 	{
-		unset_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
+		env_cmd_direct(pipex->cmd_head->main);
 		i = 1;
 	}
-	if (ft_strcmp(command, "export") == 0)
-	{
-		export_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
+	if (ft_strcmp(command, "exit") == 0 || ft_strcmp(command, "cd") == 0 || ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0)
 		i = 1;
-	}
 	if (i == 1)
 	{
 		clean_pipex(pipex, NULL, 0);
@@ -79,7 +78,7 @@ void	is_func_cmd(char *command,
 	}
 }
 
-void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd)
+void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 {
 	t_command		*cmd;
 	t_command_head	*cmd_head;
@@ -88,6 +87,14 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd)
 	cmd_head = pipex->cmd_head;
 	cmd = (t_command *)ft_lstget(pipex->cmd_head->head, i)->content;
 	is_func_cmd(cmd->command, cmd->args, pipex, cmd_head);
+	if (cmd->command && cmd->args && (cmd->command[0] == '/'
+			|| cmd->command[0] == '.'))
+	{
+		execve(cmd->command, cmd->args, envp);
+		clean_pipex(pipex, "Error: Failed to execute command", 1);
+		free_total(cmd_head->list_head, cmd_head->main, cmd_head);
+		exit(1);
+	}
 	clean_pipex(pipex, NULL, 127);
 	free_total(cmd_head->list_head, cmd_head->main, cmd_head);
 	exit(127);
@@ -112,7 +119,29 @@ void	exec_cmd(t_pipex *pipex, int i, char **envp)
 		return ;
 	}
 	if (pid == 0)
-		handle_child_process(pipex, i, pipe_fd);
+		handle_child_process(pipex, i, pipe_fd, envp);
+	t_command *current_cmd = (t_command *)ft_lstget(pipex->cmd_head->head, i)->content;
+	if (i == pipex->cmd_head->size - 1 && 
+		current_cmd->command != NULL && 
+		ft_strcmp("unset", current_cmd->command) == 0)
+		unset_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
+	if (i == pipex->cmd_head->size - 1 &&
+		current_cmd->command != NULL &&
+		ft_strcmp("export", current_cmd->command) == 0)
+		export_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
+	if (i == pipex->cmd_head->size - 1 &&
+		current_cmd->command != NULL &&
+		ft_strcmp("cd", current_cmd->command) == 0)
+		cd_cmd(pipex->cmd_head->list_head, pipex->cmd_head->envp);
+	if (i == pipex->cmd_head->size - 1 &&
+		current_cmd->command != NULL &&
+		ft_strcmp("exit", current_cmd->command) == 0)
+	{
+		t_command_head *head = pipex->cmd_head;
+		clean_pipex(pipex, NULL, 0);
+		free_total(head->list_head, head->main, head);
+		exit(0);
+	}
 	pipex->pid_tab[i] = pid;
 	close(pipe_fd[1]);
 	pipex->pipe_fd[0] = pipe_fd[0];

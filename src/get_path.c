@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/17 14:01:53 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:17:52 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ char	**get_env_paths(char **envp)
 			return (ft_split(envp[index] + 5, ':'));
 		index++;
 	}
-	ft_putstr_fd("\033[33mWarning: PATH not found in \
-environment, cannot proceed\033[0m\n", 2);
+	ft_putstr_fd("\033[33mWarning: PATH not found in environment!\033[0m\n", 2);
 	return (NULL);
 }
 
@@ -35,6 +34,8 @@ char	*check_paths(char **paths, char *cmd)
 	int		i;
 
 	i = 0;
+	if (!paths)
+		return (cmd);
 	while (paths[i])
 	{
 		path = ft_strjoin(paths[i], "/");
@@ -93,7 +94,13 @@ void	get_path(t_pipex *pipex)
 	while (tmp)
 	{
 		cmd = tmp->content;
-		if (ft_strcmp(cmd->command, "echo") != 0 && ft_strcmp(cmd->command, "pwd") != 0 && ft_strcmp(cmd->command, "unset") != 0 && ft_strcmp(cmd->command, "export") != 0 && ft_strcmp(cmd->command, "env") != 0)
+		if (ft_strcmp(cmd->command, "echo") != 0
+			&& ft_strcmp(cmd->command, "pwd") != 0
+			&& ft_strcmp(cmd->command, "unset") != 0
+			&& ft_strcmp(cmd->command, "export") != 0
+			&& ft_strcmp(cmd->command, "env") != 0
+			&& ft_strcmp(cmd->command, "cd") != 0
+			&& ft_strcmp(cmd->command, "exit") != 0)
 			resolve_command(cmd, paths);
 		tmp = tmp->next;
 	}

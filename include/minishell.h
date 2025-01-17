@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/17 13:53:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:57:51 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void			exit_cmd(t_head *head, t_main *main);
 void			free_head(t_head *head);
 
 // cd_cmd.c
-int				cd_cmd(t_head *head);
+int				cd_cmd(t_head *head, char **env);
 
 // detect_var.c
 int				verif_var(t_head *head, t_main **main, int n);
