@@ -29,6 +29,7 @@ MINISHELL_SRCS =	check_equal.c \
 					open_files.c \
 					parsing.c \
 					prompt.c \
+					prompt_2.c \
 					sanitize_input.c \
 					parsing_var.c
 

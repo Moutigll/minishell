@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 16:57:24 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:53:27 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,15 @@ typedef struct s_pipex
 	t_command_head	*cmd_head;
 }	t_pipex;
 
+typedef struct s_malloc
+{
+	int	boolean;
+	int	count;
+	int	tab;
+	int	i;
+	int	j;
+}	t_malloc;
+
 // define
 # define ERR_QUOTE "Error\nQuote open !"
 
@@ -80,6 +89,7 @@ void			print_list(t_list *lst);
 
 // env_cmd.c
 int				env_cmd(t_head *head, t_main **main);
+void			env_cmd_direct(t_main *main);
 
 // export_cmd.c
 int				find_block(t_head *head,
@@ -122,6 +132,9 @@ char			*return_name_var(char *content, char c);
 // attach.c
 char			*attach_block_quote(t_head *head);
 char			*attach_block(t_head *head);
+
+// prompt_2.c
+int				return_slash(char *str);
 
 // ft_listnode.c
 void			ft_listnode(t_list **lst_tmp, int tab);

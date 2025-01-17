@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 17:33:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 14:05:31 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:48:10 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,45 +33,49 @@ static char	*ft_strjoin_char(char const *s1, char c)
 	return (result);
 }
 
+static void	return_malloc_char_part_2(t_malloc **struc,
+	char *c, char *content, char **result)
+{
+	while ((*struc)->boolean == 0 && c[(*struc)->j]
+		&& content[(*struc)->i + (*struc)->j] == c[(*struc)->j])
+	{
+		(*struc)->count++;
+		(*struc)->j++;
+	}
+	if ((*struc)->boolean == 0 && (int)ft_strlen(c) == (*struc)->count
+		&& content[(*struc)->i + (*struc)->j] != c[0])
+	{
+		(*struc)->i += (int)ft_strlen(c);
+		(*struc)->boolean = 1;
+		result[(*struc)->tab] = ft_strdup("\0");
+	}
+	if (content[(*struc)->i + (*struc)->j] == c[0])
+		(*struc)->i++;
+	(*struc)->i++;
+}
 
 static void	return_malloc_char(char *content, char *c, char **result)
 {
-	int		boolean;
-	int		count;
-	int		tab;
-	int		i;
-	int		j;
+	t_malloc	*struc;
 
-	i = 0;
-	tab = 0;
-	boolean = 0;
-	while (content[i])
+	struc = malloc(sizeof(t_malloc *));
+	struc->i = 0;
+	struc->tab = 0;
+	struc->boolean = 0;
+	while (content[struc->i])
 	{
-		count = 0;
-		j = 0;
-		if (boolean == 1 && (content[i] == '|' || content[i] == '<' || content[i] == '>'))
+		struc->count = 0;
+		struc->j = 0;
+		if (struc->boolean == 1 && (content[struc->i] == '|'
+				|| content[struc->i] == '<' || content[struc->i] == '>'))
 		{
-			boolean = 0;
-			tab++;
+			struc->boolean = 0;
+			struc->tab++;
 		}
-		else if (boolean == 1)
-		{
-			result[tab] = ft_strjoin_char(result[tab], content[i]);
-		}
-		while (boolean == 0 && c[j] && content[i + j] == c[j])
-		{
-			count++;
-			j++;
-		}
-		if (boolean == 0 && (int)ft_strlen(c) == count && content[i + j] != c[0])
-		{
-			i += (int)ft_strlen(c);
-			boolean = 1;
-			result[tab] = ft_strdup("\0");
-		}
-		if (content[i + j] == c[0])
-			i++;
-		i++;
+		else if (struc->boolean == 1)
+			result[struc->tab]
+				= ft_strjoin_char(result[struc->tab], content[struc->i]);
+		return_malloc_char_part_2(&struc, c, content, result);
 	}
 }
 
@@ -102,7 +106,7 @@ static int	return_malloc_size(char *content, char *c)
 	return (result);
 }
 
-char **return_fd(char *content, char *c)
+char	**return_fd(char *content, char *c)
 {
 	char	**result;
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:36:07 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 16:29:02 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:21:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*return_before(char *content)
 	return (result);
 }
 
-int		search_env(t_main *main, char *content)
+int	search_env(t_main *main, char *content)
 {
 	char	*tmp;
 	int		i;

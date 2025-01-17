@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/07 19:07:15 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:22:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static int	return_slash(char *str)
-{
-	int	count;
-	int	i;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] == '/')
-			count++;
-		i++;
-	}
-	return (count);
-}
 
 static char	*verif_solo(char *path)
 {

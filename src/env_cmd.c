@@ -6,11 +6,23 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:56:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 16:38:59 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:18:58 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	env_cmd_direct(t_main *main)
+{
+	int	i;
+
+	i = 0;
+	while (main->g_env[i])
+	{
+		printf("%s\n", main->g_env[i]);
+		i++;
+	}
+}
 
 int	env_cmd(t_head *head, t_main **main)
 {

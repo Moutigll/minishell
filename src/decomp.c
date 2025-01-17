@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/16 16:24:02 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:44:43 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,6 +312,34 @@ static void test_in(char **str)
 	}
 }
 
+// static void	print_tab(char **str)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		printf("Args %i = %s\n", i, str[i]);
+// 		i++;
+// 	}
+// 	printf("\n");
+// }
+
+// static void	print_command(t_list *lst)
+// {
+// 	t_command	*tmp;
+
+// 	while (lst)
+// 	{
+// 		tmp = lst->content;
+// 		printf("command = %s\n", tmp->command);
+// 		print_tab(tmp->args);
+// 		if (!lst->next)
+// 			break ;
+// 		lst = lst->next;
+// 	}
+// }
+
 t_command_head	*return_main(t_head *head, t_main *main)
 {
 	t_command_head	*head_main;
@@ -338,10 +366,19 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	head_main = malloc(sizeof(t_command_head));
 	head_main->list_head = head;
 	head_main->main = main;
-	head_main->in_fd = in_fd[return_last(in_fd)];
-	head_main->out_fd = out_fd[return_last(out_fd)];
+	if (in_fd[0] != NULL)
+		head_main->in_fd = ft_strdup(in_fd[return_last(in_fd)]);
+	else
+		head_main->in_fd = NULL;
+	if (out_fd[0] != NULL)
+		head_main->out_fd = ft_strdup(out_fd[return_last(out_fd)]);
+	else
+		head_main->out_fd = NULL;
 	head_main->error = 0;
-	head_main->here_doc = here_doc[return_last(here_doc)];
+	if (here_doc[0] != NULL)
+		head_main->here_doc = ft_strdup(here_doc[return_last(here_doc)]);
+	else
+		head_main->here_doc = NULL;
 	head_main->out_mode = 0;
 	if (append != NULL)
 		head_main->out_mode = 1;

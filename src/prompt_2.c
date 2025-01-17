@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_cmd.c                                           :+:      :+:    :+:   */
+/*   prompt_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/17 11:58:30 by tle-goff         ###   ########.fr       */
+/*   Created: 2025/01/17 13:22:32 by tle-goff          #+#    #+#             */
+/*   Updated: 2025/01/17 13:22:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	cd_cmd(t_head *head)
+int	return_slash(char *str)
 {
-	t_head	*head_tmp;
-	char	*path;
-	int		tmp;
+	int	count;
+	int	i;
 
-
-	tmp = check_equal("cd", head, 0);
-	if (tmp >= 0)
+	i = 0;
+	count = 0;
+	while (str[i])
 	{
-		head_tmp = return_head(head, tmp);
-		path = attach_block(head_tmp);
-		if (chdir(path) == -1)
-		{
-			if (path[0] != '\0')
-				printf("%s: No such file or directory\n", path);
-		}
-		free(head_tmp);
-		free(path);
-		return (1);
+		if (str[i] == '/')
+			count++;
+		i++;
 	}
-	return (0);
+	return (count);
 }
