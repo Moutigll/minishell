@@ -6,19 +6,23 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/17 13:44:43 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 15:31:47 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	is_delimited(const char *s, int index)
+static int	is_delimited(const char *s, int index, int i)
 {
-	int	parentheses = 0;
-	int	braces = 0;
-	int	brackets = 0;
+	int	parentheses;
+	int	braces;
+	int	brackets;
 
-	for (int i = 0; i < index; i++)
+	parentheses = 0;
+	braces = 0;
+	brackets = 0;
+	i = 0;
+	while (i < index)
 	{
 		if (s[i] == '(')
 			parentheses++;
@@ -32,23 +36,26 @@ static int	is_delimited(const char *s, int index)
 			brackets++;
 		else if (s[i] == ']')
 			brackets--;
+		i++;
 	}
 	return (parentheses > 0 || braces > 0 || brackets > 0);
 }
 
 static int	count_words(const char *s, char c)
 {
-	int	count = 0;
-	int	i = 0;
+	int	count;
+	int	i;
 
+	count = 0;
+	i = 0;
 	while (s[i])
 	{
-		while (s[i] == c && !is_delimited(s, i) && s[i])
+		while (s[i] == c && !is_delimited(s, i, 0) && s[i])
 			i++;
 		if (s[i])
 		{
 			count++;
-			while ((s[i] != c || is_delimited(s, i)) && s[i])
+			while ((s[i] != c || is_delimited(s, i, 0)) && s[i])
 				i++;
 		}
 	}
@@ -57,24 +64,33 @@ static int	count_words(const char *s, char c)
 
 static char	*malloc_word(const char *s, char c, int *start)
 {
-	int		len = 0;
+	int		len;
 	char	*word;
+	int		i;
 
-	while (s[*start + len] && (s[*start + len] != c || is_delimited(s, *start + len)))
+	i = 0;
+	len = 0;
+	while (s[*start + len] && (s[*start + len] != c
+			|| is_delimited(s, *start + len, 0)))
 		len++;
 	word = (char *)malloc(len + 1);
 	if (!word)
 		return (NULL);
 	word[len] = '\0';
-	for (int i = 0; i < len; i++)
+	while (i < len)
+	{
 		word[i] = s[*start + i];
+		i++;
+	}
 	*start += len;
 	return (word);
 }
 
 static void	free_split(char **split, int words)
 {
-	int	i = 0;
+	int	i;
+
+	i = 0;
 	while (i < words)
 	{
 		free(split[i]);
@@ -85,12 +101,14 @@ static void	free_split(char **split, int words)
 
 static int	fill_array(const char *s, char c, char **split)
 {
-	int	index = 0;
-	int	i = 0;
+	int	index;
+	int	i;
 
+	i = 0;
+	index = 0;
 	while (s[i])
 	{
-		while (s[i] == c && !is_delimited(s, i) && s[i])
+		while (s[i] == c && !is_delimited(s, i, 0) && s[i])
 			i++;
 		if (s[i])
 		{
@@ -130,7 +148,7 @@ static void	add_lst(t_list **lst_cmd, char *command, int n, int j)
 	while (lst)
 	{
 		if (!lst->next)
-			break;
+			break ;
 		lst = lst->next;
 	}
 	if (n == 1 && j != 0)
@@ -147,6 +165,18 @@ static void	add_lst(t_list **lst_cmd, char *command, int n, int j)
 	free(command);
 }
 
+static void	return_command_part1(t_node *node, int *i, int *skip)
+{
+	while (node->content[*i])
+	{
+		if ((node->content[*i] == '|' || node->content[*i] == '<'
+				|| node->content[*i] == '>') && node->type == 2)
+			break ;
+		*skip = 1;
+		(*i)++;
+	}
+}
+
 static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
 {
 	char	*result;
@@ -156,13 +186,7 @@ static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
 
 	i = 0;
 	skip = 0;
-	while (node->content[i])
-	{
-		if ((node->content[i] == '|' || node->content[i] == '<' || node->content[i] == '>') && node->type == 2)
-			break;
-		skip = 1;
-		i++;
-	}
+	return_command_part1(node, &i, &skip);
 	tmp = i;
 	result = malloc(sizeof(char) * (tmp + 1));
 	i = 0;
@@ -181,6 +205,26 @@ static void	return_command(t_node *node, int *k, t_list **lst_cmd, int j)
 		ft_lstadd_back(lst_cmd, ft_lstnew("\0"));
 }
 
+static int	separated_part1(int *i, int *j, t_node *node, t_list **lst)
+{
+	if (*i == -1)
+	{
+		*lst = (*lst)->next;
+		*i = 0;
+		j++;
+		return (1);
+	}
+	*i = 0;
+	if (node->content[0] == '>' || node->content[0] == '<')
+	{
+		*lst = (*lst)->next;
+		j++;
+		*i = -1;
+		return (1);
+	}
+	return (0);
+}
+
 static void	separated(t_head *head, t_list **lst_cmd)
 {
 	char	*result;
@@ -196,24 +240,11 @@ static void	separated(t_head *head, t_list **lst_cmd)
 	while (lst)
 	{
 		node = lst->content;
-		if (i == -1)
-		{
-			lst = lst->next;
-			i = 0;
-			j++;
+		if (separated_part1(&i, &j, node, &lst) == 1)
 			continue ;
-		}
-		i = 0;
-		if (node->content[0] == '>' || node->content[0] == '<')
-		{
-			lst = lst->next;
-			j++;
-			i = -1;
-			continue ;
-		}
 		return_command(node, &i, lst_cmd, j);
 		if (!lst->next)
-			break;
+			break ;
 		lst = lst->next;
 		j++;
 	}
@@ -256,17 +287,6 @@ static t_list	*return_command_main(t_list *lst_cmd)
 	return (lst_main_cmd);
 }
 
-static void print_hole(char **str, char *s)
-{
-	int	i = 0;
-
-	while (str[i])
-	{
-		printf("%s%s\n", s, str[i]);
-		i++;
-	}
-}
-
 static int	return_last(char **str)
 {
 	int	i;
@@ -279,7 +299,7 @@ static int	return_last(char **str)
 	return (i - 1);
 }
 
-static void test_out(char **str, int n)
+static void	test_out(char **str, int n)
 {
 	int	i;
 	int	j;
@@ -296,7 +316,7 @@ static void test_out(char **str, int n)
 	}
 }
 
-static void test_in(char **str)
+static void	test_in(char **str)
 {
 	int	i;
 	int	j;
@@ -312,86 +332,78 @@ static void test_in(char **str)
 	}
 }
 
-// static void	print_tab(char **str)
-// {
-// 	int	i;
+static void	set_ptr_infd(t_command_head **head_main, char **in_fd)
+{
+	if (in_fd[0] != NULL)
+		(*head_main)->in_fd = ft_strdup(in_fd[return_last(in_fd)]);
+	else
+		(*head_main)->in_fd = NULL;
+}
 
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		printf("Args %i = %s\n", i, str[i]);
-// 		i++;
-// 	}
-// 	printf("\n");
-// }
+static void	set_ptr_outfd(t_command_head **head_main, char **out_fd)
+{
+	if (out_fd[0] != NULL)
+		(*head_main)->out_fd = ft_strdup(out_fd[return_last(out_fd)]);
+	else
+		(*head_main)->out_fd = NULL;
+}
 
-// static void	print_command(t_list *lst)
-// {
-// 	t_command	*tmp;
+static void	set_ptr_here_doc(t_command_head **head_main, char **here_doc)
+{
+	if (here_doc[0] != NULL)
+		(*head_main)->here_doc = ft_strdup(here_doc[return_last(here_doc)]);
+	else
+		(*head_main)->here_doc = NULL;
+}
 
-// 	while (lst)
-// 	{
-// 		tmp = lst->content;
-// 		printf("command = %s\n", tmp->command);
-// 		print_tab(tmp->args);
-// 		if (!lst->next)
-// 			break ;
-// 		lst = lst->next;
-// 	}
-// }
+static void	return_ptr(char *str, t_head *head,
+	int state, t_command_head **head_main)
+{
+	char	*attach;
+	char	**ptr;
+
+	attach = attach_block_quote(head);
+	ptr = return_fd(attach, str);
+	free(attach);
+	if (state == 1)
+	{
+		set_ptr_infd(head_main, ptr);
+		test_in(ptr);
+	}
+	if (state == 2)
+	{
+		set_ptr_outfd(head_main, ptr);
+		test_out(ptr, (*head_main)->out_mode);
+	}
+	if (state == 3)
+		set_ptr_here_doc(head_main, ptr);
+	if (state == 4)
+	{
+		(*head_main)->out_mode = 0;
+		if (ptr != NULL)
+			(*head_main)->out_mode = 1;
+	}
+	free_tab((void **)ptr);
+}
 
 t_command_head	*return_main(t_head *head, t_main *main)
 {
 	t_command_head	*head_main;
-	char			**here_doc;
-	char			**append;
 	t_list			*lst_cmd;
-	char			**out_fd;
-	char			**in_fd;
-	char			*attach;
 
-	attach = attach_block_quote(head);
-	in_fd = return_fd(attach, "<");
-	out_fd = return_fd(attach, ">");
-	here_doc = return_fd(attach, "<<");
-	append = return_fd(attach, ">>");
-	free(attach);
-
-	print_hole(in_fd, "in = ");
-	print_hole(out_fd, "out = ");
-	print_hole(here_doc, "here = ");
-	print_hole(append, "append = ");
+	head_main = malloc(sizeof(t_command_head));
+	return_ptr("<", head, 1, &head_main);
+	return_ptr(">", head, 2, &head_main);
+	return_ptr("<<", head, 3, &head_main);
+	return_ptr(">>", head, 4, &head_main);
 	lst_cmd = NULL;
 	ft_lstadd_back(&lst_cmd, ft_lstnew("\0"));
-	head_main = malloc(sizeof(t_command_head));
 	head_main->list_head = head;
 	head_main->main = main;
-	if (in_fd[0] != NULL)
-		head_main->in_fd = ft_strdup(in_fd[return_last(in_fd)]);
-	else
-		head_main->in_fd = NULL;
-	if (out_fd[0] != NULL)
-		head_main->out_fd = ft_strdup(out_fd[return_last(out_fd)]);
-	else
-		head_main->out_fd = NULL;
-	head_main->error = 0;
-	if (here_doc[0] != NULL)
-		head_main->here_doc = ft_strdup(here_doc[return_last(here_doc)]);
-	else
-		head_main->here_doc = NULL;
-	head_main->out_mode = 0;
-	if (append != NULL)
-		head_main->out_mode = 1;
-	test_in(in_fd);
-	test_out(out_fd, head_main->out_mode);
 	head_main->envp = main->g_env;
 	separated(head, &lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
 	ft_lstclear(&lst_cmd, free);
-	free_tab((void **)in_fd);
-	free_tab((void **)out_fd);
-	free_tab((void **)here_doc);
-	free_tab((void **)append);
 	return (head_main);
 }

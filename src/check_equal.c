@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 12:17:53 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/20 13:00:30 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 11:53:10 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,32 +31,49 @@ static void	check_block_after(t_list *lst_tmp, int *state)
 	*state = 3;
 }
 
-static int	check_equal_part2(t_node *node_tmp, int *i, char *format, int *n)
+static int	check_equal_part2(t_node *node_tmp, char *format, int *n)
 {
+	int		i;
 	int		j;
 
 	j = 0;
-	while (format[*i] && node_tmp->content[j] && node_tmp->content[j] == format[*i])
+	i = 0;
+	while (format[i] && node_tmp->content[j]
+		&& node_tmp->content[j] == format[i])
 	{
-		(*i)++;
+		(i)++;
 		j++;
 	}
-	if (ft_strcmp((const char *)node_tmp->content, (const char *)format) == 0 && *n == 0)
+	if (ft_strcmp((const char *)node_tmp->content,
+			(const char *)format) == 0 && *n == 0)
 		return (4);
-	else if (*i == (int)ft_strlen((const char *)format) && node_tmp->content[j] == '\0')
+	else if (i == (int)ft_strlen((const char *)format)
+		&& node_tmp->content[j] == '\0')
 		return (4);
 	return (2);
 }
 
-static int	check_equal_part1(int *state, t_node *node_tmp, int *i, char *format, int *n)
+static int	check_equal_part1(int *state,
+	t_node *node_tmp, char *format, int *n)
 {
 	if (*state != 3)
 	{
-		*state = check_equal_part2(node_tmp, i, format, n);
+		*state = check_equal_part2(node_tmp, format, n);
 		if (*state == 3)
 			return (0);
 	}
 	return (1);
+}
+
+static int	check_equal_start(int *state,
+	t_node *node_tmp, char *format, int *n)
+{
+	if (*state != 1
+		&& check_equal_part1(state, node_tmp, format, n) == 0)
+		return (-2);
+	if (*state == 3)
+		return (-2);
+	return (0);
 }
 
 int	check_equal(char *format, t_head *head, int tab)
@@ -64,10 +81,8 @@ int	check_equal(char *format, t_head *head, int tab)
 	t_node	*node_tmp;
 	t_list	*lst_tmp;
 	int		state;
-	int		i;
 	int		n;
 
-	i = 0;
 	n = 0;
 	state = -1;
 	lst_tmp = head->head;
@@ -75,12 +90,11 @@ int	check_equal(char *format, t_head *head, int tab)
 	while (lst_tmp)
 	{
 		node_tmp = lst_tmp->content;
-		if (state != 1 && check_equal_part1(&state, node_tmp, &i, format, &n) == 0)
+		check_equal_start(&state, node_tmp, format, &n);
+		if (state == -2)
 			return (-2);
 		if (state == 4)
 			check_block_after(lst_tmp, &state);
-		if (state == 3)
-			return (-2);
 		n++;
 		if (state == 1)
 			return (n + tab);

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/17 12:38:14 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 12:49:50 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_head(t_head *head)
 	t_node	*node;
 
 	if (!head)
-		return;
+		return ;
 	while (head->head)
 	{
 		node = head->head->content;
@@ -46,11 +46,12 @@ void	exit_cmd(t_head *head, t_main *main)
 	char	*block;
 	int		i;
 
-	i  = 0;
+	i = 0;
 	block = attach_block(head);
 	while (block[i] && block[i] != ' ')
 		i++;
-	if (ft_strncmp(block, "exit", 4) == 0 && (block[4] == '\0' || block[4] == ' '))
+	if (ft_strncmp(block, "exit", 4) == 0
+		&& (block[4] == '\0' || block[4] == ' '))
 	{
 		clear_history();
 		free_total(head, main, NULL);

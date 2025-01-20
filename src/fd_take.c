@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_take.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 17:33:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/17 14:52:01 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/20 14:31:53 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,27 @@ static char	*ft_strjoin_char(char const *s1, char c)
 	return (result);
 }
 
+static int	return_malloc_char_part1(int *boolean,
+		int *tab, int i, char *content)
+{
+	if (*boolean == 1 && (content[i] == '|'
+			|| content[i] == '<' || content[i] == '>'))
+	{
+		*boolean = 0;
+		(*tab)++;
+	}
+	else if (*boolean == 1)
+		return (1);
+	return (0);
+}
+
+static int	return_malloc_char_part2(int *boolean,
+		char **result, int tab, char *c)
+{
+	*boolean = 1;
+	result[tab] = ft_strdup("\0");
+	return ((int)ft_strlen(c));
+}
 
 static void	return_malloc_char(char *content, char *c, char **result)
 {
@@ -49,26 +70,14 @@ static void	return_malloc_char(char *content, char *c, char **result)
 	{
 		count = 0;
 		j = 0;
-		if (boolean == 1 && (content[i] == '|' || content[i] == '<' || content[i] == '>'))
-		{
-			boolean = 0;
-			tab++;
-		}
-		else if (boolean == 1)
-		{
+		if (return_malloc_char_part1(&boolean, &tab, i, content) == 1)
 			result[tab] = ft_strjoin_char(result[tab], content[i]);
-		}
 		while (boolean == 0 && c[j] && content[i + j] == c[j])
-		{
-			count++;
 			j++;
-		}
-		if (boolean == 0 && (int)ft_strlen(c) == count && content[i + j] != c[0])
-		{
-			i += (int)ft_strlen(c);
-			boolean = 1;
-			result[tab] = ft_strdup("\0");
-		}
+		count += j;
+		if (boolean == 0 && (int)ft_strlen(c) == count
+			&& content[i + j] != c[0])
+			i += return_malloc_char_part2(&boolean, result, tab, c);
 		if (content[i + j] == c[0])
 			i++;
 		i++;
@@ -102,7 +111,7 @@ static int	return_malloc_size(char *content, char *c)
 	return (result);
 }
 
-char **return_fd(char *content, char *c)
+char	**return_fd(char *content, char *c)
 {
 	char	**result;
 	int		i;

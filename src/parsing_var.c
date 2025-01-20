@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 13:00:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/15 13:02:43 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 15:09:32 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,49 +15,28 @@
 static void	change_var(int n, t_node **node, char *new_char, int z, int p)
 {
 	char	*result;
-	int		i = 0; // Index pour parcourir la chaîne originale
-	int		j = 0; // Index pour parcourir new_char
-	int		k;     // Index pour parcourir le reste de la chaîne originale après remplacement
+	int		i;
+	int		j;
+	int		k;
 
-	// Allocation de mémoire pour le résultat final
+	i = 0;
+	j = 0;
 	result = malloc(sizeof(char) * (n + 1));
 	if (!result)
-		return; // Gérer une éventuelle erreur d'allocation
-
-	// Copie de la partie de la chaîne avant le '$'
+		return ;
 	while ((*node)->content[i] && (*node)->content[i] != '$')
 	{
 		result[i] = (*node)->content[i];
 		i++;
 	}
-
-	// Sauter la partie à remplacer (z caractères après '$')
 	k = i + z;
-
-	// Ajout de la nouvelle chaîne
 	while (new_char[j])
-	{
-		result[i] = new_char[j];
-		i++;
-		j++;
-	}
-
-	// Si la taille de remplacement (p) est plus grande que z, ajuster k
+		result[i++] = new_char[j++];
 	if (j < p)
 		k += (p - z);
-
-	// Copie de la partie restante de la chaîne originale
 	while ((*node)->content[k])
-	{
-		result[i] = (*node)->content[k];
-		i++;
-		k++;
-	}
-
-	// Terminer la nouvelle chaîne avec '\0'
+		result[i++] = (*node)->content[k++];
 	result[i] = '\0';
-
-	// Libérer l'ancienne chaîne et remplacer par le résultat
 	free((*node)->content);
 	(*node)->content = result;
 }
@@ -70,7 +49,8 @@ char	*return_name_var(char *content, char c)
 
 	i = 1;
 	j = 0;
-	while (content[i] && content[i] != ' ' && content[i] != c && content[i] != '\'')
+	while (content[i] && content[i] != ' '
+		&& content[i] != c && content[i] != '\'')
 		i++;
 	result = malloc(sizeof(char) * (i + 1));
 	while (j < i)
@@ -82,7 +62,7 @@ char	*return_name_var(char *content, char c)
 	return (result);
 }
 
-static int	remove_equal(char *content)
+static int	r_e(char *content)
 {
 	int	i;
 
@@ -92,11 +72,12 @@ static int	remove_equal(char *content)
 	return (i + 1);
 }
 
-static char	*return_var_local(t_list *lst, char *name_var)
+static char	*r_l(t_list *lst, char *name_var)
 {
 	while (lst)
 	{
-		if (ft_strcmp((const char *)return_before(lst->content), (const char *)&name_var[1]) == 0)
+		if (ft_strcmp((const char *)return_before(lst->content),
+				(const char *)&name_var[1]) == 0)
 			return (lst->content);
 		if (!lst->next)
 			break ;
@@ -105,7 +86,53 @@ static char	*return_var_local(t_list *lst, char *name_var)
 	return (NULL);
 }
 
-static void	return_var(t_node **node, char **g_env, t_list *lst)
+static int	calcul_part1(t_node **node, char *name_var, char **e, int tab)
+{
+	int	content;
+	int	name;
+	int	var_lst;
+
+	content = (int)ft_strlen((const char *)(*node)->content);
+	name = (int)ft_strlen((const char *)name_var);
+	var_lst = (int)ft_strlen((const char *)&e[tab][r_e(e[tab])]);
+	return (content - name + var_lst + 1);
+}
+
+static int	calcul_part2(t_node **node, char *name_var, t_list *lst)
+{
+	int	content;
+	int	name;
+	int	var_lst;
+
+	content = (int)ft_strlen((const char *)(*node)->content);
+	name = (int)ft_strlen((const char *)name_var);
+	var_lst = (int)ft_strlen(&r_l(lst, name_var)[r_e(r_l(lst, name_var))]);
+	return (content - name + var_lst + 1);
+}
+
+static int	return_var_part1(int tab, t_node **node,
+		char *name_var, char **g_env)
+{
+	if (tab >= 0)
+	{
+		change_var(calcul_part1(node, name_var, g_env, tab), node,
+			&g_env[tab][r_e(g_env[tab])],
+			(int)ft_strlen((const char *)name_var),
+			(int)ft_strlen((const char *)name_var));
+		return ((int)ft_strlen(&g_env[tab][r_e(g_env[tab])]));
+	}
+	else
+	{
+		change_var((int)ft_strlen((const char *)(*node)->content)
+			- (int)ft_strlen((const char *)name_var) + 1,
+			node, "", 0, (int)ft_strlen((const char *)name_var));
+		if (ft_strlen((*node)->content) == 0)
+			(*node)->head = -1;
+	}
+	return (0);
+}
+
+static void	return_var(t_node **node, char **g_env, t_list *l)
 {
 	char	*name_var;
 	int		tab;
@@ -118,27 +145,14 @@ static void	return_var(t_node **node, char **g_env, t_list *lst)
 		{
 			name_var = return_name_var(&(*node)->content[i], '$');
 			tab = search_exist(&name_var[1], g_env);
-			if (return_var_local(lst, name_var) == NULL)
-			{
-				if (tab >= 0)
-				{
-					change_var((int)ft_strlen((const char *)(*node)->content) - (int)ft_strlen((const char *)name_var) + (int)ft_strlen((const char *)&g_env[tab][remove_equal(g_env[tab])]) + 1,
-						node, &g_env[tab][remove_equal(g_env[tab])], (int)ft_strlen((const char *)name_var), (int)ft_strlen((const char *)name_var));
-					i += (int)ft_strlen((const char *)&g_env[tab][remove_equal(g_env[tab])]);
-				}
-				else
-				{
-					change_var((int)ft_strlen((const char *)(*node)->content) - (int)ft_strlen((const char *)name_var) + 1,
-						node, "", 0, (int)ft_strlen((const char *)name_var));
-					if (ft_strlen((*node)->content) == 0)
-						(*node)->head = -1;
-				}
-			}
+			if (r_l(l, name_var) == NULL)
+				i += return_var_part1(tab, node, name_var, g_env);
 			else
 			{
-				change_var((int)ft_strlen((const char *)(*node)->content) - (int)ft_strlen((const char *)name_var) + (int)ft_strlen((const char *)&return_var_local(lst, name_var)[remove_equal(return_var_local(lst, name_var))]) + 1,
-						node, &return_var_local(lst, name_var)[remove_equal(return_var_local(lst, name_var))], (int)ft_strlen((const char *)name_var), (int)ft_strlen((const char *)name_var));
-				i += (int)ft_strlen((const char *)&return_var_local(lst, name_var)[remove_equal(return_var_local(lst, name_var))]);
+				change_var(calcul_part2(node, name_var, l), node,
+					&r_l(l, name_var)[r_e(r_l(l, name_var))],
+					(int)ft_strlen(name_var), (int)ft_strlen(name_var));
+				i += (int)ft_strlen(&r_l(l, name_var)[r_e(r_l(l, name_var))]);
 			}
 			free(name_var);
 		}
@@ -165,7 +179,7 @@ int	search_exist(char *name_var, char **g_env)
 	return (-1);
 }
 
-void replace_var(t_head **head, t_main *main)
+void	replace_var(t_head **head, t_main *main)
 {
 	t_node	*node;
 	t_list	*lst;
