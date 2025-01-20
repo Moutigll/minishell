@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 17:53:30 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:47:35 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,19 @@ static int	ver_void(t_list *lst)
 	return (0);
 }
 
-static int	gest_command(t_head *head, t_main **main, char *command)
+static int	gest_command(t_head *head, t_main *main, char *command)
 {
 	t_command_head	*head_main;
 
 	if (ft_strlen((const char *)command) > 0)
 		verif_var(head, main, 0);
 	free(command);
-	exit_cmd(head, *main);
+	exit_cmd(head, main);
 	if (ver_void(head->head) == 1)
 	{
-		head_main = return_main(head, *main);
+		head_main = return_main(head, main);
 		exec_cmds(head_main);
-		(*main)->error = head_main->error;
+		(main)->error = head_main->error;
 		free(head_main);
 	}
 	return (0);
@@ -74,7 +74,7 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 // 	printf("out_fd = %s\n", head_cmd->out_fd);
 // }
 
-void	while_input(t_main **main)
+void	while_input(t_main *main)
 {
 	char	*command;
 	char	*prompt;
@@ -83,7 +83,7 @@ void	while_input(t_main **main)
 	head = NULL;
 	while (1)
 	{
-		prompt = read_cmd();
+		prompt = read_cmd(main);
 		command = readline(prompt);
 		free(prompt);
 		if (parsing_error(command, 0))
@@ -92,7 +92,7 @@ void	while_input(t_main **main)
 			head = sanitize_input(command);
 			if (ft_strlen(command) > 0)
 			{
-				replace_var(&head, *main);
+				replace_var(&head, main);
 				gest_command(head, main, command);
 			}
 		}

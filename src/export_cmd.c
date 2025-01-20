@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 16:16:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:05:52 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,14 +165,14 @@ static int	export_cmd_part(t_head *head, t_main *main)
 	return (0);
 }
 
-static void	export_cmd_part2(t_main **main, char *tmp, char *content_tmp)
+static void	export_cmd_part2(t_main *main, char *tmp, char *content_tmp)
 {
-	if (search_env(*main, return_before(tmp)) == -1)
-		(*main)->g_env = ft_realoc_ptr((*main)->g_env, content_tmp);
+	if (search_env(main, return_before(tmp)) == -1)
+		main->g_env = ft_realoc_ptr(main->g_env, content_tmp);
 	else
 	{
-		free((*main)->g_env[search_env(*main, return_before(tmp))]);
-		(*main)->g_env[search_env(*main,
+		free(main->g_env[search_env(main, return_before(tmp))]);
+		main->g_env[search_env(main,
 				return_before(tmp))] = ft_strdup(content_tmp);
 	}
 }
@@ -194,7 +194,7 @@ static int	ft_lstcontain(t_list *lst, char *str)
 	return (0);
 }
 
-static void	export_cmd_part1(t_head *node, t_main **main, char **content_tmp)
+static void	export_cmd_part1(t_head *node, t_main *main, char **content_tmp)
 {
 	int		result;
 	char	*tmp;
@@ -202,27 +202,27 @@ static void	export_cmd_part1(t_head *node, t_main **main, char **content_tmp)
 	result = verif_var(node, main, 1);
 	if (result == 0)
 	{
-		remove_last_element(&(*main)->lst_var);
+		remove_last_element(&main->lst_var);
 		tmp = return_before(*content_tmp);
 		export_cmd_part2(main, tmp, *content_tmp);
 		free(tmp);
 	}
 	else if (result != -10)
 	{
-		if (search_env(*main, *content_tmp) == -1
-			&& ft_lstcontain((*main)->lst_var, *content_tmp) == 1)
+		if (search_env(main, *content_tmp) == -1
+			&& ft_lstcontain(main->lst_var, *content_tmp) == 1)
 		{
-			(*main)->g_env = ft_realoc_ptr((*main)->g_env,
-					search_lst_var((*main)->lst_var, *content_tmp));
-			(*main)->lst_var = remove_node_by_content((*main)->lst_var,
-					search_lst_var((*main)->lst_var, *content_tmp));
+			main->g_env = ft_realoc_ptr(main->g_env,
+					search_lst_var(main->lst_var, *content_tmp));
+			main->lst_var = remove_node_by_content(main->lst_var,
+					search_lst_var(main->lst_var, *content_tmp));
 		}
 	}
 	if (*content_tmp != NULL)
 		free(*content_tmp);
 }
 
-int	export_cmd(t_head *head, t_main **main)
+int	export_cmd(t_head *head, t_main *main)
 {
 	t_head	*node;
 	char	*content_tmp;
@@ -248,5 +248,5 @@ int	export_cmd(t_head *head, t_main **main)
 		return (1);
 	}
 	else
-		return (export_cmd_part(head, *main));
+		return (export_cmd_part(head, main));
 }

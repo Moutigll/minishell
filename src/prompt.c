@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/17 13:22:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:12:42 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static char	*remove_start_prompt(char *path)
 	return (verif_solo(result));
 }
 
-char	*read_cmd(void)
+char	*read_cmd(t_main *main)
 {
 	char	*print_prompt;
 	char	*end_path;
@@ -102,7 +102,12 @@ char	*read_cmd(void)
 
 	path = getcwd(NULL, 0);
 	if (path == NULL)
-		return (NULL);
+		path = ft_strdup(main->path);
+	else
+	{
+		free(main->path);
+		main->path = ft_strdup(path);
+	}
 	end_path = ft_strjoin(path, "$ ");
 	if (return_slash(end_path) >= 2)
 		end_path = remove_start_prompt(end_path);

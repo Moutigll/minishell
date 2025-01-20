@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:56:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/17 13:18:58 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:08:58 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	env_cmd_direct(t_main *main)
 	}
 }
 
-int	env_cmd(t_head *head, t_main **main)
+int	env_cmd(t_head *head, t_main *main)
 {
 	char	*command;
 	int		i;
@@ -38,9 +38,9 @@ int	env_cmd(t_head *head, t_main **main)
 			free(command);
 			return (0);
 		}
-		while ((*main)->g_env[i])
+		while (main->g_env[i])
 		{
-			printf("%s\n", (*main)->g_env[i]);
+			printf("%s\n", main->g_env[i]);
 			i++;
 		}
 		free(command);

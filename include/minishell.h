@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 16:49:01 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:08:22 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_main
 {
 	t_list			*lst_var;
 	char			**g_env;
+	char			*path;
 	int				error;
 }	t_main;
 
@@ -89,18 +90,18 @@ void			error(char *message, int etat);
 void			print_list(t_list *lst);
 
 // env_cmd.c
-int				env_cmd(t_head *head, t_main **main);
+int				env_cmd(t_head *head, t_main *main);
 void			env_cmd_direct(t_main *main);
 
 // export_cmd.c
 int				find_block(t_head *head,
 					int *n, char **content_block, int boolean);
-int				export_cmd(t_head *head, t_main **main);
+int				export_cmd(t_head *head, t_main *main);
 t_head			*return_head(t_head *head, int i);
 t_list			*return_lst(t_head *head, int i);
 
 // unset.c
-int				unset_cmd(t_head *head, t_main **main);
+int				unset_cmd(t_head *head, t_main *main);
 
 // realoc.c
 char			**ft_realoc_ptr_unset(char **tab, int n);
@@ -123,7 +124,7 @@ void			free_head(t_head *head);
 int				cd_cmd(t_head *head, char **env);
 
 // detect_var.c
-int				verif_var(t_head *head, t_main **main, int n);
+int				verif_var(t_head *head, t_main *main, int n);
 
 // parsing_var.c
 int				search_exist(char *name_var, char **g_env);
@@ -150,10 +151,10 @@ t_command_head	*return_main(t_head *head, t_main *main);
 char			*echo_command(t_head *head);
 
 // input.c
-void			while_input(t_main **main);
+void			while_input(t_main *main);
 
 // prompt.c
-char			*read_cmd(void);
+char			*read_cmd(t_main *main);
 
 // parsing.c
 int				parsing_error(char *command, int etat);
@@ -182,5 +183,9 @@ void			exec_cmd(t_pipex *pipex, int i, char **envp);
 void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
 void			handle_here_doc(char *delimiter, t_pipex *pipex);
 void			init_pipex(t_pipex *pipex, t_command_head *cmd_head);
+
+// exec_func.c
+void			is_func_cmd(char *command,
+					char **args, t_pipex *pipex, t_command_head *cmd_head);
 
 #endif

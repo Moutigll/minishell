@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   detect_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 16:47:15 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:54:17 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,14 @@ static int	check_var(t_head *head)
 	return (-1);
 }
 
-static int	change_var(char *name_var, char *val_var, t_main **main)
+static int	change_var(char *name_var, char *val_var, t_main *main)
 {
 	t_list	*lst_tmp;
 	char	*var;
 	int		i;
 
 	i = 0;
-	lst_tmp = (*main)->lst_var;
+	lst_tmp = main->lst_var;
 	while (lst_tmp)
 	{
 		var = return_name_var(lst_tmp->content, '=');
@@ -253,13 +253,13 @@ static int	check_correct(char *content)
 	return (0);
 }
 
-static void	replace_var_env(char *content, t_main **main, int n)
+static void	replace_var_env(char *content, t_main *main, int n)
 {
-	free((*main)->g_env[n]);
-	(*main)->g_env[n] = ft_strdup(content);
+	free(main->g_env[n]);
+	main->g_env[n] = ft_strdup(content);
 }
 
-static int	verif_var_part2(t_head *head, char *name_var, t_main **main, int *i)
+static int	verif_var_part2(t_head *head, char *name_var, t_main *main, int *i)
 {
 	char	*val_var;
 
@@ -273,39 +273,39 @@ static int	verif_var_part2(t_head *head, char *name_var, t_main **main, int *i)
 		return (-1);
 	}
 	*i = change_var(name_var, val_var, main);
-	if (search_env(*main, name_var) != -1)
+	if (search_env(main, name_var) != -1)
 		return (replace_var_env(ft_strjoin((const char *)name_var,
 					(const char *)val_var), main,
-				search_env(*main, name_var)),
+				search_env(main, name_var)),
 			free(val_var), free(name_var), -10);
 	if (*i != -1)
-		ft_lstadd_back(&(*main)->lst_var, ft_lstnew(val_var));
+		ft_lstadd_back(&main->lst_var, ft_lstnew(val_var));
 	free(name_var);
 	return (0);
 }
 
 static int	verif_var_part1(t_head *head, char *name_var,
-	t_node *node, t_main **main)
+	t_node *node, t_main *main)
 {
 	char	*val_var;
 	int		i;
 
 	val_var = return_value(head->head, name_var, node);
 	i = change_var(name_var, val_var, main);
-	if (search_env(*main, name_var) != -1)
+	if (search_env(main, name_var) != -1)
 		return (replace_var_env(ft_strjoin((const char *)name_var,
 					(const char *)val_var), main,
-				search_env(*main, name_var)), free(val_var),
+				search_env(main, name_var)), free(val_var),
 			free(name_var), -10);
 	if (i != -1)
-		ft_lstadd_back(&(*main)->lst_var,
+		ft_lstadd_back(&main->lst_var,
 			ft_lstnew(ft_strjoin(name_var, val_var)));
 	free(name_var);
 	free(val_var);
 	return (0);
 }
 
-int	verif_var(t_head *head, t_main **main, int n)
+int	verif_var(t_head *head, t_main *main, int n)
 {
 	char	*name_var;
 	t_node	*node;
