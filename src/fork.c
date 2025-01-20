@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/17 17:57:16 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:13:53 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,19 @@ void	is_func_cmd(char *command,
 	char **args, t_pipex *pipex, t_command_head *cmd_head)
 {
 	char	*string;
-	int		i;
+	int		is_builtin;
 
-	i = 0;
 	if (!command)
 		return ;
-	if (ft_strcmp(command, "echo") == 0)
+	is_builtin = 0;
+	if (!ft_strcmp(command, "echo"))
 	{
 		string = echo_command(pipex->cmd_head->list_head);
 		printf("%s", string);
 		free(string);
-		i = 1;
+		is_builtin = 1;
 	}
-	if (ft_strcmp(command, "pwd") == 0)
+	else if (!ft_strcmp(command, "pwd"))
 	{
 		if (args[1])
 			ft_putstr_fd("pwd: too many arguments\n", 2);
@@ -61,16 +61,17 @@ void	is_func_cmd(char *command,
 			printf("%s\n", string);
 			free(string);
 		}
-		i = 1;
+		is_builtin = 1;
 	}
-	if (ft_strcmp(command, "env") == 0)
+	else if (!ft_strcmp(command, "env"))
 	{
 		env_cmd_direct(pipex->cmd_head->main);
-		i = 1;
+		is_builtin = 1;
 	}
-	if (ft_strcmp(command, "exit") == 0 || ft_strcmp(command, "cd") == 0 || ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0)
-		i = 1;
-	if (i == 1)
+	else if (!ft_strcmp(command, "exit") || !ft_strcmp(command, "cd")
+		|| !ft_strcmp(command, "export") || !ft_strcmp(command, "unset"))
+		is_builtin = 1;
+	if (is_builtin)
 	{
 		clean_pipex(pipex, NULL, 0);
 		free_total(cmd_head->list_head, cmd_head->main, cmd_head);
@@ -100,48 +101,44 @@ void	handle_child_process(t_pipex *pipex, int i, int *pipe_fd, char **envp)
 	exit(127);
 }
 
+static void	handle_special_cmds(t_pipex *pipex, int i)
+{
+	t_command	*current_cmd;
+
+	current_cmd = (t_command *)ft_lstget(pipex->cmd_head->head, i)->content;
+	if (current_cmd->command != NULL)
+	{
+		if (ft_strcmp("unset", current_cmd->command) == 0)
+			unset_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
+		else if (ft_strcmp("export", current_cmd->command) == 0)
+			export_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
+		else if (ft_strcmp("cd", current_cmd->command) == 0)
+			cd_cmd(pipex->cmd_head->list_head, pipex->cmd_head->envp);
+		else if (ft_strcmp("exit", current_cmd->command) == 0)
+		{
+			clean_pipex(pipex, NULL, 0);
+			free_total(pipex->cmd_head->list_head,
+				pipex->cmd_head->main, pipex->cmd_head);
+			exit(0);
+		}
+	}
+}
+
 void	exec_cmd(t_pipex *pipex, int i, char **envp)
 {
-	int		pipe_fd[2];
-	pid_t	pid;
+	int			pipe_fd[2];
+	pid_t		pid;
 
-	(void)envp;
 	if (pipe(pipe_fd) == -1)
 		return (perror("Error: Failed to create pipe"),
-			(void)(pipex->cmd_head->error = 32));
+			pipex->cmd_head->error = 32, (void)0);
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("Error: Failed to fork");
-		pipex->cmd_head->error = 10;
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		return ;
-	}
+		return (perror("Error: Failed to fork"), pipex->cmd_head->error = 10,
+			close(pipe_fd[0]), close(pipe_fd[1]), (void)0);
 	if (pid == 0)
 		handle_child_process(pipex, i, pipe_fd, envp);
-	t_command *current_cmd = (t_command *)ft_lstget(pipex->cmd_head->head, i)->content;
-	if (i == pipex->cmd_head->size - 1 && 
-		current_cmd->command != NULL && 
-		ft_strcmp("unset", current_cmd->command) == 0)
-		unset_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
-	if (i == pipex->cmd_head->size - 1 &&
-		current_cmd->command != NULL &&
-		ft_strcmp("export", current_cmd->command) == 0)
-		export_cmd(pipex->cmd_head->list_head, &pipex->cmd_head->main);
-	if (i == pipex->cmd_head->size - 1 &&
-		current_cmd->command != NULL &&
-		ft_strcmp("cd", current_cmd->command) == 0)
-		cd_cmd(pipex->cmd_head->list_head, pipex->cmd_head->envp);
-	if (i == pipex->cmd_head->size - 1 &&
-		current_cmd->command != NULL &&
-		ft_strcmp("exit", current_cmd->command) == 0)
-	{
-		t_command_head *head = pipex->cmd_head;
-		clean_pipex(pipex, NULL, 0);
-		free_total(head->list_head, head->main, head);
-		exit(0);
-	}
+	handle_special_cmds(pipex, i);
 	pipex->pid_tab[i] = pid;
 	close(pipe_fd[1]);
 	pipex->pipe_fd[0] = pipe_fd[0];

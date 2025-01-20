@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 17:10:58 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/20 16:55:45 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,34 +48,24 @@ static void	execute_all_commands(t_pipex *pipex,
 	}
 }
 
-static void	handle_waiting(t_command_head *cmd_head, pid_t *pid_tab)
+static void	wait_for_children(t_pipex *pipex, t_command_head *cmd_head)
 {
-	int	i;
-	int	status;
-	int	exit_code;
+	int		status;
+	int		i;
 
 	i = 0;
-	while (i < cmd_head->size)
+	while (pipex->pid_tab[i] && i < cmd_head->size)
 	{
-		if (waitpid(pid_tab[i], &status, 0) == -1)
-			perror("Error: Failed to wait for child process");
-		else if (WIFEXITED(status))
+		if (waitpid(pipex->pid_tab[i], &status, 0) == -1)
 		{
-			exit_code = WEXITSTATUS(status);
-			if (exit_code != 0 && ((t_command *)ft_lstget(cmd_head->head,
-						i)->content)->command)
-			{
-				ft_putstr_fd("Command ", 2);
-				ft_putstr_fd(((t_command *)ft_lstget(cmd_head->head,
-							i)->content)->command, 2);
-				ft_putstr_fd(" PID: ", 2);
-				ft_putnbr_fd(pid_tab[i], 2);
-				ft_putstr_fd(" exited with status ", 2);
-				cmd_head->error = exit_code;
-				ft_putnbr_fd(exit_code, 2);
-				ft_putstr_fd("\n", 2);
-			}
+			perror("waitpid: ");
+			cmd_head->error = 1;
+			return ;
 		}
+		if (WIFEXITED(status))
+			cmd_head->error = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			cmd_head->error = 128 + WTERMSIG(status);
 		i++;
 	}
 }
@@ -93,6 +83,6 @@ void	exec_cmds(t_command_head *cmd_head)
 	if (!pipex->pid_tab)
 		return ;
 	execute_all_commands(pipex, cmd_head);
-	handle_waiting(cmd_head, pipex->pid_tab);
+	wait_for_children(pipex, cmd_head);
 	clean_pipex(pipex, NULL, 0);
 }
