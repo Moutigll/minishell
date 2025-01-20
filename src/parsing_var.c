@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 13:00:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 15:09:32 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:01:27 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,18 @@ static int	calcul_part1(t_node **node, char *name_var, char **e, int tab)
 	return (content - name + var_lst + 1);
 }
 
+static int	calcul_part3(t_node **node, char *name_var, char *str)
+{
+	int	content;
+	int	name;
+	int	var_lst;
+
+	content = (int)ft_strlen((const char *)(*node)->content);
+	name = (int)ft_strlen((const char *)name_var);
+	var_lst = (int)ft_strlen((const char *)str);
+	return (content - name + var_lst + 1);
+}
+
 static int	calcul_part2(t_node **node, char *name_var, t_list *lst)
 {
 	int	content;
@@ -132,7 +144,7 @@ static int	return_var_part1(int tab, t_node **node,
 	return (0);
 }
 
-static void	return_var(t_node **node, char **g_env, t_list *l)
+static void	return_var(t_node **node, char **g_env, t_list *l, int error)
 {
 	char	*name_var;
 	int		tab;
@@ -145,7 +157,15 @@ static void	return_var(t_node **node, char **g_env, t_list *l)
 		{
 			name_var = return_name_var(&(*node)->content[i], '$');
 			tab = search_exist(&name_var[1], g_env);
-			if (r_l(l, name_var) == NULL)
+			if ((*node)->content[i + 1] == '?')
+			{
+				change_var(calcul_part3(node, name_var, ft_itoa(error)), node,
+					ft_itoa(error),
+					(int)ft_strlen((const char *)name_var),
+					(int)ft_strlen((const char *)name_var));
+				i++;
+			}
+			else if (r_l(l, name_var) == NULL)
 				i += return_var_part1(tab, node, name_var, g_env);
 			else
 			{
@@ -189,7 +209,7 @@ void	replace_var(t_head **head, t_main *main)
 	{
 		node = lst->content;
 		if (node->type != 1)
-			return_var(&node, main->g_env, main->lst_var);
+			return_var(&node, main->g_env, main->lst_var, main->error);
 		lst = lst->next;
 	}
 }

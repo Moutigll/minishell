@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 13:42:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 16:47:15 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,6 +280,7 @@ static int	verif_var_part2(t_head *head, char *name_var, t_main **main, int *i)
 			free(val_var), free(name_var), -10);
 	if (*i != -1)
 		ft_lstadd_back(&(*main)->lst_var, ft_lstnew(val_var));
+	free(name_var);
 	return (0);
 }
 
@@ -299,6 +300,8 @@ static int	verif_var_part1(t_head *head, char *name_var,
 	if (i != -1)
 		ft_lstadd_back(&(*main)->lst_var,
 			ft_lstnew(ft_strjoin(name_var, val_var)));
+	free(name_var);
+	free(val_var);
 	return (0);
 }
 

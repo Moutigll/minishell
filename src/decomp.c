@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 15:31:47 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 15:53:32 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,6 +386,33 @@ static void	return_ptr(char *str, t_head *head,
 	free_tab((void **)ptr);
 }
 
+// static void print_arg(char **str)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		printf("Args %i = %s\n", i, str[i]);
+// 		i++;
+// 	}
+// }
+
+// static void	ptr(t_list *lst)
+// {
+// 	t_command	*node;
+
+// 	while (lst)
+// 	{
+// 		node = lst->content;
+// 		printf("Command = %s\n", node->command);
+// 		print_arg(node->args);
+// 		if (!lst->next)
+// 			break ;
+// 		lst = lst->next;
+// 	}
+// }
+
 t_command_head	*return_main(t_head *head, t_main *main)
 {
 	t_command_head	*head_main;
@@ -405,5 +432,7 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
 	ft_lstclear(&lst_cmd, free);
+	// ptr(head_main->head);
+	// printf("%s\n", head_main->out_fd);
 	return (head_main);
 }

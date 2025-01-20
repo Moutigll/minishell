@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 15:30:53 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 16:16:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,15 @@ int	find_block(t_head *head, int *n, char **content_block, int boolean)
 
 static char	*search_lst_var(t_list *lst, char *key)
 {
+	char	*tmp;
+
 	while (lst)
 	{
-		if (ft_strcmp((const char *)return_before(lst->content),
+		tmp = return_before(lst->content);
+		if (ft_strcmp((const char *)tmp,
 				(const char *)key) == 0)
-			return (lst->content);
+			return (free(tmp), lst->content);
+		free(tmp);
 		if (!lst->next)
 			break ;
 		lst = lst->next;
@@ -173,6 +177,23 @@ static void	export_cmd_part2(t_main **main, char *tmp, char *content_tmp)
 	}
 }
 
+static int	ft_lstcontain(t_list *lst, char *str)
+{
+	char	*tmp;
+
+	while (lst)
+	{
+		tmp = return_before(lst->content);
+		if (ft_strcmp(tmp, str) == 0)
+			return (free(tmp), 1);
+		free(tmp);
+		if (!lst->next)
+			break ;
+		lst = lst->next;
+	}
+	return (0);
+}
+
 static void	export_cmd_part1(t_head *node, t_main **main, char **content_tmp)
 {
 	int		result;
@@ -188,7 +209,8 @@ static void	export_cmd_part1(t_head *node, t_main **main, char **content_tmp)
 	}
 	else if (result != -10)
 	{
-		if (search_env(*main, *content_tmp) == -1)
+		if (search_env(*main, *content_tmp) == -1
+			&& ft_lstcontain((*main)->lst_var, *content_tmp) == 1)
 		{
 			(*main)->g_env = ft_realoc_ptr((*main)->g_env,
 					search_lst_var((*main)->lst_var, *content_tmp));

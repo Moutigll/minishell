@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 11:38:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:15:49 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,32 @@ void	print_list(t_list *lst)
 	}
 }
 
+static int	ver_void(t_list *lst)
+{
+	t_node	*node;
+	int		count;
+	int		i;
+
+	count = 0;
+	while (lst)
+	{
+		node = lst->content;
+		i = 0;
+		while (node->content[i])
+		{
+			if (node->content[i] != ' ')
+				count++;
+			i++;
+		}
+		if (!lst->next)
+			break ;
+		lst = lst->next;
+	}
+	if (count > 0)
+		return (1);
+	return (0);
+}
+
 static int	gest_command(t_head *head, t_main **main, char *command)
 {
 	t_command_head	*head_main;
@@ -31,9 +57,13 @@ static int	gest_command(t_head *head, t_main **main, char *command)
 		verif_var(head, main, 0);
 	free(command);
 	exit_cmd(head, *main);
-	head_main = return_main(head, *main);
-	exec_cmds(head_main);
-	free(head_main);
+	if (ver_void(head->head) == 1)
+	{
+		head_main = return_main(head, *main);
+		exec_cmds(head_main);
+		printf("ERROR CODE: %i\n", head_main->error);
+		free(head_main);
+	}
 	return (0);
 }
 
@@ -50,6 +80,7 @@ void	while_input(t_main **main)
 	char	*prompt;
 	t_head	*head;
 
+	head = NULL;
 	while (1)
 	{
 		prompt = read_cmd();

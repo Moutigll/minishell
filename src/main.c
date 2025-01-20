@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/09 16:37:53 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 16:53:45 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,12 @@ int	main(int argc, char **argv, char **env)
 	t_list	*lst_var;
 	t_main	*main;
 
-	(void)argc;
-	(void)argv;
+	(void) argc;
+	(void) argv;
 	lst_var = NULL;
 	main = malloc(sizeof(t_main));
 	main->lst_var = lst_var;
+	main->error = 0;
 	copy_env_to_mainstruct(env, &main);
 	while_input(&main);
 	return (0);
