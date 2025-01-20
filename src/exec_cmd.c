@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/20 16:55:45 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/20 18:26:22 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	wait_for_children(t_pipex *pipex, t_command_head *cmd_head)
 	int		i;
 
 	i = 0;
-	while (pipex->pid_tab[i] && i < cmd_head->size)
+	while (i < cmd_head->size)
 	{
 		if (waitpid(pipex->pid_tab[i], &status, 0) == -1)
 		{
@@ -84,5 +84,5 @@ void	exec_cmds(t_command_head *cmd_head)
 		return ;
 	execute_all_commands(pipex, cmd_head);
 	wait_for_children(pipex, cmd_head);
-	clean_pipex(pipex, NULL, 0);
+	clean_pipex(pipex, NULL, cmd_head->error);
 }

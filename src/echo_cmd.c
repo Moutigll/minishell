@@ -6,63 +6,76 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 16:06:33 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 18:56:47 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char	*echo_return_part1(t_node *node, int n, int flag, char **result)
+static void	change_result(t_node *node, char **result, int *n)
 {
-	if (ft_strcmp("|", node->content) == 0)
+	char	*tmp_2;
+	char	*tmp;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (node->content[i])
 	{
-		if (flag == 0)
-			*result = ft_strfreejoin(*result, ft_strdup("\n"));
-		return (*result);
+		if ((node->content[i] == '|' || node->content[i] == '<' || node->content[i] == '>') && node->type == 2)
+		{
+			*n = 1;
+			break ;
+		}
+		i++;
 	}
-	if (n == 0 && (int)ft_strlen((const char *)node->content) != 0)
-		*result = ft_strdup(node->content);
-	else
+	tmp = malloc(sizeof(char) * (i + 1));
+	j = 0;
+	while (j < i)
 	{
-		if (node->head == 1 && n != 0 && ft_strlen(node->content) != 0)
-			*result = ft_strjoin(*result,
-					ft_strjoin(ft_strdup(" "), ft_strdup(node->content)));
-		else
-			*result = ft_strjoin(*result, ft_strdup(node->content));
+		tmp[j] = node->content[j];
+		j++;
 	}
-	return (NULL);
+	tmp[j] = '\0';
+	tmp_2 = *result;
+	*result = ft_strjoin(tmp_2, tmp);
+	free(tmp_2);
+	free(tmp);
 }
 
-static char	*echo_return(t_list *lst, int flag, int tmp)
+static char	*echo_return(t_list *lst, int flag)
 {
 	char	*result;
 	t_node	*node;
+	char	*tmp;
 	int		n;
 
 	n = 0;
-	result = "\0";
-	ft_listnode(&lst, tmp);
+	result = ft_strdup("");
 	while (lst)
 	{
 		node = lst->content;
-		if (echo_return_part1(node, n, flag, &result) != NULL)
-			return (result);
-		if (!lst->next)
+		change_result(node, &result, &n);
+		if (!lst->next || n == 1)
 			break ;
 		lst = lst->next;
-		if ((int)ft_strlen((const char *)node->content) != 0)
-			n++;
 	}
 	if (flag == 0)
-		result = ft_strfreejoin(result, ft_strdup("\n"));
+	{
+		tmp = result;
+		result = ft_strjoin(tmp, "\n");
+		free(tmp);
+	}
 	return (result);
 }
 
 char	*echo_command(t_head *head)
 {
-	int	tmp_2;
-	int	flag;
-	int	tmp;
+	t_head	*head_tmp;
+	int		tmp_2;
+	int		flag;
+	int		tmp;
+	char	*result;
 
 	flag = 0;
 	tmp = check_equal("echo", head, 0);
@@ -72,9 +85,12 @@ char	*echo_command(t_head *head)
 		tmp = check_equal("-n", head, tmp);
 		if (tmp >= 0)
 			flag = 1;
-		if (tmp_2 > tmp)
+		else
 			tmp = tmp_2;
-		return (echo_return(head->head, flag, tmp));
+		head_tmp = return_head(head, tmp);
+		result = echo_return(head_tmp->head, flag);
+		free(head_tmp);
+		return (result);
 	}
 	return (NULL);
 }

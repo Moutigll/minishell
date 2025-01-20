@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 15:53:32 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:16:33 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ static int	separated_part1(int *i, int *j, t_node *node, t_list **lst)
 		return (1);
 	}
 	*i = 0;
-	if (node->content[0] == '>' || node->content[0] == '<')
+	if ((node->content[0] == '>' || node->content[0] == '<') && node->type == 2)
 	{
 		*lst = (*lst)->next;
 		j++;
@@ -434,5 +434,8 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	ft_lstclear(&lst_cmd, free);
 	// ptr(head_main->head);
 	// printf("%s\n", head_main->out_fd);
+	// printf("in_fd = %s\n", head_main->in_fd);
+	// printf("out_fd = %s\n", head_main->out_fd);
+	// printf("here_doc = %s\n", head_main->here_doc);
 	return (head_main);
 }
