@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/16 17:11:17 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 21:40:38 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	init_pipex(t_pipex *pipex, t_command_head *cmd_head)
 	pipex->pipe_fd[0] = -1;
 	pipex->cmd_head = cmd_head;
 	pipex->cmd_head->error = 0;
+	pipex->pid_tab = NULL;
 	pipex->stdin_backup = dup(STDIN_FILENO);
 	pipex->stdout_backup = dup(STDOUT_FILENO);
 }
