@@ -6,13 +6,13 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 18:56:47 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:29:26 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	change_result(t_node *node, char **result, int *n)
+static void	change_result(t_node *node, char **result, int *n, int k)
 {
 	char	*tmp_2;
 	char	*tmp;
@@ -28,6 +28,12 @@ static void	change_result(t_node *node, char **result, int *n)
 			break ;
 		}
 		i++;
+	}
+	if (node->head == 1 && k != 0 && i != 0)
+	{
+		tmp_2 = *result;
+		*result = ft_strjoin(tmp_2, " ");
+		free(tmp_2);
 	}
 	tmp = malloc(sizeof(char) * (i + 1));
 	j = 0;
@@ -49,16 +55,19 @@ static char	*echo_return(t_list *lst, int flag)
 	t_node	*node;
 	char	*tmp;
 	int		n;
+	int		i;
 
+	i = 0;
 	n = 0;
 	result = ft_strdup("");
 	while (lst)
 	{
 		node = lst->content;
-		change_result(node, &result, &n);
+		change_result(node, &result, &n, i);
 		if (!lst->next || n == 1)
 			break ;
 		lst = lst->next;
+		i++;
 	}
 	if (flag == 0)
 	{

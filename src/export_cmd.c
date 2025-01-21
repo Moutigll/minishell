@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 20:05:52 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:25:07 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,9 +165,40 @@ static int	export_cmd_part(t_head *head, t_main *main)
 	return (0);
 }
 
+static int	check_correct(char *str)
+{
+	int	count_a;
+	int	count_b;
+	int	count_c;
+	int	i;
+
+	i = 0;
+	count_a = 0;
+	count_b = 0;
+	count_c = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ' && str[i] != '=' && count_b == 0)
+			count_a++;
+		if (str[i] == '=')
+			count_b++;
+		if (str[i] != ' ' && count_b >= 1)
+			count_c++;
+		i++;
+	}
+	if (count_a > 0 && count_c > 0 && count_b == 1)
+		return (1);
+	return (0);
+}
+
 static void	export_cmd_part2(t_main *main, char *tmp, char *content_tmp)
 {
-	if (search_env(main, return_before(tmp)) == -1)
+	char	*tmp_2;
+
+	if (check_correct(content_tmp) == 0)
+		return ;
+	tmp_2 = return_before(tmp);
+	if (search_env(main, tmp_2) == -1)
 		main->g_env = ft_realoc_ptr(main->g_env, content_tmp);
 	else
 	{
@@ -175,6 +206,7 @@ static void	export_cmd_part2(t_main *main, char *tmp, char *content_tmp)
 		main->g_env[search_env(main,
 				return_before(tmp))] = ft_strdup(content_tmp);
 	}
+	free(tmp_2);
 }
 
 static int	ft_lstcontain(t_list *lst, char *str)

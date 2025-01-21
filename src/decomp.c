@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 19:16:33 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:27:30 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,7 +256,8 @@ static t_command	*return_node(char *command)
 
 	cmd = malloc(sizeof(t_command));
 	cmd->args = ft_split_a((const char *)command, ' ');
-	cmd->command = ft_strdup((const char *)cmd->args[0]);
+	if (cmd->args[0] != NULL)
+		cmd->command = ft_strdup((const char *)cmd->args[0]);
 	return (cmd);
 }
 
@@ -332,9 +333,25 @@ static void	test_in(char **str)
 	}
 }
 
+static int	count_print(char *str)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 static void	set_ptr_infd(t_command_head **head_main, char **in_fd)
 {
-	if (in_fd[0] != NULL)
+	if (in_fd[0] != NULL && count_print(in_fd[return_last(in_fd)]) > 0)
 		(*head_main)->in_fd = ft_strdup(in_fd[return_last(in_fd)]);
 	else
 		(*head_main)->in_fd = NULL;
@@ -342,7 +359,7 @@ static void	set_ptr_infd(t_command_head **head_main, char **in_fd)
 
 static void	set_ptr_outfd(t_command_head **head_main, char **out_fd)
 {
-	if (out_fd[0] != NULL)
+	if (out_fd[0] != NULL && count_print(out_fd[return_last(out_fd)]) > 0)
 		(*head_main)->out_fd = ft_strdup(out_fd[return_last(out_fd)]);
 	else
 		(*head_main)->out_fd = NULL;
@@ -350,7 +367,7 @@ static void	set_ptr_outfd(t_command_head **head_main, char **out_fd)
 
 static void	set_ptr_here_doc(t_command_head **head_main, char **here_doc)
 {
-	if (here_doc[0] != NULL)
+	if (here_doc[0] != NULL && count_print(here_doc[return_last(here_doc)]) > 0)
 		(*head_main)->here_doc = ft_strdup(here_doc[return_last(here_doc)]);
 	else
 		(*head_main)->here_doc = NULL;
@@ -386,17 +403,17 @@ static void	return_ptr(char *str, t_head *head,
 	free_tab((void **)ptr);
 }
 
-// static void print_arg(char **str)
-// {
-// 	int	i;
+void print_arg(char **str)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		printf("Args %i = %s\n", i, str[i]);
-// 		i++;
-// 	}
-// }
+	i = 0;
+	while (str[i])
+	{
+		printf("Args %i = %s\n", i, str[i]);
+		i++;
+	}
+}
 
 // static void	ptr(t_list *lst)
 // {
@@ -432,10 +449,5 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
 	ft_lstclear(&lst_cmd, free);
-	// ptr(head_main->head);
-	// printf("%s\n", head_main->out_fd);
-	// printf("in_fd = %s\n", head_main->in_fd);
-	// printf("out_fd = %s\n", head_main->out_fd);
-	// printf("here_doc = %s\n", head_main->here_doc);
 	return (head_main);
 }

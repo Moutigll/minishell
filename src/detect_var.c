@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   detect_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 19:54:17 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:18:30 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int	change_var(char *name_var, char *val_var, t_main *main)
 	while (lst_tmp)
 	{
 		var = return_name_var(lst_tmp->content, '=');
-		if (ft_strcmp((const char *)var, (const char *)name_var) == 0)
+		if (ft_strcmp((const char *)var, (const char *)name_var) == 0 || ft_strlen(var) == 0)
 		{
 			lst_tmp->content = ft_strfreejoin(name_var, val_var);
 			return (-1);
@@ -165,7 +165,7 @@ static char	*name_var_quote(t_head *head)
 		node = lst->content;
 		if (node->head == 1 && j != 0)
 			return (result);
-		name_var_quote_part1(node, &i, &result);
+		free(name_var_quote_part1(node, &i, &result));
 		if (!lst->next)
 			break ;
 		lst = lst->next;
@@ -293,14 +293,19 @@ static int	verif_var_part1(t_head *head, char *name_var,
 	val_var = return_value(head->head, name_var, node);
 	i = change_var(name_var, val_var, main);
 	if (search_env(main, name_var) != -1)
-		return (replace_var_env(ft_strjoin((const char *)name_var,
-					(const char *)val_var), main,
-				search_env(main, name_var)), free(val_var),
-			free(name_var), -10);
+	{
+		replace_var_env(ft_strjoin((const char *)name_var, (const char *)val_var), main, search_env(main, name_var));
+		if (val_var != NULL)
+			free(val_var);
+		if (name_var != NULL)
+			free(name_var);
+		return (-10);
+	}
 	if (i != -1)
+	{
 		ft_lstadd_back(&main->lst_var,
 			ft_lstnew(ft_strjoin(name_var, val_var)));
-	free(name_var);
+	}
 	free(val_var);
 	return (0);
 }

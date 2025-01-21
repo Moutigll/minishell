@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 20:08:22 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:03:19 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ typedef struct s_malloc
 	int	j;
 }	t_malloc;
 
+void print_arg(char **str);
+
 // define
 # define ERR_QUOTE "Error\nQuote open !"
 
@@ -99,6 +101,9 @@ int				find_block(t_head *head,
 int				export_cmd(t_head *head, t_main *main);
 t_head			*return_head(t_head *head, int i);
 t_list			*return_lst(t_head *head, int i);
+
+// signal.c
+void			signal_handler(int sig);
 
 // unset.c
 int				unset_cmd(t_head *head, t_main *main);

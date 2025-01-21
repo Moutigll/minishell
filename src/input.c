@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 19:47:35 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:57:27 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@ void	while_input(t_main *main)
 		prompt = read_cmd(main);
 		command = readline(prompt);
 		free(prompt);
+		if (command == NULL)
+		{
+			printf("exit\n");
+			free(command);
+			exit(0);
+		}
 		if (parsing_error(command, 0))
 		{
 			add_history(command);
@@ -95,7 +101,7 @@ void	while_input(t_main *main)
 				replace_var(&head, main);
 				gest_command(head, main, command);
 			}
+			free_head(head);
 		}
-		free_head(head);
 	}
 }
