@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 14:27:30 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:19:57 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,9 +396,9 @@ static void	return_ptr(char *str, t_head *head,
 		set_ptr_here_doc(head_main, ptr);
 	if (state == 4)
 	{
-		(*head_main)->out_mode = 0;
+		(*head_main)->out_mode = 1;
 		if (ptr != NULL)
-			(*head_main)->out_mode = 1;
+			(*head_main)->out_mode = 0;
 	}
 	free_tab((void **)ptr);
 }
@@ -430,6 +430,59 @@ void print_arg(char **str)
 // 	}
 // }
 
+static int check_redirec(char *attach)
+{
+    int count_a;
+    int count_b;
+    int count_c;
+    int i;
+    int in_single_quotes;  // Variable pour suivre l'état des guillemets simples
+    int in_double_quotes;  // Variable pour suivre l'état des guillemets doubles
+
+    i = 0;
+    count_a = 0;
+    count_b = 0;
+    count_c = 0;
+    in_single_quotes = 0;  // Initialisation des états des guillemets
+    in_double_quotes = 0;
+
+    while (attach[i])
+    {
+        if (attach[i] == '\'' && !in_double_quotes)  // Si on rencontre un guillemet simple
+            in_single_quotes = !in_single_quotes;  // On inverse l'état des guillemets simples
+        if (attach[i] == '\"' && !in_single_quotes)  // Si on rencontre un guillemet double
+            in_double_quotes = !in_double_quotes;  // On inverse l'état des guillemets doubles
+
+        if (in_single_quotes || in_double_quotes)  // Si on est dans des guillemets, on ignore les symboles de redirection
+        {
+            i++;
+            continue;
+        }
+
+        if (count_b > 0 && (count_a == 0 || count_c == 0))
+        {
+            count_a = 0;
+            count_b = 0;
+            count_c = 0;
+        }
+
+        if (attach[i] != ' ' && attach[i] != '<' && attach[i] != '>' && attach[i] != '|' && count_b == 0)
+            count_a++;
+
+        if (attach[i] == '<' || attach[i] == '>' || attach[i] == '|')
+            count_b++;
+
+        if (attach[i] != ' ' && attach[i] != '<' && attach[i] != '>' && attach[i] != '|' && count_b != 0)
+            count_c++;
+
+        i++;
+    }
+
+    if (count_b > 0 && (count_a == 0 || count_c == 0))
+        return (0);
+    return (1);
+}
+
 t_command_head	*return_main(t_head *head, t_main *main)
 {
 	t_command_head	*head_main;
@@ -448,6 +501,13 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	separated(head, &lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
+	if (check_redirec(attach_block_quote(head)) == 0)
+		return (NULL);
 	ft_lstclear(&lst_cmd, free);
+	// printf("in_fd = %s\n", head_main->in_fd);
+	// printf("out_fd = %s\n", head_main->out_fd);
+	// printf("here_doc = %s\n", head_main->here_doc);
+	// printf("Append = %i\n", head_main->out_mode);
+	// ptr(head_main->head);
 	return (head_main);
 }

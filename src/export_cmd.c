@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 14:25:07 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:01:49 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,19 @@ static int	export_cmd_part(t_head *head, t_main *main)
 	return (0);
 }
 
+static int	return_correct_char(char c)
+{
+	if (c >= 'A' && c <= 'Z')
+		return (1);
+	if (c >= 'a' && c <= 'z')
+		return (1);
+	if (c >= '0' && c <= '9')
+		return (1);
+	if (c == '_')
+		return (1);
+	return (0);
+}
+
 static int	check_correct(char *str)
 {
 	int	count_a;
@@ -178,11 +191,13 @@ static int	check_correct(char *str)
 	count_c = 0;
 	while (str[i])
 	{
-		if (str[i] != ' ' && str[i] != '=' && count_b == 0)
+		if (return_correct_char(str[i]) && count_b == 0)
 			count_a++;
 		if (str[i] == '=')
 			count_b++;
-		if (str[i] != ' ' && count_b >= 1)
+		else if (return_correct_char(str[i]) == 0)
+			return (0);
+		if (return_correct_char(str[i]) && count_b >= 1)
 			count_c++;
 		i++;
 	}
@@ -196,7 +211,10 @@ static void	export_cmd_part2(t_main *main, char *tmp, char *content_tmp)
 	char	*tmp_2;
 
 	if (check_correct(content_tmp) == 0)
+	{
+		printf("export: bad assignment\n");
 		return ;
+	}
 	tmp_2 = return_before(tmp);
 	if (search_env(main, tmp_2) == -1)
 		main->g_env = ft_realoc_ptr(main->g_env, content_tmp);
@@ -234,6 +252,11 @@ static void	export_cmd_part1(t_head *node, t_main *main, char **content_tmp)
 	result = verif_var(node, main, 1);
 	if (result == 0)
 	{
+		if (check_correct(*content_tmp) == 0)
+		{
+			printf("export: not valid in this context\n");
+			return ;
+		}
 		remove_last_element(&main->lst_var);
 		tmp = return_before(*content_tmp);
 		export_cmd_part2(main, tmp, *content_tmp);

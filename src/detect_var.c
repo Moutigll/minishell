@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 14:18:30 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:08:56 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,10 +274,16 @@ static int	verif_var_part2(t_head *head, char *name_var, t_main *main, int *i)
 	}
 	*i = change_var(name_var, val_var, main);
 	if (search_env(main, name_var) != -1)
-		return (replace_var_env(ft_strjoin((const char *)name_var,
-					(const char *)val_var), main,
+	{
+		if (val_var[0] == '=')
+			return (replace_var_env(ft_strjoin((const char *)name_var,
+						(const char *)val_var), main,
+					search_env(main, name_var)),
+				free(val_var), free(name_var), -10);
+		return (replace_var_env(ft_strdup(val_var), main,
 				search_env(main, name_var)),
 			free(val_var), free(name_var), -10);
+	}
 	if (*i != -1)
 		ft_lstadd_back(&main->lst_var, ft_lstnew(val_var));
 	free(name_var);

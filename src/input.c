@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 13:57:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:55:18 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static int	gest_command(t_head *head, t_main *main, char *command)
 	{
 		head_main = return_main(head, main);
 		exec_cmds(head_main);
-		(main)->error = head_main->error;
+		if (head_main != NULL)
+			(main)->error = head_main->error;
 		free(head_main);
 	}
 	return (0);
