@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 18:58:26 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:31:59 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,17 @@ static int	gest_command(t_head *head, t_main *main, char *command)
 // 	printf("out_fd = %s\n", head_cmd->out_fd);
 // }
 
+static void	exit_signal(t_main *main, char *command)
+{
+	printf("exit\n");
+	free_tab((void **)main->g_env);
+	free(main->path);
+	ft_lstclear(&main->lst_var, free);
+	free(main);
+	free(command);
+	exit(0);
+}
+
 void	while_input(t_main *main)
 {
 	char	*command;
@@ -88,15 +99,7 @@ void	while_input(t_main *main)
 		command = readline(prompt);
 		free(prompt);
 		if (command == NULL)
-		{
-			printf("exit\n");
-			free_tab((void **)main->g_env);
-			free(main->path);
-			ft_lstclear(&main->lst_var, free);
-			free(main);
-			free(command);
-			exit(0);
-		}
+			exit_signal(main, command);
 		if (parsing_error(command, 0))
 		{
 			add_history(command);

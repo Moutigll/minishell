@@ -6,15 +6,34 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 14:45:06 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:36:06 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	change_result(t_node *node, char **result, int *n, int k)
+static void	change_result_part1(char **result)
+{
+	char	*tmp;
+
+	tmp = *result;
+	*result = ft_strjoin(tmp, " ");
+	free(tmp);
+}
+
+static void	change_result_part2(char *tmp, char **result, int j)
 {
 	char	*tmp_2;
+
+	tmp[j] = '\0';
+	tmp_2 = *result;
+	*result = ft_strjoin(tmp_2, tmp);
+	free(tmp_2);
+	free(tmp);
+}
+
+static void	change_result(t_node *node, char **result, int *n, int k)
+{
 	char	*tmp;
 	int		i;
 	int		j;
@@ -22,7 +41,8 @@ static void	change_result(t_node *node, char **result, int *n, int k)
 	i = 0;
 	while (node->content[i])
 	{
-		if ((node->content[i] == '|' || node->content[i] == '<' || node->content[i] == '>') && node->type == 2)
+		if ((node->content[i] == '|' || node->content[i] == '<'
+				|| node->content[i] == '>') && node->type == 2)
 		{
 			*n = 1;
 			break ;
@@ -30,11 +50,7 @@ static void	change_result(t_node *node, char **result, int *n, int k)
 		i++;
 	}
 	if (node->head == 1 && k != 0 && i != 0)
-	{
-		tmp_2 = *result;
-		*result = ft_strjoin(tmp_2, " ");
-		free(tmp_2);
-	}
+		change_result_part1(result);
 	tmp = malloc(sizeof(char) * (i + 1));
 	j = 0;
 	while (j < i)
@@ -42,11 +58,7 @@ static void	change_result(t_node *node, char **result, int *n, int k)
 		tmp[j] = node->content[j];
 		j++;
 	}
-	tmp[j] = '\0';
-	tmp_2 = *result;
-	*result = ft_strjoin(tmp_2, tmp);
-	free(tmp_2);
-	free(tmp);
+	change_result_part2(tmp, result, j);
 }
 
 static char	*echo_return(t_list *lst, int flag)

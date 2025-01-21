@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 19:20:16 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:30:27 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -494,14 +494,8 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	separated(head, &lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
-	printf("--->%i\n", check_redirec(attach_block_quote(head)));
 	if (check_redirec(attach_block_quote(head)) == 0)
 		return (NULL);
 	ft_lstclear(&lst_cmd, free);
-	// printf("in_fd = %s\n", head_main->in_fd);
-	// printf("out_fd = %s\n", head_main->out_fd);
-	// printf("here_doc = %s\n", head_main->here_doc);
-	// printf("Append = %i\n", head_main->out_mode);
-	// ptr(head_main->head);
 	return (head_main);
 }

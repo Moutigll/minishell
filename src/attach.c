@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 14:17:19 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 19:21:26 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:45:31 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,13 @@ static char	*attach_block_quote_part_2(int i,
 
 static char	*attach_block_quote_part_1(t_node *node, char *result)
 {
+	char *temp;
+
 	result = attach_block_quote_part_2(0, node, result, "\"");
 	result = attach_block_quote_part_2(1, node, result, "\'");
+	temp = result;
+	result = ft_strjoin(temp, node->content);
+	free(temp);
 	result = attach_block_quote_part_2(0, node, result, node->content);
 	result = attach_block_quote_part_2(1, node, result, "\"");
 	return (result);

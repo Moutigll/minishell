@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 19:11:13 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:42:17 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int	change_var(char *name_var, char *val_var, t_main *main)
 	while (lst_tmp)
 	{
 		var = return_name_var(lst_tmp->content, '=');
-		if (ft_strcmp((const char *)var, (const char *)name_var) == 0 || ft_strlen(var) == 0)
+		if (ft_strcmp(var, name_var) == 0 || ft_strlen(var) == 0)
 		{
 			free(lst_tmp->content);
 			free(var);
@@ -222,12 +222,10 @@ static char	*return_value(t_list *lst, char *name_var, t_node *node)
 	t_node	*node_tmp;
 	char	*result;
 	char	*temp;
-	int		len;
 	int		i;
 
 	i = 0;
-	len = ft_strlen((const char *)name_var);
-	result = ft_strdup((const char *)&(node->content)[len]);
+	result = ft_strdup((const char *)&(node->content)[ft_strlen(name_var)]);
 	if (!result)
 		return (NULL);
 	lst = lst->next;
@@ -237,7 +235,7 @@ static char	*return_value(t_list *lst, char *name_var, t_node *node)
 		if (node_tmp->head == 1)
 			break ;
 		temp = result;
-		result = ft_strjoin((const char *)temp, (const char *)node_tmp->content);
+		result = ft_strjoin(temp, node_tmp->content);
 		free(temp);
 		if (!result)
 			return (NULL);
@@ -268,7 +266,7 @@ static void	replace_var_env(char *content, t_main *main, int n)
 	main->g_env[n] = content;
 }
 
-static int	verif_var_part2(t_head *head, char *name_var, t_main *main, int *i)
+static int	verif_var_part2(t_head *head, char *name, t_main *main, int *i)
 {
 	char	*val_var;
 
@@ -277,26 +275,24 @@ static int	verif_var_part2(t_head *head, char *name_var, t_main *main, int *i)
 	{
 		if (val_var != NULL)
 			free(val_var);
-		if (name_var != NULL)
-			free(name_var);
+		if (name != NULL)
+			free(name);
 		return (-1);
 	}
-	*i = change_var(name_var, val_var, main);
-	if (search_env(main, name_var) != -1)
+	*i = change_var(name, val_var, main);
+	if (search_env(main, name) != -1)
 	{
 		if (val_var[0] == '=')
-			return (replace_var_env(ft_strjoin((const char *)name_var,
+			return (replace_var_env(ft_strjoin((const char *)name,
 						(const char *)val_var), main,
-					search_env(main, name_var)),
-				free(val_var), free(name_var), -10);
+					search_env(main, name)),
+				free(val_var), free(name), -10);
 		return (replace_var_env(ft_strdup(val_var), main,
-				search_env(main, name_var)),
-			free(val_var), free(name_var), -10);
+				search_env(main, name)), free(val_var), free(name), -10);
 	}
 	if (*i != -1)
 		ft_lstadd_back(&main->lst_var, ft_lstnew(val_var));
-	free(name_var);
-	return (0);
+	return (free(name), 0);
 }
 
 static int	verif_var_part1(t_head *head, char *name_var,
@@ -309,7 +305,8 @@ static int	verif_var_part1(t_head *head, char *name_var,
 	i = change_var(name_var, val_var, main);
 	if (search_env(main, name_var) != -1)
 	{
-		replace_var_env(ft_strjoin((const char *)name_var, (const char *)val_var), main, search_env(main, name_var));
+		replace_var_env(ft_strjoin(name_var, val_var),
+			main, search_env(main, name_var));
 		free(val_var);
 		free(name_var);
 		return (-10);
