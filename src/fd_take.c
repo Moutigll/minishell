@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 17:33:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 12:05:02 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:39:50 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	return_malloc_char(char *content, char *c, char **result)
 	tab = 0;
 	boolean = 0;
 	in_quote = 0;
-	while (content[i])
+	while ((int)ft_strlen(content) > i && content[i])
 	{
 		count = 0;
 		j = 0;
@@ -91,7 +91,7 @@ static void	return_malloc_char(char *content, char *c, char **result)
 		if (boolean == 0 && (int)ft_strlen(c) == count
 			&& content[i + j] != c[0])
 			i += return_malloc_char_part2(&boolean, result, tab, c);
-		if (content[i + j] == c[0])
+		if ((int)ft_strlen(content) > i + j && content[i + j] == c[0])
 			i++;
 		i++;
 	}

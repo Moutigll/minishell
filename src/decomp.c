@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 18:00:17 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:20:16 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -454,7 +454,7 @@ static int check_redirec(char *attach)
 		if (in_single_quotes || in_double_quotes)
 		{
 			i++;
-			continue ;
+			continue;
 		}
 		if (count_b > 0 && (count_a == 0 || count_c == 0))
 		{
@@ -494,6 +494,7 @@ t_command_head	*return_main(t_head *head, t_main *main)
 	separated(head, &lst_cmd);
 	head_main->head = return_command_main(lst_cmd);
 	head_main->size = ft_lstsize(lst_cmd);
+	printf("--->%i\n", check_redirec(attach_block_quote(head)));
 	if (check_redirec(attach_block_quote(head)) == 0)
 		return (NULL);
 	ft_lstclear(&lst_cmd, free);

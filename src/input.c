@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 16:23:51 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:58:26 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,10 @@ void	while_input(t_main *main)
 		if (command == NULL)
 		{
 			printf("exit\n");
+			free_tab((void **)main->g_env);
+			free(main->path);
+			ft_lstclear(&main->lst_var, free);
+			free(main);
 			free(command);
 			exit(0);
 		}

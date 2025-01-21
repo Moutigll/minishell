@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 18:31:23 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:55:09 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,17 @@ static void	remove_last_element(t_list **lst)
 	prev->next = NULL;
 }
 
-static t_list	*remove_node_by_content_part1(t_list **prev,
-		t_list **current, t_list **next_node, t_list *lst)
+static t_list	*remove_node_by_content_part1(t_list *prev,
+		t_list *current, t_list *next_node, t_list *lst)
 {
-	*next_node = (*current)->next;
-	free((*current)->content);
-	free(*current);
-	if (*prev == NULL)
-		return (*next_node);
+	next_node = current->next;
+	free(current->content);
+	free(current);
+	if (prev == NULL)
+		return (next_node);
 	else
 	{
-		(*prev)->next = *next_node;
+		prev->next = next_node;
 		return (lst);
 	}
 }
@@ -135,12 +135,13 @@ static t_list	*remove_node_by_content(t_list *lst, char *str)
 		return (lst);
 	current = lst;
 	prev = NULL;
+	next_node = NULL;
 	while (current)
 	{
 		if (ft_strcmp((const char *)current->content, (const char *)str) == 0)
 		{
-			lst = remove_node_by_content_part1(&prev,
-					&current, &next_node, lst);
+			lst = remove_node_by_content_part1(prev,
+					current, next_node, lst);
 			current = next_node;
 			continue ;
 		}

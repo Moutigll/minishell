@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   detect_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 16:56:31 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:11:13 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,12 @@ static int	change_var(char *name_var, char *val_var, t_main *main)
 		var = return_name_var(lst_tmp->content, '=');
 		if (ft_strcmp((const char *)var, (const char *)name_var) == 0 || ft_strlen(var) == 0)
 		{
+			free(lst_tmp->content);
+			free(var);
 			lst_tmp->content = ft_strjoin(name_var, val_var);
 			return (-1);
 		}
+		free(var);
 		if (!lst_tmp->next)
 			break ;
 		lst_tmp = lst_tmp->next;
@@ -218,20 +221,26 @@ static char	*return_value(t_list *lst, char *name_var, t_node *node)
 {
 	t_node	*node_tmp;
 	char	*result;
+	char	*temp;
 	int		len;
 	int		i;
 
 	i = 0;
 	len = ft_strlen((const char *)name_var);
 	result = ft_strdup((const char *)&(node->content)[len]);
+	if (!result)
+		return (NULL);
 	lst = lst->next;
 	while (lst)
 	{
 		node_tmp = lst->content;
 		if (node_tmp->head == 1)
 			break ;
-		result = ft_strjoin((const char *)result,
-				(const char *)node_tmp->content);
+		temp = result;
+		result = ft_strjoin((const char *)temp, (const char *)node_tmp->content);
+		free(temp);
+		if (!result)
+			return (NULL);
 		if (!lst->next)
 			break ;
 		lst = lst->next;
@@ -256,7 +265,7 @@ static int	check_correct(char *content)
 static void	replace_var_env(char *content, t_main *main, int n)
 {
 	free(main->g_env[n]);
-	main->g_env[n] = ft_strdup(content);
+	main->g_env[n] = content;
 }
 
 static int	verif_var_part2(t_head *head, char *name_var, t_main *main, int *i)
@@ -301,13 +310,11 @@ static int	verif_var_part1(t_head *head, char *name_var,
 	if (search_env(main, name_var) != -1)
 	{
 		replace_var_env(ft_strjoin((const char *)name_var, (const char *)val_var), main, search_env(main, name_var));
-		if (val_var != NULL)
-			free(val_var);
-		if (name_var != NULL)
-			free(name_var);
+		free(val_var);
+		free(name_var);
 		return (-10);
 	}
-	if (i != -1)
+	else if (i != -1)
 	{
 		ft_lstadd_back(&main->lst_var,
 			ft_lstnew(ft_strjoin(name_var, val_var)));
