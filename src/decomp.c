@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 16:19:57 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:00:17 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,55 +432,48 @@ void print_arg(char **str)
 
 static int check_redirec(char *attach)
 {
-    int count_a;
-    int count_b;
-    int count_c;
-    int i;
-    int in_single_quotes;  // Variable pour suivre l'état des guillemets simples
-    int in_double_quotes;  // Variable pour suivre l'état des guillemets doubles
+	int	count_a;
+	int	count_b;
+	int	count_c;
+	int	i;
+	int	in_single_quotes;
+	int	in_double_quotes;
 
-    i = 0;
-    count_a = 0;
-    count_b = 0;
-    count_c = 0;
-    in_single_quotes = 0;  // Initialisation des états des guillemets
-    in_double_quotes = 0;
-
-    while (attach[i])
-    {
-        if (attach[i] == '\'' && !in_double_quotes)  // Si on rencontre un guillemet simple
-            in_single_quotes = !in_single_quotes;  // On inverse l'état des guillemets simples
-        if (attach[i] == '\"' && !in_single_quotes)  // Si on rencontre un guillemet double
-            in_double_quotes = !in_double_quotes;  // On inverse l'état des guillemets doubles
-
-        if (in_single_quotes || in_double_quotes)  // Si on est dans des guillemets, on ignore les symboles de redirection
-        {
-            i++;
-            continue;
-        }
-
-        if (count_b > 0 && (count_a == 0 || count_c == 0))
-        {
-            count_a = 0;
-            count_b = 0;
-            count_c = 0;
-        }
-
-        if (attach[i] != ' ' && attach[i] != '<' && attach[i] != '>' && attach[i] != '|' && count_b == 0)
-            count_a++;
-
-        if (attach[i] == '<' || attach[i] == '>' || attach[i] == '|')
-            count_b++;
-
-        if (attach[i] != ' ' && attach[i] != '<' && attach[i] != '>' && attach[i] != '|' && count_b != 0)
-            count_c++;
-
-        i++;
-    }
-
-    if (count_b > 0 && (count_a == 0 || count_c == 0))
-        return (0);
-    return (1);
+	i = 0;
+	count_a = 0;
+	count_b = 0;
+	count_c = 0;
+	in_single_quotes = 0;
+	in_double_quotes = 0;
+	while (attach[i])
+	{
+		if (attach[i] == '\'' && !in_double_quotes)
+			in_single_quotes = !in_single_quotes;
+		if (attach[i] == '\"' && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		if (in_single_quotes || in_double_quotes)
+		{
+			i++;
+			continue ;
+		}
+		if (count_b > 0 && (count_a == 0 || count_c == 0))
+		{
+			count_a = 0;
+			count_b = 0;
+			count_c = 0;
+		}
+		if (attach[i] != ' ' && attach[i] != '<' && attach[i] != '>' && attach[i] != '|' && count_b == 0)
+			count_a++;
+		if (attach[i] == '<' || attach[i] == '>' || attach[i] == '|')
+			count_b++;
+		if (attach[i] != ' ' && attach[i] != '<' && attach[i] != '>' && attach[i] != '|' && count_b != 0)
+			count_c++;
+		i++;
+	}
+	free(attach);
+	if (count_b > 0 && (count_a == 0 || count_c == 0))
+		return (0);
+	return (1);
 }
 
 t_command_head	*return_main(t_head *head, t_main *main)

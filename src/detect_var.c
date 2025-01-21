@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   detect_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 16:32:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 15:08:56 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:56:31 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	change_var(char *name_var, char *val_var, t_main *main)
 		var = return_name_var(lst_tmp->content, '=');
 		if (ft_strcmp((const char *)var, (const char *)name_var) == 0 || ft_strlen(var) == 0)
 		{
-			lst_tmp->content = ft_strfreejoin(name_var, val_var);
+			lst_tmp->content = ft_strjoin(name_var, val_var);
 			return (-1);
 		}
 		if (!lst_tmp->next)
@@ -313,6 +313,8 @@ static int	verif_var_part1(t_head *head, char *name_var,
 			ft_lstnew(ft_strjoin(name_var, val_var)));
 	}
 	free(val_var);
+	if (name_var != NULL && name_var[0] != '\0')
+		free(name_var);
 	return (0);
 }
 

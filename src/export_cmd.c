@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 15:01:49 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:31:23 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,23 +208,24 @@ static int	check_correct(char *str)
 
 static void	export_cmd_part2(t_main *main, char *tmp, char *content_tmp)
 {
-	char	*tmp_2;
+	char	*var_name;
+	int		var_pos;
 
 	if (check_correct(content_tmp) == 0)
 	{
 		printf("export: bad assignment\n");
 		return ;
 	}
-	tmp_2 = return_before(tmp);
-	if (search_env(main, tmp_2) == -1)
+	var_name = return_before(tmp);
+	var_pos = search_env(main, var_name);
+	if (var_pos == -1)
 		main->g_env = ft_realoc_ptr(main->g_env, content_tmp);
 	else
 	{
-		free(main->g_env[search_env(main, return_before(tmp))]);
-		main->g_env[search_env(main,
-				return_before(tmp))] = ft_strdup(content_tmp);
+		free(main->g_env[var_pos]);
+		main->g_env[var_pos] = ft_strdup(content_tmp);
 	}
-	free(tmp_2);
+	free(var_name);
 }
 
 static int	ft_lstcontain(t_list *lst, char *str)
