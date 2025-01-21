@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 15:55:18 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:23:51 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	while_input(t_main *main)
 		if (parsing_error(command, 0))
 		{
 			add_history(command);
-			head = sanitize_input(command);
+			head = sanitize_input(command, main);
 			if (ft_strlen(command) > 0)
 			{
 				replace_var(&head, main);

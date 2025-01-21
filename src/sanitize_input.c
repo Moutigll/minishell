@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:21:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 13:23:15 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:01:27 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void	process_quote(int *i, char *input, t_head *head)
 	add_block(type, ishead, ft_substr(input, start, *i - start), head);
 }
 
-t_head	*sanitize_input(char *input)
+t_head	*sanitize_input(char *input, t_main *main)
 {
 	t_head	*head;
 	int		i;
@@ -78,7 +78,7 @@ t_head	*sanitize_input(char *input)
 
 	head = malloc(sizeof(t_head));
 	if (!head)
-		return (NULL);
+		exit_on_error(main, MALLOC_ERROR);
 	head->head = NULL;
 	head->size = 0;
 	i = 0;

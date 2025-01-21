@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 20:14:23 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:39:40 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	free_total(t_head *head, t_main *main, t_command_head *head_main)
 {
 	free_tab((void **)main->g_env);
 	ft_lstclear(&main->lst_var, free);
-	free_head(head);
+	if (head)
+		free_head(head);
 	if (main->path)
 		free(main->path);
 	if (head_main)
@@ -47,8 +48,10 @@ void	exit_cmd(t_head *head, t_main *main)
 {
 	char	*block;
 	int		i;
+	int		error;
 
 	i = 0;
+	error = main->error;
 	block = attach_block(head);
 	while (block[i] && block[i] != ' ')
 		i++;
@@ -58,7 +61,7 @@ void	exit_cmd(t_head *head, t_main *main)
 		clear_history();
 		free_total(head, main, NULL);
 		free(block);
-		exit(1);
+		exit(error);
 	}
 	free(block);
 }

@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 13:07:16 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:22:04 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	exit_on_error(t_main *main, int error)
+{
+	free_total(main->head, main, main->cmd_head);
+	exit(error);
+}
 
 void	error(char *message, int etat)
 {
@@ -26,10 +32,14 @@ static void	copy_env_to_mainstruct(char **env, t_main *main)
 	while (env[i])
 		i++;
 	main->g_env = malloc(sizeof(char *) * (i + 1));
+	if (!main->g_env)
+		exit_on_error(main, MALLOC_ERROR);
 	i = 0;
 	while (env[i])
 	{
 		main->g_env[i] = ft_strdup(env[i]);
+		if (!main->g_env[i])
+			exit_on_error(main, MALLOC_ERROR);
 		i++;
 	}
 	main->g_env[i] = 0;
@@ -46,6 +56,8 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGQUIT, signal_handler);
 	lst_var = NULL;
 	main = malloc(sizeof(t_main));
+	if (!main)
+		return (MALLOC_ERROR);
 	main->path = NULL;
 	main->lst_var = lst_var;
 	main->error = 0;

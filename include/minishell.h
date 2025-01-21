@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 13:03:19 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:15:18 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,24 @@
 # include <sys/wait.h>
 # include <errno.h>
 
-typedef struct s_main
-{
-	t_list			*lst_var;
-	char			**g_env;
-	char			*path;
-	int				error;
-}	t_main;
+# define MALLOC_ERROR 12
+
+typedef struct s_command_head	t_command_head;
 
 typedef struct s_head
 {
 	t_list		*head;
 	int			size;
 }	t_head;
+typedef struct s_main
+{
+	t_list			*lst_var;
+	char			**g_env;
+	char			*path;
+	int				error;
+	t_head			*head;
+	t_command_head	*cmd_head;
+}	t_main;
 
 typedef struct s_node
 {
@@ -82,12 +87,13 @@ typedef struct s_malloc
 	int	j;
 }	t_malloc;
 
-void print_arg(char **str);
+void			print_arg(char **str);
 
 // define
 # define ERR_QUOTE "Error\nQuote open !"
 
 // main.c
+void			exit_on_error(t_main *main, int error);
 void			error(char *message, int etat);
 void			print_list(t_list *lst);
 
@@ -121,7 +127,8 @@ int				pwd_cmd(t_head *head);
 char			**return_fd(char *content, char *c);
 
 // exit_cmd.c
-void			free_total(t_head *head, t_main *main, t_command_head *head_main);
+void			free_total(t_head *head,
+					t_main *main, t_command_head *head_main);
 void			exit_cmd(t_head *head, t_main *main);
 void			free_head(t_head *head);
 
@@ -165,7 +172,7 @@ char			*read_cmd(t_main *main);
 int				parsing_error(char *command, int etat);
 
 // sanitize.c
-t_head			*sanitize_input(char *input);
+t_head			*sanitize_input(char *input, t_main *main);
 
 // file_tmp.c
 void			print_block(t_head *head);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/21 15:29:43 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:24:08 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	init_and_prepare_pipex(t_pipex **pipex, t_command_head *cmd_head)
 {
 	*pipex = malloc(sizeof(t_pipex));
 	if (!(*pipex))
-		return (clean_pipex(NULL, "Malloc error", 12));
+		return (clean_pipex(NULL, "Malloc error", MALLOC_ERROR));
 	init_pipex(*pipex, cmd_head);
 	open_fds(*pipex, cmd_head);
 	if (cmd_head->here_doc && !cmd_head->error)
@@ -31,7 +31,7 @@ static pid_t	*allocate_pid_table(t_pipex *pipex, t_command_head *cmd_head)
 
 	pid_tab = malloc(sizeof(pid_t) * cmd_head->size);
 	if (!pid_tab)
-		clean_pipex(pipex, "Malloc error", 12);
+		clean_pipex(pipex, "Malloc error", MALLOC_ERROR);
 	return (pid_tab);
 }
 
