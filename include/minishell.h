@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 20:46:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/23 00:35:36 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,9 +230,7 @@ void				print_env(t_list *env);
 //static t_env_var	*find_env_var_node(t_list *env, const char *var_name);
 t_head				*replace_variables(t_head *head, t_envirronement *env);
 
-
-
-
-
+// reattach_head.c
+t_head				*reattach_head(t_head *head);
 
 #endif
