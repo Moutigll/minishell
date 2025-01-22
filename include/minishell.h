@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 17:21:02 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:55:36 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define MALLOC_ERROR 131
 
 typedef struct s_command_head	t_command_head;
+typedef struct s_envirronement	t_envirronement;
 
 typedef struct s_head
 {
@@ -33,6 +34,7 @@ typedef struct s_head
 
 typedef struct s_main
 {
+	t_envirronement	*env;
 	t_list			*lst_var;
 	char			**g_env;
 	char			*path;
@@ -200,5 +202,35 @@ void			init_pipex(t_pipex *pipex, t_command_head *cmd_head);
 // exec_func.c
 void			is_func_cmd(char *command,
 					char **args, t_pipex *pipex, t_command_head *cmd_head);
+
+
+
+
+
+
+typedef struct s_env_var
+{
+	char	*name;
+	char	*value;
+	int		exported;
+}	t_env_var;
+
+typedef struct s_envirronement
+{
+	t_list	*env_list;
+	char	**envp;
+}	t_envirronement;
+
+// env_utils.c
+void			free_env(t_list *env);
+t_list	*create_env_list(char **env);
+void	print_env(t_list *env);
+
+
+
+
+
+
+
 
 #endif

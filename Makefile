@@ -8,6 +8,7 @@ OBJ_DIR = obj
 
 MINISHELL_SRCS =	check_equal.c \
 					echo_cmd.c \
+					env_utils.c \
 					exec_cmd.c \
 					exec_func.c \
 					exec_utils.c \

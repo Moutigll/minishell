@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 18:12:26 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/22 18:39:42 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	cd_cmd(char **env, char **args)
 		path = resolve_path(env, "~");
 	else
 		path = resolve_path(env, args[1]);
+	if (!path)
+		return (0);
 	if (chdir(path) == -1)
 	{
 		perror("cd");
