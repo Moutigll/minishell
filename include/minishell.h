@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 19:55:36 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/22 20:46:27 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,11 +222,13 @@ typedef struct s_envirronement
 }	t_envirronement;
 
 // env_utils.c
-void			free_env(t_list *env);
-t_list	*create_env_list(char **env);
-void	print_env(t_list *env);
+void				free_env(t_list *env);
+t_list				*create_env_list(char **env);
+void				print_env(t_list *env);
 
-
+// env_var.c
+//static t_env_var	*find_env_var_node(t_list *env, const char *var_name);
+t_head				*replace_variables(t_head *head, t_envirronement *env);
 
 
 

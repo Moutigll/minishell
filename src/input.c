@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 12:47:10 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/22 20:46:32 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	while_input(t_main *main)
 			head = sanitize_input(command, main);
 			if (ft_strlen(command) > 0)
 			{
+				replace_variables(head, main->env);
 				replace_var(&head, main);
 				gest_command(head, main, command);
 			}
