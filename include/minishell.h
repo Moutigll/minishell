@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 18:59:49 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:21:02 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 
-# define MALLOC_ERROR 12
+# define MALLOC_ERROR 131
 
 typedef struct s_command_head	t_command_head;
 
@@ -134,7 +134,7 @@ void			exit_cmd(t_head *head, t_main *main);
 void			free_head(t_head *head);
 
 // cd_cmd.c
-int				cd_cmd(t_head *head, char **env);
+int				cd_cmd(char **env, char **args);
 
 // detect_var.c
 int				verif_var(t_head *head, t_main *main, int n);

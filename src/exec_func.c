@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/21 12:32:53 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:36:20 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	is_func_cmd(char *command,
 	is_builtin = 0;
 	if (!ft_strcmp(command, "env"))
 		env_cmd_direct(pipex->cmd_head->main);
+	else if (!ft_strcmp(command, "cd"))
+		error = cd_cmd(pipex->cmd_head->envp, args);
 	if (!ft_strcmp(command, "exit") || !ft_strcmp(command, "cd")
 		|| !ft_strcmp(command, "export") || !ft_strcmp(command, "unset")
 		|| !ft_strcmp(command, "env"))
@@ -55,10 +57,6 @@ void	is_func_cmd(char *command,
 		is_builtin = exec_func_c(command, args, pipex);
 	if (is_builtin)
 	{
-		if (cmd_head->error)
-			error = cmd_head->error;
-		else
-			error = cmd_head->main->error;
 		clean_pipex(pipex, NULL, 0);
 		free_total(cmd_head->list_head, cmd_head->main, cmd_head);
 		exit(error);

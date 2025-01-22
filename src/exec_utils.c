@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/21 21:40:38 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/22 16:07:53 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ void	init_pipex(t_pipex *pipex, t_command_head *cmd_head)
 
 void	free_fds(t_pipex *pipex)
 {
-	if (pipex->cmd_head->in_fd != NULL)
+	if (pipex->cmd_head->in_fd)
 		free(pipex->cmd_head->in_fd);
-	if (pipex->cmd_head->out_fd != NULL)
+	if (pipex->cmd_head->out_fd)
 		free(pipex->cmd_head->out_fd);
 	if (pipex->cmd_head->here_doc)
 		free(pipex->cmd_head->here_doc);
@@ -40,6 +40,9 @@ void	free_fds(t_pipex *pipex)
 	if (pipex->pipe_fd[0] != -1 && pipex->pipe_fd[0]
 		!= STDIN_FILENO && pipex->pipe_fd[0] != STDOUT_FILENO)
 		close(pipex->pipe_fd[0]);
+	pipex->in_fd = 0;
+	pipex->out_fd = 0;
+	pipex->pipe_fd[0] = 0;
 }
 
 void	clean_pipex(t_pipex *pipex, char *error, int exit_status)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   decomp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 12:41:38 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:05:49 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -538,28 +538,28 @@ static int	check_redirect(char *attach, char c)
 	return (free(attach), 0);
 }
 
-int check_redirection_syntax(char *input)
-{
-	int i = 0;
+// int check_redirection_syntax(char *input)
+// {
+// 	int i = 0;
 
-	while (input[i])
-	{
-		if (input[i] == '<' || input[i] == '>')
-		{
-			int redir_type = input[i];
-			i++;
-			if (redir_type == '>' && input[i] == '>')
-				i++;
-			while (input[i] && isspace(input[i]))
-				i++;
-			if (input[i] == '\0' || input[i] == '<' || input[i] == '>' || input[i] == '|')
-				return (free(input), 1);
-		}
-		else
-			i++;
-	}
-	return (free(input), 0);
-}
+// 	while (input[i])
+// 	{
+// 		if (input[i] == '<' || input[i] == '>')
+// 		{
+// 			int redir_type = input[i];
+// 			i++;
+// 			if (redir_type == '>' && input[i] == '>')
+// 				i++;
+// 			while (input[i] && isspace(input[i]))
+// 				i++;
+// 			if (input[i] == '\0' || input[i] == '<' || input[i] == '>' || input[i] == '|')
+// 				return (free(input), 1);
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	return (free(input), 0);
+// }
 
 t_command_head	*return_main(t_head *head, t_main *main)
 {
@@ -572,8 +572,8 @@ t_command_head	*return_main(t_head *head, t_main *main)
 		return (printf("parse error near '>>>'\n"), NULL);
 	if (check_redirect(attach_block_quote(head), '<') == 1)
 		return (printf("parse error near '<<<'\n"), NULL);
-	if (check_redirection_syntax(attach_block_quote(head)) == 1)
-		return (printf("parse error near '\\n'\n"), NULL);
+	// if (check_redirection_syntax(attach_block_quote(head)) == 1)
+	// 	return (printf("parse error near '\\n'\n"), NULL);
 	head_main = malloc(sizeof(t_command_head));
 	return_ptr("<", head, 1, &head_main);
 	return_ptr(">", head, 2, &head_main);
