@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:43:51 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 19:30:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:41:38 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -476,11 +476,104 @@ static int check_redirec(char *attach)
 	return (1);
 }
 
+static int	check_pipe(char *attach)
+{
+	int		count;
+	int		i;
+	char	quote;
+
+	i = 0;
+	count = 0;
+	quote = 0;
+	while (attach[i])
+	{
+		if (attach[i] == '\'' || attach[i] == '"')
+		{
+			if (quote == 0)
+				quote = attach[i];
+			else if (quote == attach[i])
+				quote = 0;
+		}
+		if (attach[i] == '|' && quote == 0)
+		{
+			if (count > 0)
+				return (free(attach), 1);
+			count++;
+		}
+		else if (attach[i] != '|')
+			count = 0;
+		i++;
+	}
+	return (free(attach), 0);
+}
+
+static int	check_redirect(char *attach, char c)
+{
+	int		count;
+	int		i;
+	char	quote;
+
+	i = 0;
+	count = 0;
+	quote = 0;
+	while (attach[i])
+	{
+		if (attach[i] == '\'' || attach[i] == '"')
+		{
+			if (quote == 0)
+				quote = attach[i];
+			else if (quote == attach[i])
+				quote = 0;
+		}
+		if (attach[i] == c && quote == 0)
+		{
+			if (count > 1)
+				return (free(attach), 1);
+			count++;
+		}
+		else if (attach[i] != c)
+			count = 0;
+		i++;
+	}
+	return (free(attach), 0);
+}
+
+int check_redirection_syntax(char *input)
+{
+	int i = 0;
+
+	while (input[i])
+	{
+		if (input[i] == '<' || input[i] == '>')
+		{
+			int redir_type = input[i];
+			i++;
+			if (redir_type == '>' && input[i] == '>')
+				i++;
+			while (input[i] && isspace(input[i]))
+				i++;
+			if (input[i] == '\0' || input[i] == '<' || input[i] == '>' || input[i] == '|')
+				return (free(input), 1);
+		}
+		else
+			i++;
+	}
+	return (free(input), 0);
+}
+
 t_command_head	*return_main(t_head *head, t_main *main)
 {
 	t_command_head	*head_main;
 	t_list			*lst_cmd;
 
+	if (check_pipe(attach_block_quote(head)) == 1)
+		return (printf("parse error near '||'\n"), NULL);
+	if (check_redirect(attach_block_quote(head), '>') == 1)
+		return (printf("parse error near '>>>'\n"), NULL);
+	if (check_redirect(attach_block_quote(head), '<') == 1)
+		return (printf("parse error near '<<<'\n"), NULL);
+	if (check_redirection_syntax(attach_block_quote(head)) == 1)
+		return (printf("parse error near '\\n'\n"), NULL);
 	head_main = malloc(sizeof(t_command_head));
 	return_ptr("<", head, 1, &head_main);
 	return_ptr(">", head, 2, &head_main);

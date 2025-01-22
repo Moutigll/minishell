@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 18:55:09 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:40:47 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ static int	return_correct_char(char c)
 		return (1);
 	if (c >= '0' && c <= '9')
 		return (1);
-	if (c == '_')
+	if (c == '_' || c == '\'' || c == '\"')
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 17:33:56 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 16:39:50 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:40:57 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	return_malloc_char_part2(int *boolean,
 		char **result, int tab, char *c)
 {
 	*boolean = 1;
-	result[tab] = ft_strdup("\0");
+	result[tab] = ft_strdup("");
 	return ((int)ft_strlen(c));
 }
 
