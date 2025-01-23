@@ -7,6 +7,7 @@ TEST_DIR = tester
 OBJ_DIR = obj
 
 MINISHELL_SRCS =	check_equal.c \
+					clean_cmd.c \
 					echo_cmd.c \
 					env_utils.c \
 					exec_cmd.c \
@@ -15,6 +16,7 @@ MINISHELL_SRCS =	check_equal.c \
 					file_tmp.c \
 					fork.c \
 					ft_listnode.c \
+					get_cmds_utils.c \
 					get_cmds.c \
 					attach.c \
 					decomp.c \
