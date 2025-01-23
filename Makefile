@@ -16,8 +16,9 @@ MINISHELL_SRCS =	check_equal.c \
 					file_tmp.c \
 					fork.c \
 					ft_listnode.c \
-					get_cmds_utils.c \
 					get_cmds.c \
+					split_cmds_utils.c \
+					split_cmds.c \
 					attach.c \
 					decomp.c \
 					get_path.c \

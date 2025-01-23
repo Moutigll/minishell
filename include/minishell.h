@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/23 15:22:03 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/23 18:01:08 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,12 +233,16 @@ typedef struct parse_error
 	char	*target;
 }	t_parse_error;
 
+typedef struct s_fd_struct
+{
+	char	*fd;
+	int		mode;
+}	t_fd_struct;
+
 typedef struct s_command_struct
 {
-	char	*in_fd;
-	char	*out_fd;
-	int		in_mode;
-	int		out_mode;
+	t_list	**in_fd;
+	t_list	**out_fd;
 	char	**command;
 }	t_command_struct;
 
@@ -255,10 +259,10 @@ t_head				*replace_variables(t_head *head, t_envirronement *env);
 t_head				*reattach_head(t_head *head);
 void	print_head(t_list *head);
 
-// get_cmds.c
+// split_cmds.c
 t_head **split_head(t_head *head);
 
-// get_cmds_utils.c
+// split_cmds_utils.c
 int	get_nb_head_cmds(t_head *head, t_parse_error *error);
 int	tab_new_head(t_head **tab, int i);
 int	add_back_copy(t_list **head, t_list *lst);
@@ -266,5 +270,8 @@ int	add_before_pipe(t_list **head, int ishead, char *content);
 
 // clean_cmd.c
 void	cleant_tab_cmd(t_head **tab);
+
+// get_cmds.c
+t_command_struct	*fill_cmd(t_head *head);
 
 #endif
