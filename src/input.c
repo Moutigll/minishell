@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/23 00:36:00 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/23 01:53:00 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,9 @@ void	while_input(t_main *main)
 			{
 				replace_variables(head, main->env);
 				reattach_head(head);
-				replace_var(&head, main);
-				gest_command(head, main, command);
+				split_head(head);
+				//replace_var(&head, main);
+				//gest_command(head, main, command);
 			}
 			else
 				free(command);

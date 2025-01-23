@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -I include -I libft/include
+CFLAGS = -g -I include -I libft/include
 NAME = minishell
 TESTER = minishell_tester
 SRC_DIR = src
@@ -15,6 +15,7 @@ MINISHELL_SRCS =	check_equal.c \
 					file_tmp.c \
 					fork.c \
 					ft_listnode.c \
+					get_cmds.c \
 					attach.c \
 					decomp.c \
 					get_path.c \

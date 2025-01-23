@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/23 00:35:36 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/23 01:43:20 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,27 @@ typedef struct s_envirronement
 	char	**envp;
 }	t_envirronement;
 
+typedef struct s_exec_utils
+{
+	int		nb_cmd;
+	t_list	*cmd_head;
+}	t_exec_utils;
+
+typedef struct parse_error
+{
+	int		error;
+	char	*target;
+}	t_parse_error;
+
+typedef struct s_command_struct
+{
+	char	*in_fd;
+	char	*out_fd;
+	int		in_mode;
+	int		out_mode;
+	char	**command;
+}	t_command_struct;
+
 // env_utils.c
 void				free_env(t_list *env);
 t_list				*create_env_list(char **env);
@@ -232,5 +253,9 @@ t_head				*replace_variables(t_head *head, t_envirronement *env);
 
 // reattach_head.c
 t_head				*reattach_head(t_head *head);
+void	print_head(t_list *head);
+
+// get_cmds.c
+t_head **split_head(t_head *head);
 
 #endif

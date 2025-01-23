@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:12:28 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/23 00:43:05 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/23 01:56:51 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	print_head(t_list *head)
 	while (head)
 	{
 		content = head->content;
-		printf("\nNode: type:%d | ishead: %d | content: |%s|",
+		printf("\nNode: type:%d | ishead: %d | content: \"%s\"\n",
 			content->type, content->head, content->content);
 		head = head->next;
 	}
