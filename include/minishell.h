@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/23 18:01:08 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/23 22:49:09 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,7 @@ typedef struct s_command_struct
 	t_list	**in_fd;
 	t_list	**out_fd;
 	char	**command;
+	int		nb_args;
 }	t_command_struct;
 
 // env_utils.c

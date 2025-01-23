@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/23 18:10:05 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/23 23:12:33 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	get_nbargs_cmd(t_list *lst)
 	while (lst)
 	{
 		node = lst->content;
-		if (node->head == 1)
+		if (node->head == 1 && node->content[0] != '<' && node->content[0] != '>')
 			i++;
 		lst = lst->next;
 	}
@@ -33,23 +33,111 @@ int	get_nbargs_cmd(t_list *lst)
 t_command_struct	*init_command_struct(t_list *head)
 {
 	t_command_struct	*cmd_struct;
-	int					nb_args;
 
-	nb_args = get_nbargs_cmd(head);
 	cmd_struct = malloc(sizeof(t_command_struct));
 	if (!cmd_struct)
 		return (NULL);
-	cmd_struct->command = malloc(sizeof(char *) * (nb_args + 1));
+	cmd_struct->nb_args = get_nbargs_cmd(head);
+	cmd_struct->command = malloc(sizeof(char *) * (cmd_struct->nb_args + 1));
 	if (!cmd_struct->command)
 		return (NULL);
-	cmd_struct->command[nb_args] = NULL;
-	cmd_struct->in_fd = malloc(sizeof(t_list *));
+	cmd_struct->command[cmd_struct->nb_args] = NULL;
+	cmd_struct->in_fd = malloc(sizeof(t_list **));
 	if (!cmd_struct->in_fd)
 		return (NULL);
-	cmd_struct->out_fd = malloc(sizeof(t_list *));
+	((t_list **)cmd_struct->in_fd)[0] = NULL;
+	cmd_struct->out_fd = malloc(sizeof(t_list **));
 	if (!cmd_struct->out_fd)
 		return (NULL);
+	((t_list **)cmd_struct->out_fd)[0] = NULL;
 	return (cmd_struct);
+}
+
+int	is_in_or_out(char *str,
+	t_list *list, t_fd_struct *fd_struct)
+{
+	t_node	*node;
+
+	if (str[0])
+	{
+		if (str[1] && str[0] == str[1])
+			fd_struct->mode = 1;
+		else
+			fd_struct->mode = 0;
+		if (str[0] == '<')
+			return (0);
+		else
+			return (1);
+	}
+	else
+	{
+		node = list->next->content;
+		if (node->content[1] && node->content[0] == node->content[1])
+			fd_struct->mode = 1;
+		else
+			fd_struct->mode = 0;
+		if (node->content[0] == '<')
+			return (0);
+		else
+			return (1);
+	}
+}
+
+char	*get_filename(t_list **lst, int *j)
+{
+	t_node	*node;
+	char	*filename;
+	int		start;
+
+	filename = NULL;
+	node = (*lst)->content;
+	if (!node->content[*j])
+	{
+		(*lst) = (*lst)->next;
+		if (!(*lst))
+			return (NULL);
+		node = (*lst)->content;
+	}
+	while (node->content[*j] && (node->content[*j] == '<' || node->content[*j] == '>'))
+		(*j)++;
+	if (node->content[*j])
+	{
+		start = *j;
+		while (node->content[*j] && node->content[*j] != '<' && node->content[*j] != '>')
+			(*j)++;
+		filename = ft_substr(node->content, start, *j - start);
+	}
+	else
+		filename = ft_strdup("");
+	if (!filename)
+		return (NULL);
+	if (node->content[*j] && (node->content[*j] == '<' || node->content[*j] == '>'))
+		return (filename);
+	(*lst) = (*lst)->next;
+	if (!(*lst))
+		return (filename);
+	node = (*lst)->content;
+	(*j) = 0;
+	while ((*lst) && node->head == 0)
+	{
+		node = (*lst)->content;
+		if (node->type != 2)
+			filename = ft_strjoin_free(filename, node->content, 1, 0);
+		else
+		{
+			(*j) = 0;
+			while (node->content[*j] && node->content[*j] != '<' && node->content[*j] != '>')
+				(*j)++;
+			if (node->content[*j] == '<' || node->content[*j] == '>')
+			{
+				filename = ft_strjoin_free(filename, ft_substr(node->content, 0, *j), 1, 1);
+				break ;
+			}
+			filename = ft_strjoin_free(filename, node->content, 1, 0);
+		}
+		(*lst) = (*lst)->next;
+	}
+	return (filename);
 }
 
 t_command_struct	*fill_cmd(t_head *head)
@@ -57,108 +145,81 @@ t_command_struct	*fill_cmd(t_head *head)
 	t_command_struct	*cmd_struct;
 	t_node				*content;
 	t_list				*lst;
-	char				**command;
-	char				*arg;
 	int					i;
+	int	start = 0;
+	int	j = 0;
 
 	print_head(head->head);
 	cmd_struct = init_command_struct(head->head);
 	lst = head->head;
-	i = 0;
-	arg = ft_strdup("");
-	command[i] = arg;
+	i = -1;
 	while (lst)
 	{
 		content = lst->content;
 		if (!content->head && content->type != 2)
-			arg = ft_strjoin_free(arg, content->content, 1, 0);
+			cmd_struct->command[i] = ft_strjoin_free(cmd_struct->command[i], content->content, 1, 0);
 		else if (content->head == 1 && content->type != 2)
 		{
 			i++;
-			arg = ft_strdup(content->content);
-			if (!arg)
+			cmd_struct->command[i] = ft_strdup(content->content);
+			if (!cmd_struct->command[i])
 				return (NULL);
-			command[i] = arg;
 		}
 		else
 		{
-			int j = 0;
-			int is_file = 0;
-			int	file_type = 0;
-			int start = 0;
+			printf("Analysing %c {%s} is after\n", content->content[j], content->content + j);
+			if (content->head && j == 0)
+			{
+				i++;
+				cmd_struct->command[i] = ft_strdup("");
+				if (!cmd_struct->command[i])
+					return (NULL);
+			}
+			start = j;
 			while (content->content[j] && content->content[j] != '<' && content->content[j] != '>')
 				j++;
 			if (j > start)
-				arg = ft_strjoin_free(arg, ft_substr(content->content, start, j), 1, 1);
-			if (content->content[j] == '<' || content->content[j] == '>')
 			{
-				while (content->content[j] && (content->content[j] == '<' || content->content[j] == '>'))
-					j++;
-				if (content->content[j - 2] && content->content[j - 2] == '<' || content->content[j - 2] == '>')
-					file_type = 1;
-				start = j;
-				is_file = 1;
+				char *tmp = ft_substr(content->content, start, j - start);
+				if (!tmp)
+					return (NULL);
+				cmd_struct->command[i] = ft_strjoin_free(cmd_struct->command[i], tmp, 1, 1);
 			}
-			else if (content->content[j] == '\0')
+			if (!content->content[j]
+				&& (!lst->next || (((t_node *)lst->next->content)->type != 2 || (((t_node *)lst->next->content)->content[0] != '<' && ((t_node *)lst->next->content)->content[0] != '>'))))
 			{
 				lst = lst->next;
-				content = lst->content;
-				start = 0;
 				j = 0;
-				if (content->type == 2 && (content->content[0] == '<' || content->content[0] == '>'))
-				{
-					while (content->content[j] && (content->content[j] == '<' || content->content[j] == '>'))
-						j++;
-					if (content->content[j - 2] && content->content[j - 2] == '<' || content->content[j - 2] == '>')
-						file_type = 1;
-					start = j;
-					is_file = 1;
-				}
+				continue ;
 			}
-			if (is_file)
-			{
-				char *filename;
-				if (content->content[j])
-					filename = ft_strdup(content->content + start);
-				else
-				{
-					lst = lst->next;
-					content = lst->content;
-					filename = ft_strdup(content->content);
-				}
-				if (!filename)
-					return (NULL);
-				t_fd_struct	*fd_struct;
-				fd_struct = malloc(sizeof(t_fd_struct));
-				if (!fd_struct)
-					return (NULL);
-				t_list	*fd_node;
-				fd_node = ft_lstnew(fd_struct);
-				if (!fd_node)
-					return (NULL);
-				fd_struct->fd = filename;
-				fd_struct->mode = file_type;
-				if (content->content[j - 1] == '<')
-					ft_lstadd_back(cmd_struct->in_fd, fd_node);
-				else
-					ft_lstadd_back(cmd_struct->out_fd, fd_node);
-				lst = lst->next;
-				content = lst->content;
-			}
+			t_fd_struct	*fd_struct;
+			fd_struct = malloc(sizeof(t_fd_struct));
+			if (!fd_struct)
+				return (NULL);
+			int in_or_out = is_in_or_out(content->content + j, lst, malloc(sizeof(t_fd_struct)));
+			char *filename = get_filename(&lst, &j);
+			if (!filename)
+				return (NULL);
+			fd_struct->fd = filename;
+			if (in_or_out == 0)
+				ft_lstadd_back(((t_list **)cmd_struct->in_fd), ft_lstnew(fd_struct));
+			else
+				ft_lstadd_back(((t_list **)cmd_struct->out_fd), ft_lstnew(fd_struct));
+			printf("Continuing at %c {%s}\n", content->content[j], content->content + j);
+			continue ;
 		}
 		lst = lst->next;
-		
 	}
 	printf("\n----------------------\n");
 	i = 0;
-	while (command[i])
+	while (i < cmd_struct->nb_args)
 	{
-		printf("Arg %d: %s\n", i, command[i]);
+		printf("Arg %d: [%s]\n", i, cmd_struct->command[i]);
 		i++;
 	}
 	printf("\nFDS:\n");
 	printf("IN:\n");
-	t_list	*in_lst;
+	t_list	*in_lst = ((t_list **)cmd_struct->in_fd)[0];
 	while (in_lst)
 	{
 		t_fd_struct	*fd_struct;
@@ -166,8 +227,8 @@ t_command_struct	*fill_cmd(t_head *head)
 		printf("Mode: %d | File: %s\n", fd_struct->mode, fd_struct->fd);
 		in_lst = in_lst->next;
 	}
-	printf("OUT:\n");
-	t_list	*out_lst;
+	printf("\nOUT:\n");
+	t_list	*out_lst = ((t_list **)cmd_struct->out_fd)[0];
 	while (out_lst)
 	{
 		t_fd_struct	*fd_struct;
