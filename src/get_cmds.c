@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/25 23:55:37 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/26 00:05:42 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	check(char *str)
 	free(cmd);
 }
 
-//20341
 t_command_struct	*fill_cmd(t_head *head)
 {
 	t_command_struct	*cmd_struct;
