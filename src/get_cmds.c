@@ -6,16 +6,51 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/23 23:12:33 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:43:53 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	free_fd_list(t_list *lst)
+{
+	t_fd_struct	*fd_struct;
+	t_list		*tmp;
+
+	while (lst)
+	{
+		fd_struct = lst->content;
+		free(fd_struct->fd);
+		free(fd_struct);
+		tmp = lst;
+		lst = lst->next;
+		free(tmp);
+	}
+}
+
+void	free_cmd_struct(t_command_struct *cmd)
+{
+	int	i;
+
+	free_fd_list(((t_list **)cmd->in_fd)[0]);
+	free(((t_list **)cmd->in_fd));
+	free_fd_list(((t_list **)cmd->out_fd)[0]);
+	free(((t_list **)cmd->out_fd));
+	i = 0;
+	while (i < cmd->nb_args)
+	{
+		free(cmd->command[i]);
+		i++;
+	}
+	free(cmd->command);
+	free(cmd);
+}
+
 int	get_nbargs_cmd(t_list *lst)
 {
 	int		i;
 	int		j;
+	int		size;
 	int		sep_type;
 	t_node	*node;
 
@@ -23,8 +58,11 @@ int	get_nbargs_cmd(t_list *lst)
 	while (lst)
 	{
 		node = lst->content;
-		if (node->head == 1 && node->content[0] != '<' && node->content[0] != '>')
+		if (node->head == 1 && (node->type != 2 || (node->content[0] != '<' && node->content[0] != '>')))
 			i++;
+		size = ft_strlen(node->content);
+		if (node->type == 2 && (node->content[size - 1] == '<' || node->content[size - 1] == '>'))
+			i--;
 		lst = lst->next;
 	}
 	return (i);
@@ -38,6 +76,7 @@ t_command_struct	*init_command_struct(t_list *head)
 	if (!cmd_struct)
 		return (NULL);
 	cmd_struct->nb_args = get_nbargs_cmd(head);
+	printf("Nb args: %d\n", cmd_struct->nb_args);
 	cmd_struct->command = malloc(sizeof(char *) * (cmd_struct->nb_args + 1));
 	if (!cmd_struct->command)
 		return (NULL);
@@ -118,9 +157,8 @@ char	*get_filename(t_list **lst, int *j)
 		return (filename);
 	node = (*lst)->content;
 	(*j) = 0;
-	while ((*lst) && node->head == 0)
+	while ((*lst))
 	{
-		node = (*lst)->content;
 		if (node->type != 2)
 			filename = ft_strjoin_free(filename, node->content, 1, 0);
 		else
@@ -136,6 +174,11 @@ char	*get_filename(t_list **lst, int *j)
 			filename = ft_strjoin_free(filename, node->content, 1, 0);
 		}
 		(*lst) = (*lst)->next;
+		if (!(*lst))
+			break ;
+		node = (*lst)->content;
+		if (node->head == 1)
+			break ;
 	}
 	return (filename);
 }
@@ -185,9 +228,9 @@ t_command_struct	*fill_cmd(t_head *head)
 					return (NULL);
 				cmd_struct->command[i] = ft_strjoin_free(cmd_struct->command[i], tmp, 1, 1);
 			}
-			if (!content->content[j]
-				&& (!lst->next || (((t_node *)lst->next->content)->type != 2 || (((t_node *)lst->next->content)->content[0] != '<' && ((t_node *)lst->next->content)->content[0] != '>'))))
+			if (!content->content[j])
 			{
+				printf("Exiting node %s\n", content->content);
 				lst = lst->next;
 				j = 0;
 				continue ;
@@ -196,7 +239,7 @@ t_command_struct	*fill_cmd(t_head *head)
 			fd_struct = malloc(sizeof(t_fd_struct));
 			if (!fd_struct)
 				return (NULL);
-			int in_or_out = is_in_or_out(content->content + j, lst, malloc(sizeof(t_fd_struct)));
+			int in_or_out = is_in_or_out(content->content + j, lst, fd_struct);
 			char *filename = get_filename(&lst, &j);
 			if (!filename)
 				return (NULL);
@@ -205,7 +248,7 @@ t_command_struct	*fill_cmd(t_head *head)
 				ft_lstadd_back(((t_list **)cmd_struct->in_fd), ft_lstnew(fd_struct));
 			else
 				ft_lstadd_back(((t_list **)cmd_struct->out_fd), ft_lstnew(fd_struct));
-			printf("Continuing at %c {%s}\n", content->content[j], content->content + j);
+		//	printf("Continuing at %c {%s}\n", content->content[j], content->content + j);
 			continue ;
 		}
 		lst = lst->next;
@@ -238,3 +281,5 @@ t_command_struct	*fill_cmd(t_head *head)
 	}
 	return (cmd_struct);
 }
+
+//ls -'l'"" " " " " > file."txt" | re'v' << HERE

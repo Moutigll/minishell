@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/23 22:49:09 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:39:04 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,5 +274,6 @@ void	cleant_tab_cmd(t_head **tab);
 
 // get_cmds.c
 t_command_struct	*fill_cmd(t_head *head);
+void	free_cmd_struct(t_command_struct *cmd);
 
 #endif
