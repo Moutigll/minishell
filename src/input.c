@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/24 17:40:22 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:21:26 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,11 @@ void	while_input(t_main *main)
 			{
 				replace_variables(head, main->env);
 				reattach_head(head);
-				t_head **splitted = split_head(head);
+				t_splitted_cmds	*splitted = split_head(head);
 				int i = 0;
-				while (splitted[i])
+				while (i < splitted->size)
 				{
-					
-					free_cmd_struct(fill_cmd(splitted[i]));
+					free_cmd_struct(fill_cmd(splitted->tab[i]));
 					i++;
 				}
 				//replace_var(&head, main);

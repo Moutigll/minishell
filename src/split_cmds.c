@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_cmds.c                                         :+:      :+:    :+:   */
+/*   split_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:55:00 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/23 15:27:50 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:21:14 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,26 @@ static int	handle_type_two(t_head **current_head,
 	return (0);
 }
 
-static t_head	**initialize_split_tab(t_head *head,
-		t_parse_error *error, int *size)
+static t_splitted_cmds	*initialize_split_tab(t_head *head,
+		t_parse_error *error)
 {
-	t_head	**tab;
+	t_splitted_cmds	*splitted;
 
-	*size = get_nb_head_cmds(head, error);
+	splitted = malloc(sizeof(t_splitted_cmds));
+	if (!splitted)
+		return (NULL);
+	splitted->size = get_nb_head_cmds(head, error) + 1;
+	printf("Nb cmds: %d\n", splitted->size);
 	if (error->error)
 	{
 		printf("Parse error near '%s'\n", error->target);
 		return (NULL);
 	}
-	tab = malloc(sizeof(t_head *) * (*size + 1));
-	if (!tab)
+	splitted->tab = malloc(sizeof(t_head *) * (splitted->size + 1));
+	if (!splitted->tab)
 		return (NULL);
-	tab[*size] = NULL;
-	return (tab);
+	splitted->tab[splitted->size] = NULL;
+	return (splitted);
 }
 
 static int	process_list_nodes(t_head **tab,
@@ -99,22 +103,21 @@ static int	process_list_nodes(t_head **tab,
 	return (0);
 }
 
-t_head	**split_head(t_head *head)
+t_splitted_cmds	*split_head(t_head *head)
 {
+	t_splitted_cmds	*splitted;
 	t_parse_error	error;
-	t_head			**tab;
 	t_head			*current_head;
 	t_list			*lst;
-	int				size;
 
 	error.error = 0;
-	tab = initialize_split_tab(head, &error, &size);
-	if (!tab)
+	splitted = initialize_split_tab(head, &error);
+	if (!splitted)
 		return (NULL);
 	lst = head->head;
-	tab_new_head(tab, 0);
-	current_head = tab[0];
-	if (process_list_nodes(tab, &current_head, lst))
-		return (cleant_tab_cmd(tab), NULL);
-	return (tab);
+	tab_new_head(splitted->tab, 0);
+	current_head = splitted->tab[0];
+	if (process_list_nodes(splitted->tab, &current_head, lst))
+		return (cleant_tab_cmd(splitted->tab), NULL);
+	return (splitted);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_cmds_utils.c                                   :+:      :+:    :+:   */
+/*   split_cmds_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:53:45 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/23 15:19:08 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/25 13:12:01 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,21 @@
 static int	check_node_content(t_node *content, t_parse_error *error)
 {
 	int	j;
+	int	count;
 
 	j = 0;
+	count = 0;
 	while (content->content[j])
 	{
-		while (content->content[j] && content->content[j] == ' ')
+		while (content->content[j] && content->content[j] != '|')
 			j++;
-		if (content->content[j] && content->content[j] == '|'
-			&& content->content[j + 1] == '|')
-		{
-			error->error = 1;
-			error->target = content->content;
-			return (0);
-		}
 		if (content->content[j] && content->content[j] == '|')
+		{
+			count++;
 			j++;
-		while (content->content[j] && content->content[j] == ' ')
-			j++;
-		if (content->content[j])
-			j++;
+		}
 	}
-	return (1);
+	return (count);
 }
 
 int	get_nb_head_cmds(t_head *head, t_parse_error *error)

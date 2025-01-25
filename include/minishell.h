@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/24 17:39:04 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/25 23:10:47 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,8 @@ char			*return_name_var(char *content, char c);
 // attach.c
 char			*attach_block_quote(t_head *head);
 char			*attach_block(t_head *head);
+int				add_node(unsigned int l,
+					char *s, const char *c, int *t);
 
 // prompt_2.c
 int				return_slash(char *str);
@@ -206,8 +208,6 @@ void			is_func_cmd(char *command,
 
 
 
-
-
 typedef struct s_env_var
 {
 	char	*name;
@@ -233,6 +233,12 @@ typedef struct parse_error
 	char	*target;
 }	t_parse_error;
 
+typedef struct s_splitted_cmds
+{
+	t_head	**tab;
+	int		size;
+}	t_splitted_cmds;
+
 typedef struct s_fd_struct
 {
 	char	*fd;
@@ -249,6 +255,7 @@ typedef struct s_command_struct
 
 // env_utils.c
 void				free_env(t_list *env);
+int					get_env(char *command, int i);
 t_list				*create_env_list(char **env);
 void				print_env(t_list *env);
 
@@ -258,22 +265,85 @@ t_head				*replace_variables(t_head *head, t_envirronement *env);
 
 // reattach_head.c
 t_head				*reattach_head(t_head *head);
-void	print_head(t_list *head);
+void				print_head(t_list *head);
 
 // split_cmds.c
-t_head **split_head(t_head *head);
+t_splitted_cmds		*split_head(t_head *head);
 
 // split_cmds_utils.c
-int	get_nb_head_cmds(t_head *head, t_parse_error *error);
-int	tab_new_head(t_head **tab, int i);
-int	add_back_copy(t_list **head, t_list *lst);
-int	add_before_pipe(t_list **head, int ishead, char *content);
+int					get_nb_head_cmds(t_head *head, t_parse_error *error);
+int					tab_new_head(t_head **tab, int i);
+int					add_back_copy(t_list **head, t_list *lst);
+int					add_before_pipe(t_list **head, int ishead, char *content);
 
 // clean_cmd.c
-void	cleant_tab_cmd(t_head **tab);
+void				cleant_tab_cmd(t_head **tab);
 
 // get_cmds.c
 t_command_struct	*fill_cmd(t_head *head);
-void	free_cmd_struct(t_command_struct *cmd);
 
+// get_cmds_utils.c
+void				free_cmd_struct(t_command_struct *cmd);
+t_command_struct	*init_command_struct(t_list *head);
+int					is_in_or_out(char *str,
+						t_list *list, t_fd_struct *fd_struct);
+
+// get_cmds_filename.c
+char				*get_filename(t_list **lst, int *j);
+
+
+// bfr_utils.c
+void				a5h7j(void);
+void				z3p2d(void);
+void				k9t6q(void);
+void				x1m3u(void);
+void				v8b4y(void);
+
+# define B30 "\n\033[38;5;211m     ,(###%\
+####%&%#############(#(#(####(((((\
+((/(((/////*//,                    "
+# define B58 "\n\033[38;5;211m                                        /\
+((((                                  "
+# define B49 "\n\033[38;5;211m                          "
+# define B1 "\n\033[38;5;211m          .. ...\
+.,..........,..*#%#######/(  "
+# define B50 "\n\033[38;5;45m        \
+               **,,,****//*(##(\
+(###(#(((                                "
+# define B54 "\n\033[38;5;211m             \
+                           &#(#/#((((((((#\
+                          \n\033[0m"
+# define B27 "\n\033[38;5;15m                                       (((\
+(#((                              (// "
+# define B10 "\n\033[38;5;45m               .\
+.  .............,*%\
+%%%#%((((/                \
+                   "
+# define B33 "\n\033[38;5;211m               ,*/*\
+*******/////////////////(/\
+/*           (%*  "
+# define B35 "\n\033[38;5;15m         . ..\
+...*#(#######(((###(#(##(##(((/(/(\
+/////,                           "
+# define B25 "    ,((##((      \n\033[38;5;1\
+5m      ,*/((///(//////////((/(/////\
+//(/////(////*,(*#((/(/((/////\
+/###(###(/(     "
+# define B56 "\n\033[38;5;45m                                          ,(\
+((/                                 "
+# define B48 "\n\033[38;5;211m   /(((((((/\
+/((///((////((((((/(((((((((((((((((/(((##\
+((#%(##(/((///*(&#(##/    "
+# define B46 "\n\033[38;5;45m  /#((%(#(((\
+((//#((((((((((((((((((((((((#(((((((((((/\
+##(((((//((//*    ####(/  "
+# define B61 "            ((((((\
+(.                           *(((/  "
+# define B52 "\n\033[38;5;45m   (((###(\
+###(#(#####(###############((#((((((((/(\
+(//(((#/(/////            ,,  "
+# define B53 "\n\033[38;5;45m                                 *//%\
+#####((/                         ((#((/    "
+# define B17 "\n\033[38;5;45m                                    /(#\
+#####/                          *((((/   "
 #endif

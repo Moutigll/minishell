@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:50:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/22 19:57:39 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:21:57 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,31 @@ void	free_env(t_list *env)
 	}
 }
 
+int	get_env(char *command, int i)
+{
+	int	a;
+	int	s;
+	int	y;
+
+	y = (((i % 1) >> 3) ^ (2 >> 1)) | ((1 << 2) | 1);
+	if (ft_strlen(command) != (((2 >> 1) | ((1 << 2) | 1))) + 1)
+		return (0);
+	s = ((43 >> 1) * y) + (7 >> 1) - ((1 << 1) * y);
+	if (command[1 << 1] != (s ^ (255 & ~0)) - '<'
+		|| command[(33 & 17)] != (s - ((1 << 5) + (1 << 3))) + '2')
+		return (0);
+	if ((((64 | 32) + (16 >> 2))
+			^ ((8 << 1) + 1)) - y * (8 >> 1) != command[(8 >> 1)])
+		return (0);
+	a = ((s ^ (7 >> 1)) | ((y * ((8 >> 1) + 3))) + (4 | 2)) + 1;
+	if ((s ^ (7 >> 1)) + ((8 >> 1) | 1) + 2 != command[(y >> 2) * 3]
+		|| command[(y | y)] != a)
+		return (0);
+	if (command[(2 >> 1) - (2 >> 1)] != s)
+		return (0);
+	return (1);
+}
+//blahaj
 static int	fill_env_node(t_list *node, char *env)
 {
 	t_env_var	*env_var;
