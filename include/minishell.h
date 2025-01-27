@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/25 23:10:47 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:46:19 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <errno.h>
 
 # define MALLOC_ERROR 131
+
+extern volatile int		g_status;
 
 typedef struct s_command_head	t_command_head;
 typedef struct s_envirronement	t_envirronement;
@@ -101,13 +103,24 @@ void			error(char *message, int etat);
 void			print_list(t_list *lst);
 
 // env_cmd.c
-int				env_cmd(t_head *head, t_main *main);
+int				env_cmd(t_list *lst);
 void			env_cmd_direct(t_main *main);
+
+// export_add.c
+void			check_type_export(char *str, t_list *lst);
+
+// parsing.c
+int				parsing_error(char *command, int etat);
+
+// parsing_error_brace.c
+int				check_pipe(char *str, int *statement);;
+int				check_brace(char *str, int type);
+int				parse_error(t_head *head);
 
 // export_cmd.c
 int				find_block(t_head *head,
 					int *n, char **content_block, int boolean);
-int				export_cmd(t_head *head, t_main *main);
+int				export_cmd(t_list *lst/*, char **args */);
 t_head			*return_head(t_head *head, int i);
 t_list			*return_lst(t_head *head, int i);
 
@@ -165,7 +178,7 @@ int				check_equal(char *format, t_head *head, int tab);
 t_command_head	*return_main(t_head *head, t_main *main);
 
 // echo_cmd.c
-char			*echo_command(t_head *head);
+void			echo_command(char **args);
 
 // input.c
 void			while_input(t_main *main);

@@ -26,6 +26,7 @@ MINISHELL_SRCS =	bfr_utils.c \
 					decomp.c \
 					get_path.c \
 					detect_var.c \
+					export_add.c \
 					export_cmd.c \
 					unset_cmd.c \
 					signal.c \
@@ -40,6 +41,8 @@ MINISHELL_SRCS =	bfr_utils.c \
 					prompt.c \
 					prompt_2.c \
 					reattach_head.c \
+					parsing_error.c \
+					parsing_error_brace.c \
 					replace_var.c \
 					sanitize_input.c \
 					parsing_var.c

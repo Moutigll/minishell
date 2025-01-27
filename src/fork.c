@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/22 17:21:36 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:42:34 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,22 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 	current_cmd = (t_command *)ft_lstget(pipex->cmd_head->head, i)->content;
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
 	{
-		if (ft_strcmp("unset", current_cmd->command) == 0)
-			unset_cmd(pipex->cmd_head->list_head, pipex->cmd_head->main);
-		else if (ft_strcmp("export", current_cmd->command) == 0)
-			export_cmd(pipex->cmd_head->list_head, pipex->cmd_head->main);
-		else if (ft_strcmp("cd", current_cmd->command) == 0)
-			pipex->cmd_head->error = cd_cmd(pipex->cmd_head->envp,
-					current_cmd->args);
-		else if (ft_strcmp("exit", current_cmd->command) == 0)
-		{
-			clean_pipex(pipex, NULL, 0);
-			free_total(pipex->cmd_head->list_head,
-				pipex->cmd_head->main, pipex->cmd_head);
-			exit(0);
-		}
-		else
-			return (0);
+		// if (ft_strcmp("unset", current_cmd->command) == 0)
+		// 	unset_cmd(pipex->cmd_head->list_head, pipex->cmd_head->main);
+		// else if (ft_strcmp("export", current_cmd->command) == 0)
+		// 	export_cmd(pipex->cmd_head->list_head, pipex->cmd_head->main);
+		// else if (ft_strcmp("cd", current_cmd->command) == 0)
+		// 	pipex->cmd_head->error = cd_cmd(pipex->cmd_head->envp,
+		// 			current_cmd->args);
+		// else if (ft_strcmp("exit", current_cmd->command) == 0)
+		// {
+		// 	clean_pipex(pipex, NULL, 0);
+		// 	free_total(pipex->cmd_head->list_head,
+		// 		pipex->cmd_head->main, pipex->cmd_head);
+		// 	exit(0);
+		// }
+		// else
+			// return (0);
 		return (1);
 	}
 	return (0);
