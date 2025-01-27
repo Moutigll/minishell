@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 18:21:49 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:06:33 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,9 @@ void	free_head(t_head *head)
 	free(head);
 }
 
-void	free_total(t_head *head, t_main *main, t_command_head *head_main)
+void	free_total(t_main *main, t_command_head *head_main)
 {
 	free_tab((void **)main->g_env);
-	ft_lstclear(&main->lst_var, free);
-	if (head)
-		free_head(head);
 	if (main->path)
 		free(main->path);
 	if (head_main)

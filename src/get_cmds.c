@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/26 00:05:42 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:38:35 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,11 @@ t_command_struct	*fill_cmd(t_head *head)
 	cmd_struct = init_command_struct(head->head);
 	lst = head->head;
 	i = -1;
+	if (((t_node *)head->head->content)->content[0] == '<' || ((t_node *)head->head->content)->content[0] == '>')
+	{
+		printf("Error: Invalid command\n");
+		return (free_cmd_struct(cmd_struct), NULL);
+	}
 	while (lst)
 	{
 		content = lst->content;

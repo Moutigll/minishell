@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 20:27:57 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/27 21:56:07 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_head
 typedef struct s_main
 {
 	t_envirronement	*env;
-	t_list			*lst_var;
 	char			**g_env;
 	char			*path;
 	int				error;
@@ -54,29 +53,13 @@ typedef struct s_node
 
 typedef struct s_command_head
 {
-	t_list		*head;
-	char		*in_fd;
-	char		*out_fd;
-	char		**envp;
-	char		*here_doc;
-	int			out_mode;
-	t_head		*list_head;
-	t_main		*main;
-	int			size;
-	int			error;
+	t_command_struct	**cmds;
+	t_main				*main;
+	int					size;
 }	t_command_head;
-
-typedef struct s_command
-{
-	char		*command;
-	char		**args;
-}				t_command;
 
 typedef struct s_pipex
 {
-	int				in_fd;
-	int				out_fd;
-	int				pipe_fd[2];
 	int				stdin_backup;
 	int				stdout_backup;
 	pid_t			*pid_tab;
@@ -91,8 +74,6 @@ typedef struct s_malloc
 	int	i;
 	int	j;
 }	t_malloc;
-
-
 
 typedef struct s_env_var
 {
@@ -137,8 +118,8 @@ typedef struct s_command_struct
 	t_list	**out_fd;
 	char	**command;
 	int		nb_args;
+	int		here_doc;
 }	t_command_struct;
-
 
 void			print_arg(char **str);
 
@@ -192,8 +173,7 @@ int				pwd_cmd(t_head *head);
 char			**return_fd(char *content, char *c);
 
 // exit_cmd.c
-void			free_total(t_head *head,
-					t_main *main, t_command_head *head_main);
+void			free_total(t_main *main, t_command_head *head_main);
 void			exit_cmd(t_head *head, t_main *main);
 void			free_head(t_head *head);
 
@@ -242,15 +222,13 @@ void			print_block(t_head *head);
 void			exec_cmds(t_command_head *cmd_head);
 
 // open_files.c
-void			open_fds(t_pipex *pipex, t_command_head *head);
-void			fake_open_infile(char *file);
-void			fake_open_outfile(char *file, int mode);
+void			exec_cmds(t_command_head *cmd_head);
 
 // get_path.c
 void			get_path(t_pipex *pipex);
 
 // fork.c
-void			exec_cmd(t_pipex *pipex, int i, char **envp);
+int				exec_cmd(t_pipex *pipex, int read_pipe, int i);
 
 // exec_utils.c
 void			clean_pipex(t_pipex *pipex, char *error, int exit_status);

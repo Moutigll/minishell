@@ -6,62 +6,42 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/22 16:51:05 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:40:54 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	init_and_prepare_pipex(t_pipex **pipex, t_command_head *cmd_head)
+static t_pipex	*init_and_prepare_pipex(t_command_head *cmd_head)
 {
-	*pipex = malloc(sizeof(t_pipex));
-	if (!(*pipex))
-		return (clean_pipex(NULL, "Malloc error", MALLOC_ERROR));
-	init_pipex(*pipex, cmd_head);
-	open_fds(*pipex, cmd_head);
-	if (cmd_head->here_doc && !cmd_head->error)
-		handle_here_doc(cmd_head->here_doc, *pipex);
-	if (!cmd_head->error)
-		get_path(*pipex);
+	t_pipex	*pipex;
+
+	pipex = malloc(sizeof(t_pipex));
+	if (!(pipex))
+		return (clean_pipex(pipex, NULL, MALLOC_ERROR), NULL);
+	pipex->pid_tab = malloc(sizeof(pid_t) * cmd_head->size);
+	if (!(pipex->pid_tab))
+		return (clean_pipex(pipex, NULL, MALLOC_ERROR), NULL);
+	pipex->cmd_head = cmd_head;
+	pipex->pid_tab = NULL;
+	pipex->stdin_backup = dup(STDIN_FILENO);
+	pipex->stdout_backup = dup(STDOUT_FILENO);
 }
 
-static pid_t	*allocate_pid_table(t_pipex *pipex, t_command_head *cmd_head)
-{
-	pid_t	*pid_tab;
-
-	pid_tab = malloc(sizeof(pid_t) * cmd_head->size);
-	if (!pid_tab)
-		clean_pipex(pipex, "Malloc error", MALLOC_ERROR);
-	return (pid_tab);
-}
-
-static void	execute_all_commands(t_pipex *pipex,
-	t_command_head *cmd_head)
-{
-	int	i;
-
-	i = 0;
-	while (i < cmd_head->size)
-	{
-		exec_cmd(pipex, i, cmd_head->envp);
-		i++;
-	}
-}
-
-static void	wait_for_children(t_pipex *pipex, t_command_head *cmd_head)
+static void	wait_for_children(t_pipex *pipex)
 {
 	int		status;
 	int		i;
 
 	i = 0;
-	while (i < cmd_head->size)
+	while (i < pipex->cmd_head->size)
 	{
 		if (waitpid(pipex->pid_tab[i], &status, 0) == -1)
 			return ;
 		if (WIFEXITED(status))
-			cmd_head->error = WEXITSTATUS(status);
+			g_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			cmd_head->error = 128 + WTERMSIG(status);
+			g_status = 128 + WTERMSIG(status);
 		i++;
 	}
 }
@@ -69,16 +49,21 @@ static void	wait_for_children(t_pipex *pipex, t_command_head *cmd_head)
 void	exec_cmds(t_command_head *cmd_head)
 {
 	t_pipex	*pipex;
+	int		rpipe;
+	int		i;
 
-	if (!cmd_head || !cmd_head->head)
+	if (!cmd_head || !cmd_head->cmds)
 		return ;
-	init_and_prepare_pipex(&pipex, cmd_head);
-	if (cmd_head->error || !pipex)
+	pipex = init_and_prepare_pipex(cmd_head);
+	if (g_status || !pipex)
 		return ;
-	pipex->pid_tab = allocate_pid_table(pipex, cmd_head);
-	if (!pipex->pid_tab)
-		return ;
-	execute_all_commands(pipex, cmd_head);
-	wait_for_children(pipex, cmd_head);
-	clean_pipex(pipex, NULL, cmd_head->error);
+	i = 0;
+	rpipe = -1;
+	while (i < pipex->cmd_head->size)
+	{
+		rpipe = exec_cmd(pipex, rpipe, i);
+		i++;
+	}
+	wait_for_children(pipex);
+	clean_pipex(pipex, NULL, g_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 18:19:18 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:40:36 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,11 @@ int	parse_error(t_head *head)
 
 	lst = head->head;
 	last_content = last_block(lst);
+	if (((t_node *)head->head->content)->content[0] == '|')
+	{
+		printf("Error: Invalid command\n");
+		return (g_status = 2, 1);
+	}
 	if (last_content == NULL)
 		return (0);
 	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)

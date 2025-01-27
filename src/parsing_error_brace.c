@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_brace.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:15:13 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 17:07:35 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:44:59 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,7 @@ int	check_brace(char *str, int type)
 			return (1);
 		i++;
 	}
+	if (brace > 0)
+		return (1);
 	return (0);
 }

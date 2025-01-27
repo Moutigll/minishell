@@ -6,49 +6,61 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/17 14:33:31 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/27 21:59:46 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	open_infile(t_pipex *pipex, t_command_head *head)
+int	open_infile(t_pipex *pipex, const char *infile)
 {
-	if (pipex->in_fd != -1)
-		close(pipex->in_fd);
-	if (head->in_fd)
+	int	infile_fd;
+
+	if (access(infile, R_OK) == -1)
 	{
-		pipex->in_fd = open(head->in_fd, O_RDONLY);
-		if (pipex->in_fd == -1)
-			return (clean_pipex(pipex, "Can't open infile", 11));
+		perror("Error: Infile is not readable");
+		return (-1);
 	}
-	else
+	infile_fd = open(infile, O_RDONLY);
+	if (infile_fd == -1)
 	{
-		pipex->in_fd = pipex->stdin_backup;
+		perror("Error: Can't open infile");
+		return (-1);
 	}
+	if (dup2(infile_fd, STDIN_FILENO) == -1)
+	{
+		perror("Error: dup2 failed for infile");
+		close(infile_fd);
+		return (-1);
+	}
+	close(infile_fd);
+	return (0);
 }
 
-void	open_outfile(t_pipex *pipex, t_command_head *head)
+int	open_outfile(const char *outfile, int mode)
 {
+	int	outfile_fd;
 	int	flags;
 
-	if (pipex->out_fd != -1)
-		close(pipex->out_fd);
 	flags = O_WRONLY | O_CREAT;
-	if (head->out_mode == 1)
+	if (mode == 1)
 		flags |= O_APPEND;
 	else
 		flags |= O_TRUNC;
-	if (head->out_fd)
+	outfile_fd = open(outfile, flags, 0644);
+	if (outfile_fd == -1)
 	{
-		pipex->out_fd = open(head->out_fd, flags, 0644);
-		if (pipex->out_fd == -1)
-			clean_pipex(pipex, "Can't open outfile", 21);
+		perror("Error: Can't open outfile");
+		return (-1);
 	}
-	else
+	if (dup2(outfile_fd, STDOUT_FILENO) == -1)
 	{
-		pipex->out_fd = STDOUT_FILENO;
+		perror("Error: dup2 failed for outfile");
+		close(outfile_fd);
+		return (-1);
 	}
+	close(outfile_fd);
+	return (0);
 }
 
 void	fake_open_infile(char *file)
@@ -83,10 +95,47 @@ void	fake_open_outfile(char *file, int mode)
 		perror("Error: Can't close outfile descriptor");
 }
 
-void	open_fds(t_pipex *pipex, t_command_head *head)
+int	open_fds(t_pipex *pipex, int i, int read_pipe)
 {
-	open_infile(pipex, head);
-	if (head->error)
-		return ;
-	open_outfile(pipex, head);
+	t_list	*lst;
+	int		size;
+	int		j;
+
+	size = ft_lstsize(pipex->cmd_head->cmds[i]->in_fd);
+	lst = pipex->cmd_head->cmds[i]->in_fd;
+	j = 0;
+	while (lst)
+	{
+		if (j != size - 1 && !pipex->cmd_head->cmds[i]->here_doc)
+			fake_open_infile(((t_fd_struct *)lst->content)->fd);
+		else if (j == size - 1 && !pipex->cmd_head->cmds[i]->here_doc)
+		{
+			if (!open_infile(pipex, ((t_fd_struct *)lst->content)->fd))
+				return (1);
+		}
+	}
+	if (size == 0 && i != 0 && read_pipe != -1)
+	{
+		if (dup2(read_pipe, STDIN_FILENO) == -1)
+		{
+			perror("Error: dup2 failed for read pipe");
+			return (1);
+		}
+	}
+	size = ft_lstsize(pipex->cmd_head->cmds[i]->out_fd);
+	lst = pipex->cmd_head->cmds[i]->out_fd;
+	j = 0;
+	while (lst)
+	{
+		if (j != size - 1)
+			fake_open_outfile(((t_fd_struct *)lst->content)->fd,
+				((t_fd_struct *)lst->content)->mode);
+		else if (j == size - 1)
+		{
+			if (!open_outfile(((t_fd_struct *)lst->content)->fd,
+					((t_fd_struct *)lst->content)->mode))
+				return (1);
+		}
+	}
+	return (0);
 }

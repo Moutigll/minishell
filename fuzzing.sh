@@ -22,7 +22,7 @@ function generate_random_length() {
 
 generate_random_input() {
     LENGTH=$(generate_random_length)
-    cat /dev/urandom | tr -dc "<>|'\"a-zA-A0-9!@#$%^&*_+-=,.:" | head -c "$LENGTH" # Generate random input with the characters between ''
+    cat /dev/urandom | tr -dc "<>|'\"a-zA-A0-9!@#$%^&*_+-=,.:{()[]}" | head -c "$LENGTH" # Generate random input with the characters between ''
 }
 
 mkdir -p "$TEMP_DIR"

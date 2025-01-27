@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 20:29:32 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:39:09 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,57 +23,11 @@ void	print_list(t_list *lst)
 	}
 }
 
-static int	ver_void(t_list *lst)
-{
-	t_node	*node;
-	int		count;
-	int		i;
-
-	count = 0;
-	while (lst)
-	{
-		node = lst->content;
-		i = 0;
-		while (node->content[i])
-		{
-			if (node->content[i] != ' ')
-				count++;
-			i++;
-		}
-		if (!lst->next)
-			break ;
-		lst = lst->next;
-	}
-	if (count > 0)
-		return (1);
-	return (0);
-}
-
-static int	gest_command(t_head *head, t_main *main, char *command)
-{
-	t_command_head	*head_main;
-
-	if (ft_strlen((const char *)command) > 0)
-		verif_var(head, main, 0);
-	free(command);
-	exit_cmd(head, main);
-	if (ver_void(head->head) == 1)
-	{
-		head_main = return_main(head, main);
-		exec_cmds(head_main);
-		if (head_main != NULL)
-			(main)->error = head_main->error;
-		free(head_main);
-	}
-	return (0);
-}
-
 static void	exit_signal(t_main *main, char *command)
 {
 	printf("exit\n");
 	free_tab((void **)main->g_env);
 	free(main->path);
-	ft_lstclear(&main->lst_var, free);
 	free(main);
 	free(command);
 	exit(0);
@@ -104,12 +58,20 @@ void	while_input(t_main *main)
 				replace_variables(head, main->env);
 				reattach_head(head);
 				t_splitted_cmds	*splitted = split_head(head);
+				t_command_head	*cmd_head = malloc(sizeof(t_command_head));
+				if (!cmd_head)
+					return ;
+				cmd_head->size = splitted->size;
+				cmd_head->cmds = malloc(sizeof(t_command_struct) * splitted->size);
 				int i = 0;
 				while (i < splitted->size)
 				{
-					free_cmd_struct(fill_cmd(splitted->tab[i]));
+					cmd_head->cmds[i] = fill_cmd(splitted->tab[i]);
 					i++;
 				}
+				cmd_head->main = main;
+				g_status = 0;
+				exec_cmds(cmd_head);
 				//replace_var(&head, main);
 				//gest_command(head, main, command);
 			}
