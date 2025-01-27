@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 18:27:14 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:27:57 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,54 @@ typedef struct s_malloc
 	int	j;
 }	t_malloc;
 
+
+
+typedef struct s_env_var
+{
+	char	*name;
+	char	*value;
+	int		exported;
+}	t_env_var;
+
+typedef struct s_envirronement
+{
+	t_list	*env_list;
+	char	**envp;
+}	t_envirronement;
+
+typedef struct s_exec_utils
+{
+	int		nb_cmd;
+	t_list	*cmd_head;
+}	t_exec_utils;
+
+typedef struct parse_error
+{
+	int		error;
+	char	*target;
+}	t_parse_error;
+
+typedef struct s_splitted_cmds
+{
+	t_head	**tab;
+	int		size;
+}	t_splitted_cmds;
+
+typedef struct s_fd_struct
+{
+	char	*fd;
+	int		mode;
+}	t_fd_struct;
+
+typedef struct s_command_struct
+{
+	t_list	**in_fd;
+	t_list	**out_fd;
+	char	**command;
+	int		nb_args;
+}	t_command_struct;
+
+
 void			print_arg(char **str);
 
 // define
@@ -117,10 +165,20 @@ int				check_pipe(char *str, int *statement);;
 int				check_brace(char *str, int type);
 int				parse_error(t_head *head);
 
+// export_print.c
+t_list			*find_min_node(t_list *lst, t_list *visited);
+int				print_ascii_sorted(t_list *lst);
+
+// export_add_second.c
+t_env_var		*new_var(char *str, char *key, char *value, int exported);
+char			*return_value(char *str);
+int				check_first_char(char c);
+char			*return_key(char *str);
+
 // export_cmd.c
 int				find_block(t_head *head,
 					int *n, char **content_block, int boolean);
-int				export_cmd(t_list *lst/*, char **args */);
+int				export_cmd(t_list *lst, char **args );
 t_head			*return_head(t_head *head, int i);
 t_list			*return_lst(t_head *head, int i);
 
@@ -202,54 +260,6 @@ void			init_pipex(t_pipex *pipex, t_command_head *cmd_head);
 // exec_func.c
 void			is_func_cmd(char *command,
 					char **args, t_pipex *pipex, t_command_head *cmd_head);
-
-
-
-
-typedef struct s_env_var
-{
-	char	*name;
-	char	*value;
-	int		exported;
-}	t_env_var;
-
-typedef struct s_envirronement
-{
-	t_list	*env_list;
-	char	**envp;
-}	t_envirronement;
-
-typedef struct s_exec_utils
-{
-	int		nb_cmd;
-	t_list	*cmd_head;
-}	t_exec_utils;
-
-typedef struct parse_error
-{
-	int		error;
-	char	*target;
-}	t_parse_error;
-
-typedef struct s_splitted_cmds
-{
-	t_head	**tab;
-	int		size;
-}	t_splitted_cmds;
-
-typedef struct s_fd_struct
-{
-	char	*fd;
-	int		mode;
-}	t_fd_struct;
-
-typedef struct s_command_struct
-{
-	t_list	**in_fd;
-	t_list	**out_fd;
-	char	**command;
-	int		nb_args;
-}	t_command_struct;
 
 // env_utils.c
 void				free_env(t_list *env);
