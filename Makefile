@@ -1,19 +1,27 @@
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -I include -I libft/include
+CFLAGS = -g -I include -I libft/include
 NAME = minishell
 TESTER = minishell_tester
 SRC_DIR = src
 TEST_DIR = tester
 OBJ_DIR = obj
 
-MINISHELL_SRCS =	check_equal.c \
+MINISHELL_SRCS =	bfr_utils.c \
+					check_equal.c \
+					clean_cmd.c \
 					echo_cmd.c \
+					env_utils.c \
 					exec_cmd.c \
 					exec_func.c \
 					exec_utils.c \
 					file_tmp.c \
 					fork.c \
 					ft_listnode.c \
+					get_cmds_filename.c \
+					get_cmds.c \
+					get_cmds_utils.c \
+					split_cmds_utils.c \
+					split_cmds.c \
 					attach.c \
 					decomp.c \
 					get_path.c \
@@ -31,6 +39,8 @@ MINISHELL_SRCS =	check_equal.c \
 					parsing.c \
 					prompt.c \
 					prompt_2.c \
+					reattach_head.c \
+					replace_var.c \
 					sanitize_input.c \
 					parsing_var.c
 

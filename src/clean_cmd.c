@@ -1,29 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_cmd.c                                          :+:      :+:    :+:   */
+/*   clean_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 13:56:30 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 17:32:27 by ele-lean         ###   ########.fr       */
+/*   Created: 2025/01/23 15:19:44 by ele-lean          #+#    #+#             */
+/*   Updated: 2025/01/23 15:21:38 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-int	env_cmd(t_list *lst)
+void	cleant_tab_cmd(t_head **tab)
 {
-	t_env_var	*var;
+	t_node	*content;
+	t_list	*lst;
+	t_list	*tmp;
+	int		i;
 
-	while (lst)
+	i = 0;
+	while (tab[i])
 	{
-		var = lst->content;
-		if (var->exported == 1 && var->value[0] != '\0')
-			printf("%s=%s\n", var->name, var->value);
-		if (!lst->next)
-			break ;
-		lst = lst->next;
+		lst = tab[i]->head;
+		while (lst)
+		{
+			content = lst->content;
+			free(content->content);
+			tmp = lst;
+			lst = lst->next;
+			free(tmp);
+		}
+		free(tab[i]);
+		i++;
 	}
-	return (0);
 }

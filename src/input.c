@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 12:47:10 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:21:26 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,17 @@ void	while_input(t_main *main)
 			head = sanitize_input(command, main);
 			if (ft_strlen(command) > 0)
 			{
-				replace_var(&head, main);
-				gest_command(head, main, command);
+				replace_variables(head, main->env);
+				reattach_head(head);
+				t_splitted_cmds	*splitted = split_head(head);
+				int i = 0;
+				while (i < splitted->size)
+				{
+					free_cmd_struct(fill_cmd(splitted->tab[i]));
+					i++;
+				}
+				//replace_var(&head, main);
+				//gest_command(head, main, command);
 			}
 			else
 				free(command);

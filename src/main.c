@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 15:22:04 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:21:35 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ int	main(int argc, char **argv, char **env)
 	main->lst_var = lst_var;
 	main->error = 0;
 	copy_env_to_mainstruct(env, main);
+	main->env = malloc(sizeof(t_envirronement));
+	if (!main->env)
+		exit_on_error(main, MALLOC_ERROR);
+	main->env->env_list = create_env_list(env);
+	main->env->envp = main->g_env;
 	while_input(main);
 	return (0);
 }
