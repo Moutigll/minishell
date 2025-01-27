@@ -6,112 +6,60 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 19:36:06 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:22:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	change_result_part1(char **result)
+static void	print_echo(char **args, int block, int flag)
 {
-	char	*tmp;
-
-	tmp = *result;
-	*result = ft_strjoin(tmp, " ");
-	free(tmp);
-}
-
-static void	change_result_part2(char *tmp, char **result, int j)
-{
-	char	*tmp_2;
-
-	tmp[j] = '\0';
-	tmp_2 = *result;
-	*result = ft_strjoin(tmp_2, tmp);
-	free(tmp_2);
-	free(tmp);
-}
-
-static void	change_result(t_node *node, char **result, int *n, int k)
-{
-	char	*tmp;
-	int		i;
-	int		j;
+	int	i;
 
 	i = 0;
-	while (node->content[i])
+	while (args[block])
 	{
-		if ((node->content[i] == '|' || node->content[i] == '<'
-				|| node->content[i] == '>') && node->type == 2)
-		{
-			*n = 1;
-			break ;
-		}
-		i++;
-	}
-	if (node->head == 1 && k != 0 && i != 0)
-		change_result_part1(result);
-	tmp = malloc(sizeof(char) * (i + 1));
-	j = 0;
-	while (j < i)
-	{
-		tmp[j] = node->content[j];
-		j++;
-	}
-	change_result_part2(tmp, result, j);
-}
-
-static char	*echo_return(t_list *lst, int flag)
-{
-	char	*result;
-	t_node	*node;
-	char	*tmp;
-	int		n;
-	int		i;
-
-	i = 0;
-	n = 0;
-	result = ft_strdup("");
-	while (lst)
-	{
-		node = lst->content;
-		change_result(node, &result, &n, i);
-		if (!lst->next || n == 1)
-			break ;
-		lst = lst->next;
+		if (i > 0)
+			printf(" ");
+		printf("%s", args[block]);
+		block++;
 		i++;
 	}
 	if (flag == 0)
-	{
-		tmp = result;
-		result = ft_strjoin(tmp, "\n");
-		free(tmp);
-	}
-	return (result);
+		printf("\n");
+	g_status = 0;
 }
 
-char	*echo_command(t_head *head)
+static int	check_flag(char *str)
 {
-	t_head	*head_tmp;
-	int		tmp_2;
-	int		flag;
-	int		tmp;
-	char	*result;
+	int	i;
+
+	i = 2;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	echo_command(char **args)
+{
+	int	block;
+	int	flag;
 
 	flag = 0;
-	tmp = check_equal("echo", head, 0);
-	if (tmp >= 0)
+	block = 0;
+	if (ft_strcmp(args[block], "echo") == 0 && args[block][4] == '\0')
 	{
-		tmp_2 = tmp;
-		tmp = check_equal("-n", head, tmp);
-		if (tmp >= 0)
+		block++;
+		if (args[block] != NULL && ft_strncmp(args[block], "-n", 2) == 0
+			&& check_flag(args[block]) == 0)
+		{
+			block++;
 			flag = 1;
-		else
-			tmp = tmp_2;
-		head_tmp = return_head(head, tmp);
-		result = echo_return(head_tmp->head, flag);
-		free(head_tmp);
-		return (result);
+		}
+		print_echo(args, block, flag);
 	}
-	return (NULL);
 }

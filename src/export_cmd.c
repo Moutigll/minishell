@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/22 14:41:44 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:09:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,242 +68,94 @@ int	find_block(t_head *head, int *n, char **content_block, int boolean)
 	return (*n = -1, -1);
 }
 
-static char	*search_lst_var(t_list *lst, char *key)
+static int	count_tab(char **args)
 {
-	char	*tmp;
-
-	while (lst)
-	{
-		tmp = return_before(lst->content);
-		if (ft_strcmp((const char *)tmp,
-				(const char *)key) == 0)
-			return (free(tmp), lst->content);
-		free(tmp);
-		if (!lst->next)
-			break ;
-		lst = lst->next;
-	}
-	return (NULL);
-}
-
-static void	remove_last_element(t_list **lst)
-{
-	t_list	*current;
-	t_list	*prev;
-
-	if (!lst || !*lst)
-		return ;
-	current = *lst;
-	if (!current->next)
-	{
-		free(current->content);
-		free(current);
-		*lst = NULL;
-		return ;
-	}
-	while (current->next)
-	{
-		prev = current;
-		current = current->next;
-	}
-	free(current);
-	prev->next = NULL;
-}
-
-static t_list	*remove_node_by_content_part1(t_list *prev,
-		t_list *current, t_list *next_node, t_list *lst)
-{
-	next_node = current->next;
-	free(current->content);
-	free(current);
-	if (prev == NULL)
-		return (next_node);
-	else
-	{
-		prev->next = next_node;
-		return (lst);
-	}
-}
-
-static t_list	*remove_node_by_content(t_list *lst, char *str)
-{
-	t_list	*current;
-	t_list	*prev;
-	t_list	*next_node;
-
-	if (!lst || !str)
-		return (lst);
-	current = lst;
-	prev = NULL;
-	next_node = NULL;
-	while (current)
-	{
-		if (ft_strcmp((const char *)current->content, (const char *)str) == 0)
-		{
-			lst = remove_node_by_content_part1(prev,
-					current, next_node, lst);
-			current = next_node;
-			continue ;
-		}
-		prev = current;
-		current = current->next;
-	}
-	return (lst);
-}
-
-static int	export_cmd_part(t_head *head, t_main *main)
-{
-	char	*attach;
-
-	attach = attach_block(head);
-	if (ft_strncmp(attach, "export", 6) == 0)
-	{
-		env_cmd_direct(main);
-		free(attach);
-		return (1);
-	}
-	free(attach);
-	return (0);
-}
-
-static int	return_correct_char(char c)
-{
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c >= '0' && c <= '9')
-		return (1);
-	if (c == '_' || c == '\'' || c == '\"' || c == '\\' || c == '~' || c == '-')
-		return (1);
-	return (0);
-}
-
-static int	check_correct(char *str)
-{
-	int	count_a;
-	int	count_b;
-	int	count_c;
 	int	i;
 
 	i = 0;
-	count_a = 0;
-	count_b = 0;
-	count_c = 0;
-	while (str[i])
-	{
-		if (return_correct_char(str[i]) && count_b == 0)
-			count_a++;
-		if (str[i] == '=')
-			count_b++;
-		else if (return_correct_char(str[i]) == 0)
-			return (0);
-		if (return_correct_char(str[i]) && count_b >= 1)
-			count_c++;
+	while (args[i])
 		i++;
+	return (i);
+}
+
+int is_node_visited(t_list *visited, t_list *node)
+{
+	while (visited)
+	{
+		if (visited->content == node->content)
+			return (1);
+		visited = visited->next;
 	}
-	if (count_a > 0 && count_c > 0 && count_b == 1)
-		return (1);
 	return (0);
 }
 
-static void	export_cmd_part2(t_main *main, char *tmp, char *content_tmp)
+t_list *find_min_node(t_list *lst, t_list *visited)
 {
-	char	*var_name;
-	int		var_pos;
-
-	if (check_correct(content_tmp) == 0)
-	{
-		printf("export: bad assignment\n");
-		return ;
-	}
-	var_name = return_before(tmp);
-	var_pos = search_env(main, var_name);
-	if (var_pos == -1)
-		main->g_env = ft_realoc_ptr(main->g_env, content_tmp);
-	else
-	{
-		free(main->g_env[var_pos]);
-		main->g_env[var_pos] = ft_strdup(content_tmp);
-	}
-	free(var_name);
-}
-
-static int	ft_lstcontain(t_list *lst, char *str)
-{
-	char	*tmp;
+	t_list		*min_node = NULL;
+	t_env_var	*tmp;
+	t_env_var	*tmp_2;
 
 	while (lst)
 	{
-		tmp = return_before(lst->content);
-		if (ft_strcmp(tmp, str) == 0)
-			return (free(tmp), 1);
-		free(tmp);
-		if (!lst->next)
-			break ;
+		if (!is_node_visited(visited, lst))
+		{
+			tmp = lst->content;
+			if (min_node != NULL)
+				tmp_2 = min_node->content;
+			if (!min_node || strcmp(tmp->name, tmp_2->name) < 0)
+				min_node = lst;
+		}
 		lst = lst->next;
 	}
-	return (0);
+	return (min_node);
 }
 
-static void	export_cmd_part1(t_head *node, t_main *main, char **content_tmp)
+void print_ascii_sorted(t_list *lst)
 {
-	int		result;
-	char	*tmp;
+	t_list		*min_node;
+	t_list		*current;
+	t_list		*visited;
+	t_env_var	*tmp;
 
-	result = verif_var(node, main, 1);
-	if (result == 0)
+	visited = NULL;
+	while ((min_node = find_min_node(lst, visited)) != NULL)
 	{
-		if (check_correct(*content_tmp) == 0)
+		tmp = min_node->content;
+		if (((int)ft_strlen(tmp->name) != 1 || tmp->name[0] != '_') && tmp->exported == 1)
+			printf("declare -x %s=\"%s\"\n", tmp->name, tmp->value);
+		else if (((int)ft_strlen(tmp->name) != 1 || tmp->name[0] != '_') && tmp->exported == 0)
+			printf("declare -x %s\n", tmp->name);
+		current = malloc(sizeof(t_list));
+		if (!current)
 		{
-			printf("export: not valid in this context\n");
+			fprintf(stderr, "Error: malloc failed\n");
+			ft_lstclear(&visited, free);
 			return ;
 		}
-		remove_last_element(&main->lst_var);
-		tmp = return_before(*content_tmp);
-		export_cmd_part2(main, tmp, *content_tmp);
-		free(tmp);
+		current->content = min_node->content;
+		current->next = visited;
+		visited = current;
 	}
-	else if (result != -10)
-	{
-		if (search_env(main, *content_tmp) == -1
-			&& ft_lstcontain(main->lst_var, *content_tmp) == 1)
-		{
-			main->g_env = ft_realoc_ptr(main->g_env,
-					search_lst_var(main->lst_var, *content_tmp));
-			main->lst_var = remove_node_by_content(main->lst_var,
-					search_lst_var(main->lst_var, *content_tmp));
-		}
-	}
-	if (*content_tmp != NULL)
-		free(*content_tmp);
 }
 
-int	export_cmd(t_head *head, t_main *main)
+int	export_cmd(t_list *lst/*, char **args */)
 {
-	t_head	*node;
-	char	*content_tmp;
-	int		tmp;
-	int		n;
+	char	*args[] = {"export", "oui=non", "5oui=", NULL};
 	int		i;
 
-	tmp = check_equal("export", head, 0);
-	n = tmp;
-	i = n;
-	if (tmp >= 0)
+	i = 1;
+	if (ft_strcmp(args[0], "export") == 0)
 	{
-		tmp = 0;
-		while (n != -1)
+		if (count_tab(args) == 1)
+			print_ascii_sorted(lst);
+		while (args[i])
 		{
-			node = return_head(head, i);
-			find_block(node, &n, &content_tmp, 1);
-			export_cmd_part1(node, main, &content_tmp);
-			i += find_block(node, &n, &content_tmp, 0) - 1;
-			free(node);
-			tmp++;
+			check_type_export(args[i], lst);
+			i++;
 		}
-		return (1);
 	}
-	else
-		return (export_cmd_part(head, main));
+	print_ascii_sorted(lst);
+	g_status = 0;
+	// update here
+	return (0);
 }
