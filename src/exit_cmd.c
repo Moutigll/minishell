@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/20 20:39:40 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:21:49 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,22 +46,22 @@ void	free_total(t_head *head, t_main *main, t_command_head *head_main)
 
 void	exit_cmd(t_head *head, t_main *main)
 {
-	char	*block;
-	int		i;
-	int		error;
+	// char	*block;
+	// int		i;
+	// int		error;
 
-	i = 0;
-	error = main->error;
-	block = attach_block(head);
-	while (block[i] && block[i] != ' ')
-		i++;
-	if (ft_strncmp(block, "exit", 4) == 0
-		&& (block[4] == '\0' || block[4] == ' '))
-	{
-		clear_history();
-		free_total(head, main, NULL);
-		free(block);
-		exit(error);
-	}
-	free(block);
+	// i = 0;
+	// error = main->error;
+	// block = attach_block(head);
+	// while (block[i] && block[i] != ' ')
+	// 	i++;
+	// if (ft_strncmp(block, "exit", 4) == 0
+	// 	&& (block[4] == '\0' || block[4] == ' '))
+	// {
+	// 	clear_history();
+	// 	free_total(head, main, NULL);
+	// 	free(block);
+	// 	exit(error);
+	// }
+	// free(block);
 }

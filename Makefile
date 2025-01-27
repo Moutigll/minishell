@@ -7,7 +7,6 @@ TEST_DIR = tester
 OBJ_DIR = obj
 
 MINISHELL_SRCS =	bfr_utils.c \
-					check_equal.c \
 					clean_cmd.c \
 					echo_cmd.c \
 					env_utils.c \
@@ -22,19 +21,13 @@ MINISHELL_SRCS =	bfr_utils.c \
 					get_cmds_utils.c \
 					split_cmds_utils.c \
 					split_cmds.c \
-					attach.c \
-					decomp.c \
 					get_path.c \
-					detect_var.c \
 					export_add.c \
 					export_cmd.c \
-					unset_cmd.c \
 					signal.c \
-					fd_take.c \
 					exit_cmd.c \
 					env_cmd.c \
 					cd_cmd.c \
-					realoc.c \
 					input.c \
 					open_files.c \
 					parsing.c \
@@ -44,8 +37,7 @@ MINISHELL_SRCS =	bfr_utils.c \
 					parsing_error.c \
 					parsing_error_brace.c \
 					replace_var.c \
-					sanitize_input.c \
-					parsing_var.c
+					sanitize_input.c
 
 MINISHELL_OBJS = $(addprefix $(OBJ_DIR)/, $(MINISHELL_SRCS:.c=.o))
 

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 17:46:19 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:27:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,15 +127,6 @@ t_list			*return_lst(t_head *head, int i);
 // signal.c
 void			signal_handler(int sig);
 
-// unset.c
-int				unset_cmd(t_head *head, t_main *main);
-
-// realoc.c
-char			**ft_realoc_ptr_unset(char **tab, int n);
-int				search_env(t_main *main, char *content);
-char			**ft_realoc_ptr(char **tab, char *str);
-char			*return_before(char *content);
-
 // pwd_cmd.c
 int				pwd_cmd(t_head *head);
 
@@ -158,12 +149,6 @@ int				verif_var(t_head *head, t_main *main, int n);
 int				search_exist(char *name_var, char **g_env);
 void			replace_var(t_head **head, t_main *main);
 char			*return_name_var(char *content, char c);
-
-// attach.c
-char			*attach_block_quote(t_head *head);
-char			*attach_block(t_head *head);
-int				add_node(unsigned int l,
-					char *s, const char *c, int *t);
 
 // prompt_2.c
 int				return_slash(char *str);
