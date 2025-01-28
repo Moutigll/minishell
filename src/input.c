@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 20:39:09 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:40:36 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	while_input(t_main *main)
 		{
 			add_history(command);
 			head = sanitize_input(command, main);
-			char *args[] = {"export", "oui=non", "5oui=", NULL};
-			export_cmd(main->env->env_list, args);
+			// char *args[] = {"export", "oui=non", "5oui=", NULL};
+			// export_cmd(main->env->env_list, args);
 			if (ft_strlen(command) > 0 && parse_error(head) == 0)
 			{
 				replace_variables(head, main->env);

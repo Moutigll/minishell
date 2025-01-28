@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   split_cmds_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:53:45 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 14:42:39 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:15:45 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	check_node_content(t_node *content, t_parse_error *error)
+static int	check_node_content(t_node *content)
 {
 	int	j;
 	int	count;
@@ -45,9 +45,7 @@ int	get_nb_head_cmds(t_head *head, t_parse_error *error)
 		content = lst->content;
 		if (content->type == 2)
 		{
-			if (!check_node_content(content, error))
-				return (0);
-			i++;
+			i += check_node_content(content);
 		}
 		lst = lst->next;
 	}

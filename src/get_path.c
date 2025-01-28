@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/17 17:17:52 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:35:03 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,27 @@ char	*check_paths(char **paths, char *cmd)
 	return (NULL);
 }
 
-void	resolve_command(t_command *cmd, char **paths)
+void	resolve_command(t_command_struct *cmd, char **paths)
 {
-	if (!cmd->command || ft_strlen(cmd->command) == 0)
+	if (!cmd->command || ft_strlen(cmd->command[0]) == 0)
 	{
 		write(STDERR_FILENO, "Error: Empty command\n", 21);
-		cmd->command = NULL;
+		cmd->command[0] = NULL;
 		return ;
 	}
-	if (cmd->command[0] == '/' || cmd->command[0] == '.')
+	if (cmd->command[0][0] == '/' || cmd->command[0][0] == '.')
 	{
-		if (access(cmd->command, X_OK) == -1)
+		if (access(cmd->command[0], X_OK) == -1)
 		{
 			perror("Error: Command not accessible");
-			cmd->command = NULL;
+			cmd->command[0] = NULL;
 			return ;
 		}
 	}
 	else
 	{
-		cmd->command = check_paths(paths, cmd->command);
-		if (!cmd->command)
+		cmd->command[0] = check_paths(paths, cmd->command[0]);
+		if (!cmd->command[0])
 			return ;
 	}
 }
@@ -86,23 +86,23 @@ void	resolve_command(t_command *cmd, char **paths)
 void	get_path(t_pipex *pipex)
 {
 	char		**paths;
-	t_list		*tmp;
-	t_command	*cmd;
+	t_command_struct	*cmd;
+	int			i;
 
-	paths = get_env_paths(pipex->cmd_head->envp);
-	tmp = pipex->cmd_head->head;
-	while (tmp)
+	paths = get_env_paths(pipex->cmd_head->main->env->envp);
+	i = 0;
+	while (i < pipex->cmd_head->size)
 	{
-		cmd = tmp->content;
-		if (ft_strcmp(cmd->command, "echo") != 0
-			&& ft_strcmp(cmd->command, "pwd") != 0
-			&& ft_strcmp(cmd->command, "unset") != 0
-			&& ft_strcmp(cmd->command, "export") != 0
-			&& ft_strcmp(cmd->command, "env") != 0
-			&& ft_strcmp(cmd->command, "cd") != 0
-			&& ft_strcmp(cmd->command, "exit") != 0)
+		cmd = pipex->cmd_head->cmds[i];
+		if (ft_strcmp(cmd->command[0], "echo") != 0
+			&& ft_strcmp(cmd->command[0], "pwd") != 0
+			&& ft_strcmp(cmd->command[0], "unset") != 0
+			&& ft_strcmp(cmd->command[0], "export") != 0
+			&& ft_strcmp(cmd->command[0], "env") != 0
+			&& ft_strcmp(cmd->command[0], "cd") != 0
+			&& ft_strcmp(cmd->command[0], "exit") != 0)
 			resolve_command(cmd, paths);
-		tmp = tmp->next;
+		i++;
 	}
 	free_tab((void **)paths);
 }

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 14:01:06 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:02:58 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,10 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 	int		size;
 	int		j;
 
-	size = ft_lstsize(pipex->cmd_head->cmds[i]->in_fd);
-	lst = pipex->cmd_head->cmds[i]->in_fd;
+	size = ft_lstsize(*pipex->cmd_head->cmds[i]->in_fd);
+	lst = *pipex->cmd_head->cmds[i]->in_fd;
 	j = 0;
-	while (lst)
+	while (lst && pipex->cmd_head->cmds[i]->here_doc == -1)
 	{
 		if (j != size - 1 && !pipex->cmd_head->cmds[i]->here_doc)
 			fake_open_infile(((t_fd_struct *)lst->content)->fd);
@@ -114,7 +114,7 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 				return (1);
 		}
 	}
-	if (size == 0 && i != 0 && read_pipe != -1)
+	if (size == 0 && i != 0 && read_pipe != -1 && pipex->cmd_head->cmds[i]->here_doc == -1)
 	{
 		if (dup2(read_pipe, STDIN_FILENO) == -1)
 		{
@@ -124,8 +124,16 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 	}
 	else if (read_pipe != -1)
 		close(read_pipe);
-	size = ft_lstsize(pipex->cmd_head->cmds[i]->out_fd);
-	lst = pipex->cmd_head->cmds[i]->out_fd;
+	if (pipex->cmd_head->cmds[i]->here_doc != -1)
+	{
+		if (dup2(pipex->cmd_head->cmds[i]->here_doc, STDIN_FILENO) == -1)
+		{
+			perror("Error: dup2 failed for here doc");
+			return (1);
+		}
+	}
+	size = ft_lstsize(*pipex->cmd_head->cmds[i]->out_fd);
+	lst = *pipex->cmd_head->cmds[i]->out_fd;
 	j = 0;
 	while (lst)
 	{

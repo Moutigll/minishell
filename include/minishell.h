@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/28 15:07:14 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:34:21 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,6 +275,7 @@ int					is_in_or_out(char *str,
 // get_cmds_filename.c
 char				*get_filename(t_list **lst, int *j);
 
+int	unset_cmd(t_list *lst, char **args);
 
 // bfr_utils.c
 void				a5h7j(void);
