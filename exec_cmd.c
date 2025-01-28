@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 17:22:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:17:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	check_here_doc(t_pipex	*pipex)
 	cmds = pipex->cmd_head->cmds;
 	while (cmds[++i])
 	{
-		in_fd = *cmds[i]->in_fd;
+		in_fd = cmds[i]->in_fd;
 		count = ft_lstsize(in_fd) - 1;
 		while (in_fd)
 		{
@@ -60,6 +60,7 @@ static t_pipex	*init_and_prepare_pipex(t_command_head *cmd_head)
 	if (!(pipex->pid_tab))
 		return (clean_pipex(pipex, NULL, MALLOC_ERROR), NULL);
 	pipex->cmd_head = cmd_head;
+	pipex->pid_tab = NULL;
 	pipex->stdin_backup = dup(STDIN_FILENO);
 	pipex->stdout_backup = dup(STDOUT_FILENO);
 	return (pipex);
@@ -92,9 +93,9 @@ void	exec_cmds(t_command_head *cmd_head)
 	if (!cmd_head || !cmd_head->cmds)
 		return ;
 	pipex = init_and_prepare_pipex(cmd_head);
+	// pipex->cmd_head->cmds
 	if (g_status || !pipex)
 		return ;
-	get_path(pipex);
 	i = 0;
 	rpipe = -1;
 	while (i < pipex->cmd_head->size)

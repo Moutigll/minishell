@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/28 15:34:21 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 17:21:17 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,8 @@ int				exec_cmd(t_pipex *pipex, int read_pipe, int i);
 
 // exec_utils.c
 void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
-void			handle_here_doc(char *delimiter, t_pipex *pipex);
 void			init_pipex(t_pipex *pipex, t_command_head *cmd_head);
+int				handle_here_doc(char *delimiter, t_pipex *pipex);
 
 // exec_func.c
 void	is_func_cmd(t_pipex *pipex, int i);
@@ -246,6 +246,10 @@ void				print_env(t_list *env);
 // env_var.c
 //static t_env_var	*find_env_var_node(t_list *env, const char *var_name);
 t_head				*replace_variables(t_head *head, t_envirronement *env);
+
+// realoc.c
+char				**ft_realoc_ptr(char **tab, char *str);
+void				update_env(t_list *lst, char **envp);
 
 // reattach_head.c
 t_head				*reattach_head(t_head *head);

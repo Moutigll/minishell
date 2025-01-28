@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/27 20:04:29 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:52:11 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 	free(pipex);
 }
 
-void	handle_here_doc(char *delimiter, t_pipex *pipex)
+int	handle_here_doc(char *delimiter, t_pipex *pipex)
 {
 	char	*line;
 	int		pipe_fd[2];
@@ -32,7 +32,7 @@ void	handle_here_doc(char *delimiter, t_pipex *pipex)
 
 	delimiter_len = ft_strlen(delimiter);
 	if (pipe(pipe_fd) == -1)
-		clean_pipex(pipex, "Pipe error", 32);
+		return (clean_pipex(pipex, "Pipe error", 32), -1);
 	while (1)
 	{
 		write(1, "heredoc> ", 10);
@@ -47,4 +47,5 @@ void	handle_here_doc(char *delimiter, t_pipex *pipex)
 	if (line)
 		free(line);
 	close(pipe_fd[1]);
+	return (pipe_fd[0]);
 }
