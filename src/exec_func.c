@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 14:36:16 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:11:48 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,47 +18,43 @@ int	exec_func_c(char *command, char **args, t_pipex *pipex)
 	int		is_builtin;
 
 	is_builtin = 0;
-	// if (!ft_strcmp(command, "echo"))
-	// {
-	// 	string = echo_command(pipex->cmd_head->list_head);
-	// 	printf("%s", string);
-	// 	free(string);
-	// 	is_builtin = 1;
-	// }
-	// else if (!ft_strcmp(command, "pwd"))
-	// {
-	// 	if (args[1])
-	// 		ft_putstr_fd("pwd: too many arguments\n", 2);
-	// 	else
-	// 		printf("%s\n", pipex->cmd_head->main->path);
-	// 	is_builtin = 1;
-	// }
+	if (!ft_strcmp(command, "echo"))
+	{
+		echo_command(args);
+		is_builtin = 1;
+	}
+	else if (!ft_strcmp(command, "pwd"))
+	{
+		if (args[1])
+			ft_putstr_fd("pwd: too many arguments\n", 2);
+		else
+			printf("%s\n", pipex->cmd_head->main->path);
+		is_builtin = 1;
+	}
 	return (is_builtin);
 }
 
-void	is_func_cmd(char *command,
-	char **args, t_pipex *pipex, t_command_head *cmd_head)
+void	is_func_cmd(t_pipex *pipex, int i)
 {
-	int		is_builtin;
-	int		error;
+	t_command_struct	*cmd;
+	int					is_builtin;
 
-	if (!command)
+	cmd = pipex->cmd_head->cmds[i];
+	if (cmd->command[0] == NULL)
 		return ;
 	is_builtin = 0;
-	// if (!ft_strcmp(command, "env"))
-	// 	env_cmd_direct(pipex->cmd_head->main);
-	// else if (!ft_strcmp(command, "cd"))
-	// 	error = cd_cmd(pipex->cmd_head->envp, args);
-	// if (!ft_strcmp(command, "exit") || !ft_strcmp(command, "cd")
-	// 	|| !ft_strcmp(command, "export") || !ft_strcmp(command, "unset")
-	// 	|| !ft_strcmp(command, "env"))
-	// 	is_builtin = 1;
-	// else
-	is_builtin = exec_func_c(command, args, pipex);
+	if (!ft_strcmp(cmd->command[0], "pwd"))
+		g_status = cd_cmd(pipex->cmd_head->main->env, cmd->command);
+	if (!ft_strcmp(cmd->command[0], "exit") || !ft_strcmp(cmd->command[0], "cd")
+		|| !ft_strcmp(cmd->command[0], "export") || !ft_strcmp(cmd->command[0], "unset")
+		|| !ft_strcmp(cmd->command[0], "env"))
+		is_builtin = 1;
+	else
+	is_builtin = exec_func_c(cmd->command[0], cmd->command, pipex);
 	if (is_builtin)
 	{
 		clean_pipex(pipex, NULL, 0);
-		free_total(cmd_head->list_head, cmd_head->main, cmd_head);
-		exit(error);
+		free_total(pipex->cmd_head->main, pipex->cmd_head);
+		exit(g_status);
 	}
 }

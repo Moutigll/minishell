@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/27 22:00:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:42:12 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 		exit(1);
 	}
 	close(pipe_fd[0]);
-	if (ft_lstsize(pipex->cmd_head->cmds[i]->out_fd) == 0
+	if (ft_lstsize(*pipex->cmd_head->cmds[i]->out_fd) == 0
 		&& i != pipex->cmd_head->size - 1)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
@@ -32,6 +32,15 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 			exit(1);
 		}
 	}
+	is_func_cmd(pipex, i);
+	if (execve(pipex->cmd_head->cmds[i]->command[0],
+			pipex->cmd_head->cmds[i]->command, pipex->cmd_head->main->env->envp) == -1)
+	{
+		perror("Error: Failed to execute command");
+		clean_pipex(pipex, NULL, 1);
+		free_total(pipex->cmd_head->main, pipex->cmd_head);
+		exit(1);
+	}
 }
 
 static int	handle_special_cmds(t_pipex *pipex, int i)
@@ -41,13 +50,13 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 	current_cmd = pipex->cmd_head->cmds[i];
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
 	{
-		if (ft_strcmp("unset", current_cmd->command) == 0)
+		if (ft_strcmp("unset", current_cmd->command[0]) == 0)
 			unset_cmd();
-		else if (ft_strcmp("export", current_cmd->command) == 0)
+		else if (ft_strcmp("export", current_cmd->command[0]) == 0)
 			export_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
-		else if (ft_strcmp("cd", current_cmd->command) == 0)
+		else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
 			cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
-		else if (ft_strcmp("exit", current_cmd->command) == 0)
+		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
 		{
 			clean_pipex(pipex, NULL, 0);
 			free_total(pipex->cmd_head->main, pipex->cmd_head);
@@ -66,7 +75,7 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	pid_t		pid;
 
 	if (handle_special_cmds(pipex, i))
-		return ;
+		return -1;
 	if (pipe(pipe_fd) == -1)
 		return (perror("Error: Failed to create pipe"),
 			g_status = 32, clean_pipex(pipex, NULL, 32), -1);

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/27 21:59:46 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:01:06 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 			return (1);
 		}
 	}
+	else if (read_pipe != -1)
+		close(read_pipe);
 	size = ft_lstsize(pipex->cmd_head->cmds[i]->out_fd);
 	lst = pipex->cmd_head->cmds[i]->out_fd;
 	j = 0;

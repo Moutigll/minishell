@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/27 20:40:54 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:15:10 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static t_pipex	*init_and_prepare_pipex(t_command_head *cmd_head)
 	pipex->pid_tab = NULL;
 	pipex->stdin_backup = dup(STDIN_FILENO);
 	pipex->stdout_backup = dup(STDOUT_FILENO);
+	return (pipex);
 }
 
 static void	wait_for_children(t_pipex *pipex)
