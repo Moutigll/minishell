@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/28 14:52:15 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:38:39 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,7 @@ void			error(char *message, int etat);
 void			print_list(t_list *lst);
 
 // env_cmd.c
-int				env_cmd(t_list *lst);
-void			env_cmd_direct(t_main *main);
+int				env_cmd(t_list *lst, char **args);
 
 // export_add.c
 void			check_type_export(char *str, t_list *lst);
@@ -176,11 +175,7 @@ int				check_first_char(char c);
 char			*return_key(char *str);
 
 // export_cmd.c
-int				find_block(t_head *head,
-					int *n, char **content_block, int boolean);
 int				export_cmd(t_list *lst, char **args );
-t_head			*return_head(t_head *head, int i);
-t_list			*return_lst(t_head *head, int i);
 
 // signal.c
 void			signal_handler(int sig);

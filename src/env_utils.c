@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:50:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/25 22:21:57 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:35:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	get_env(char *command, int i)
 		return (0);
 	return (1);
 }
-//blahaj
+
 static int	fill_env_node(t_list *node, char *env)
 {
 	t_env_var	*env_var;
@@ -105,8 +105,6 @@ t_list	*create_env_list(char **env)
 	}
 	return (lst);
 }
-
-//DEBUG
 
 void	print_env(t_list *env)
 {

@@ -22,6 +22,8 @@ MINISHELL_SRCS =	bfr_utils.c \
 					split_cmds_utils.c \
 					split_cmds.c \
 					get_path.c \
+					pwd_cmd.c \
+					unset_cmd.c \
 					export_add.c \
 					export_add_second.c \
 					export_cmd.c \

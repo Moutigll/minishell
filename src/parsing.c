@@ -6,13 +6,11 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 12:23:49 by tle-goff          #+#    #+#             */
-/*   Updated: 2024/12/18 17:31:12 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:42:02 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// gestion d'erreur "quote open", ";", "\"
 
 int	parsing_error(char *command, int etat)
 {
