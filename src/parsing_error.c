@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 18:40:36 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:40:52 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,9 +139,9 @@ int	parse_error(t_head *head)
 	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)
 		return (printf("4 Parse error near `%s'\n", last_content->content), g_status = 2, 1);
 	if (last_char(last_content->content, '>') == 1)
-		return (printf("5 Parse error near `\\n'\n"), g_status = 2, 1);
+		return (printf("5 Ambigous redirect `\\n'\n"), g_status = 2, 1);
 	if (last_char(last_content->content, '<') == 1)
-		return (printf("6 Parse error near `\\n'\n"), g_status = 2, 1);
+		return (printf("6 Ambigous redirect `\\n'\n"), g_status = 2, 1);
 	if (check_redirect(lst) == 1)
 		return (g_status = 2, 1);
 	return (0);

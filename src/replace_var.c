@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 14:02:11 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:39:46 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static char	*handle_dollar_sign(char *str, int *i, t_list *env)
 	return (free(tmp), free(variable), free(full_variable), str);
 }
 
-static char	*string_to_var(char *str, t_list *env)
+static char	*string_to_var(char *str, t_list *env, t_list *current_node, int type)
 {
 	int	i;
 
@@ -92,6 +92,12 @@ static char	*string_to_var(char *str, t_list *env)
 			if (!str)
 				return (NULL);
 			i = 0;
+		}
+		else if (str[i] == '$' && str[i + 1] == '\0' && type == 2)
+		{
+			str = ft_str_replace(str, "$", "");
+			if (current_node->next)
+				((t_node *)current_node->next->content)->head = 1;
 		}
 		else
 			i++;
@@ -110,7 +116,7 @@ t_head	*replace_variables(t_head *head, t_envirronement *env)
 			|| ((t_node *)current_node->content)->type == 2)
 		{
 			((t_node *)current_node->content)->content = string_to_var(
-					((t_node *)current_node->content)->content, env->env_list);
+					((t_node *)current_node->content)->content, env->env_list, current_node, ((t_node *)current_node->content)->type);
 			if (!((t_node *)current_node->content)->content)
 				return (NULL);
 		}

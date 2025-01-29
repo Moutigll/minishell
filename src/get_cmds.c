@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 14:11:48 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:39:33 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,16 @@ t_command_struct	*fill_cmd(t_head *head)
 	{
 		content = lst->content;
 		if (!content->head && content->type != 2)
+		{
+			if (i == -1)
+			{
+				i++;
+				cmd_struct->command[i] = ft_strdup("");
+				if (!cmd_struct->command[i])
+					return (free_cmd_struct(cmd_struct), NULL);
+			}
 			cmd_struct->command[i] = ft_strjoin_free(cmd_struct->command[i], content->content, 1, 0);
+		}
 		else if (content->head == 1 && content->type != 2)
 		{
 			i++;
@@ -134,6 +143,13 @@ t_command_struct	*fill_cmd(t_head *head)
 				char *tmp = ft_substr(content->content, start, j - start);
 				if (!tmp)
 					return (free_cmd_struct(cmd_struct), NULL);
+				if (i == -1)
+				{
+					i++;
+					cmd_struct->command[i] = ft_strdup("");
+					if (!cmd_struct->command[i])
+						return (free_cmd_struct(cmd_struct), NULL);
+				}
 				cmd_struct->command[i] = ft_strjoin_free(cmd_struct->command[i], tmp, 1, 1);
 			}
 			if (!content->content[j])
