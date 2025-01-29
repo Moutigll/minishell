@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 16:02:58 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:39:11 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	open_outfile(const char *outfile, int mode)
 	int	outfile_fd;
 	int	flags;
 
+	printf("Opening outfile: %s with mode: %d\n", outfile, mode);
 	flags = O_WRONLY | O_CREAT;
 	if (mode == 1)
 		flags |= O_APPEND;
@@ -59,7 +60,6 @@ int	open_outfile(const char *outfile, int mode)
 		close(outfile_fd);
 		return (-1);
 	}
-	close(outfile_fd);
 	return (0);
 }
 
@@ -98,23 +98,21 @@ void	fake_open_outfile(char *file, int mode)
 int	open_fds(t_pipex *pipex, int i, int read_pipe)
 {
 	t_list	*lst;
-	int		size;
-	int		j;
 
-	size = ft_lstsize(*pipex->cmd_head->cmds[i]->in_fd);
 	lst = *pipex->cmd_head->cmds[i]->in_fd;
-	j = 0;
 	while (lst && pipex->cmd_head->cmds[i]->here_doc == -1)
 	{
-		if (j != size - 1 && !pipex->cmd_head->cmds[i]->here_doc)
+		if (lst->next)
 			fake_open_infile(((t_fd_struct *)lst->content)->fd);
-		else if (j == size - 1 && !pipex->cmd_head->cmds[i]->here_doc)
+		else
 		{
 			if (!open_infile(pipex, ((t_fd_struct *)lst->content)->fd))
 				return (1);
 		}
+		lst = lst->next;
 	}
-	if (size == 0 && i != 0 && read_pipe != -1 && pipex->cmd_head->cmds[i]->here_doc == -1)
+	if (!(*pipex->cmd_head->cmds[i]->in_fd) && i != 0
+		&& read_pipe != -1 && pipex->cmd_head->cmds[i]->here_doc == -1)
 	{
 		if (dup2(read_pipe, STDIN_FILENO) == -1)
 		{
@@ -132,20 +130,20 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 			return (1);
 		}
 	}
-	size = ft_lstsize(*pipex->cmd_head->cmds[i]->out_fd);
 	lst = *pipex->cmd_head->cmds[i]->out_fd;
-	j = 0;
 	while (lst)
 	{
-		if (j != size - 1)
+		if (lst->next)
 			fake_open_outfile(((t_fd_struct *)lst->content)->fd,
 				((t_fd_struct *)lst->content)->mode);
-		else if (j == size - 1)
+		else
 		{
+			printf("Opening outfile: %s\n", ((t_fd_struct *)lst->content)->fd);
 			if (!open_outfile(((t_fd_struct *)lst->content)->fd,
 					((t_fd_struct *)lst->content)->mode))
 				return (1);
 		}
+		lst = lst->next;
 	}
 	return (0);
 }

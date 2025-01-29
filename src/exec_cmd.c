@@ -3,49 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 17:22:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/28 18:03:49 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	here_doc_implement(t_command_struct *cmds, int n, int i)
+void	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
 {
-	if (n == -1)
-		return ;
-	if (i == 0)
-		cmds->here_doc = n;
-	else
-		cmds->here_doc = -1;
+	t_fd_struct	*content;
+	t_list		*lst;
+
+	lst = *cmd->in_fd;
+	cmd->here_doc = -1;
+	while (lst)
+	{
+		content = lst->content;
+		if (content->mode == 1)
+		{
+			cmd->here_doc = handle_here_doc(content->fd, pipex);
+			if (cmd->here_doc == -1)
+				return ;
+			if (lst->next)
+				close(cmd->here_doc);
+		}
+		lst = lst->next;
+	}
 }
 
 static void	check_here_doc(t_pipex	*pipex)
 {
 	t_command_struct	**cmds;
-	t_list				*in_fd;
-	int					count;
-	t_fd_struct			*fd;
 	int					i;
 
-	i = -1;
+	i = 0;
 	cmds = pipex->cmd_head->cmds;
-	while (cmds[++i])
+	while (i < pipex->cmd_head->size)
 	{
-		in_fd = *cmds[i]->in_fd;
-		count = ft_lstsize(in_fd) - 1;
-		while (in_fd)
-		{
-			fd = in_fd->content;
-			here_doc_implement(cmds[i],
-				handle_here_doc(fd->fd, pipex), count);
-			if (!in_fd->next)
-				break ;
-			in_fd = in_fd->next;
-			count--;
-		}
+		get_here_doc(cmds[i], pipex);
+		i++;
 	}
 }
 
@@ -95,6 +94,11 @@ void	exec_cmds(t_command_head *cmd_head)
 	if (g_status || !pipex)
 		return ;
 	get_path(pipex);
+	if (g_status)
+		return (clean_pipex(pipex, NULL, g_status));
+	check_here_doc(pipex);
+	if (g_status)
+		return (clean_pipex(pipex, NULL, g_status));
 	i = 0;
 	rpipe = -1;
 	while (i < pipex->cmd_head->size)
