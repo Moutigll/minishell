@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 15:35:03 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 14:14:20 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ void	get_path(t_pipex *pipex)
 	while (i < pipex->cmd_head->size)
 	{
 		cmd = pipex->cmd_head->cmds[i];
-		if (ft_strcmp(cmd->command[0], "echo") != 0
+		if (cmd->command && cmd->command[0]
+			&& ft_strcmp(cmd->command[0], "echo") != 0
 			&& ft_strcmp(cmd->command[0], "pwd") != 0
 			&& ft_strcmp(cmd->command[0], "unset") != 0
 			&& ft_strcmp(cmd->command[0], "export") != 0

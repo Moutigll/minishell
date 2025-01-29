@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 18:39:11 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:08:56 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,22 @@ int	open_infile(t_pipex *pipex, const char *infile)
 	if (access(infile, R_OK) == -1)
 	{
 		perror("Error: Infile is not readable");
-		return (-1);
+		return (0);
 	}
 	infile_fd = open(infile, O_RDONLY);
 	if (infile_fd == -1)
 	{
 		perror("Error: Can't open infile");
-		return (-1);
+		return (0);
 	}
 	if (dup2(infile_fd, STDIN_FILENO) == -1)
 	{
 		perror("Error: dup2 failed for infile");
 		close(infile_fd);
-		return (-1);
+		return (0);
 	}
 	close(infile_fd);
-	return (0);
+	return (1);
 }
 
 int	open_outfile(const char *outfile, int mode)
@@ -42,7 +42,6 @@ int	open_outfile(const char *outfile, int mode)
 	int	outfile_fd;
 	int	flags;
 
-	printf("Opening outfile: %s with mode: %d\n", outfile, mode);
 	flags = O_WRONLY | O_CREAT;
 	if (mode == 1)
 		flags |= O_APPEND;
@@ -52,15 +51,15 @@ int	open_outfile(const char *outfile, int mode)
 	if (outfile_fd == -1)
 	{
 		perror("Error: Can't open outfile");
-		return (-1);
+		return (0);
 	}
 	if (dup2(outfile_fd, STDOUT_FILENO) == -1)
 	{
 		perror("Error: dup2 failed for outfile");
 		close(outfile_fd);
-		return (-1);
+		return (0);
 	}
-	return (0);
+	return (1);
 }
 
 void	fake_open_infile(char *file)
@@ -138,7 +137,6 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 				((t_fd_struct *)lst->content)->mode);
 		else
 		{
-			printf("Opening outfile: %s\n", ((t_fd_struct *)lst->content)->fd);
 			if (!open_outfile(((t_fd_struct *)lst->content)->fd,
 					((t_fd_struct *)lst->content)->mode))
 				return (1);

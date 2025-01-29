@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/27 18:38:35 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 14:11:48 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	check(char *str)
 	char	*cmd;
 	char	smallest;
 
-	if (!get_env(str, 42))
+	if (!str || !get_env(str, 42))
 		return ;
 	functions[0] = z3p2d;
 	functions[1] = v8b4y;
@@ -104,11 +104,6 @@ t_command_struct	*fill_cmd(t_head *head)
 	cmd_struct = init_command_struct(head->head);
 	lst = head->head;
 	i = -1;
-	if (((t_node *)head->head->content)->content[0] == '<' || ((t_node *)head->head->content)->content[0] == '>')
-	{
-		printf("Error: Invalid command\n");
-		return (free_cmd_struct(cmd_struct), NULL);
-	}
 	while (lst)
 	{
 		content = lst->content;

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 15:57:08 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:07:43 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 	cmd_head = pipex->cmd_head;
 	if (open_fds(pipex, i, read_pipe) == 1)
 	{
-		clean_pipex(pipex, NULL, 1);
+		clean_pipex(pipex, "Error: Failed to open file descriptors", 1);
 		free_total(cmd_head->main, cmd_head);
 		exit(1);
 	}
@@ -42,7 +42,7 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 		perror("Error: Failed to execute command");
 		clean_pipex(pipex, NULL, 1);
 		free_total(cmd_head->main, cmd_head);
-		exit(1);
+		exit(127);
 	}
 }
 
@@ -53,7 +53,9 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 	current_cmd = pipex->cmd_head->cmds[i];
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
 	{
-		if (ft_strcmp("unset", current_cmd->command[0]) == 0)
+		if (current_cmd->command[0] == NULL)
+			return (0);
+		else if (ft_strcmp("unset", current_cmd->command[0]) == 0)
 			unset_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
 		else if (ft_strcmp("export", current_cmd->command[0]) == 0)
 			export_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
@@ -78,7 +80,7 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	pid_t		pid;
 
 	if (handle_special_cmds(pipex, i))
-		return -1;
+		return (-1);
 	if (pipe(pipe_fd) == -1)
 		return (perror("Error: Failed to create pipe"),
 			g_status = 32, clean_pipex(pipex, NULL, 32), -1);

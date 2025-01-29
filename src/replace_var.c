@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/23 00:10:45 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 14:02:11 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ static char	*string_to_var(char *str, t_list *env)
 			str = handle_dollar_sign(str, &i, env);
 			if (!str)
 				return (NULL);
+			i = 0;
 		}
 		else
 			i++;
