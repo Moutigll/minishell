@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/28 17:19:22 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:54:39 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	while_input(t_main *main)
 			// export_cmd(main->env->env_list, args);
 			if (ft_strlen(command) > 0 && parse_error(head) == 0)
 			{
+				free(command);
 				replace_variables(head, main->env);
 				reattach_head(head);
 				t_splitted_cmds	*splitted = split_head(head);
@@ -67,17 +68,20 @@ void	while_input(t_main *main)
 				while (i < splitted->size)
 				{
 					cmd_head->cmds[i] = fill_cmd(splitted->tab[i]);
+					free_head(splitted->tab[i]);
 					i++;
 				}
+				free(splitted->tab);
+				free(splitted);
 				cmd_head->main = main;
 				g_status = 0;
 				exec_cmds(cmd_head);
+				free(cmd_head);
 				//replace_var(&head, main);
 				//gest_command(head, main, command);
 			}
 			else
 				free(command);
-			free_head(head);
 		}
 	}
 }

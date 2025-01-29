@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:55:00 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/25 22:21:14 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:40:48 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,6 @@ t_splitted_cmds	*split_head(t_head *head)
 	current_head = splitted->tab[0];
 	if (process_list_nodes(splitted->tab, &current_head, lst))
 		return (cleant_tab_cmd(splitted->tab), NULL);
+	free_head(head);
 	return (splitted);
 }

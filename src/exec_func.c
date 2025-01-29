@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 15:11:48 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:11:55 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int	exec_func_c(char *command, char **args, t_pipex *pipex)
 void	is_func_cmd(t_pipex *pipex, int i)
 {
 	t_command_struct	*cmd;
+	t_command_head		*cmd_head;
 	int					is_builtin;
 
 	cmd = pipex->cmd_head->cmds[i];
@@ -53,8 +54,9 @@ void	is_func_cmd(t_pipex *pipex, int i)
 	is_builtin = exec_func_c(cmd->command[0], cmd->command, pipex);
 	if (is_builtin)
 	{
+		cmd_head = pipex->cmd_head;
 		clean_pipex(pipex, NULL, 0);
-		free_total(pipex->cmd_head->main, pipex->cmd_head);
+		free_total(cmd_head->main, cmd_head);
 		exit(g_status);
 	}
 }

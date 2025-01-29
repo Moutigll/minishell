@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 20:06:33 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:32:19 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ void	free_head(t_head *head)
 
 void	free_total(t_main *main, t_command_head *head_main)
 {
+
 	free_tab((void **)main->g_env);
+	free_env(main->env->env_list);
+	free(main->env);
 	if (main->path)
 		free(main->path);
 	if (head_main)

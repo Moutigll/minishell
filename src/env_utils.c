@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:50:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 14:35:08 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:27:51 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	free_env(t_list *env)
 		env_var = tmp->content;
 		free(env_var->name);
 		free(env_var->value);
+		free(env_var);
 		free(tmp);
 	}
 }

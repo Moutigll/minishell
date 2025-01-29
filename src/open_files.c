@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 15:08:56 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:52:51 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	open_outfile(const char *outfile, int mode)
 	int	outfile_fd;
 	int	flags;
 
+	printf("outfile: %s\n", outfile);
 	flags = O_WRONLY | O_CREAT;
 	if (mode == 1)
 		flags |= O_APPEND;

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:12:28 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/25 22:21:44 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:41:25 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,9 @@ t_head	*reattach_head(t_head *head)
 		if (!((t_node *)next_node->content)->head
 			&& is_quote_node(current_node->content)
 			&& is_quote_node(next_node->content))
-		{
 			join_and_remove_nodes(current_node, next_node, head);
-		}
 		else
-		{
 			current_node = current_node->next;
-		}
 	}
 	return (head);
 }

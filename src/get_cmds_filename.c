@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:34:54 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/25 22:20:06 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:59:17 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,11 @@ char	*get_filename(t_list **lst, int *j)
 	if (!(*lst))
 		return (filename);
 	node = (*lst)->content;
+	if (node->type == 2 && node->head == 1 && strlen(filename) > 0)
+	{
+		*j = 0;
+		return (filename);
+	}
 	*j = 0;
 	return (get_filename_part2(lst, node, j, filename));
 }
