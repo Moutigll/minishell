@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/21 15:56:17 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:26:48 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,25 +110,17 @@ char	*read_cmd(t_main *main)
 	char	*end_host;
 	char	*path;
 
-	path = getcwd(NULL, 0);
+	path = get_env_value(main->env->envp, "PWD");
 	if (path == NULL)
-		path = ft_strdup(main->path);
+		path = get_env_value(main->env->envp, "HOME");
 	if (!path)
 		exit_on_error(main, MALLOC_ERROR);
-	else
-	{
-		free(main->path);
-		main->path = ft_strdup(path);
-		if (!main->path)
-			exit_on_error(main, MALLOC_ERROR);
-	}
 	end_path = ft_strjoin(path, "$ ");
 	if (!end_path)
 		exit_on_error(main, MALLOC_ERROR);
 	if (return_slash(end_path) >= 2)
 		end_path = remove_start_prompt(end_path, main);
 	end_host = prompt_return(path, main);
-	free(path);
 	print_prompt = ft_strjoin(end_host, end_path);
 	if (!print_prompt)
 		exit_on_error(main, MALLOC_ERROR);

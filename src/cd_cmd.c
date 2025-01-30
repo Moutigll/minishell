@@ -6,11 +6,28 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/28 14:41:05 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:18:14 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	update_envlist(t_list *env, char *name, char *value)
+{
+	t_env_var	*env_var;
+
+	while (env)
+	{
+		env_var = (t_env_var *)env->content;
+		if (strcmp(env_var->name, name) == 0)
+		{
+			free(env_var->value);
+			env_var->value = ft_strdup(value);
+			return ;
+		}
+		env = env->next;
+	}
+}
 
 char	*get_env_value(char **env, const char *key)
 {
@@ -50,17 +67,18 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 	char	*path;
 	int		tab_len;
 
-	char **env = env_struct->envp;
 	tab_len = ft_tablen((void **)args);
 	if (tab_len > 2)
 	{
 		printf("cd: too many arguments\n");
 		return (1);
 	}
-	else if (tab_len == 1)
-		path = resolve_path(env, "~");
+	else if (args[1] && args[1][0] == '\0')
+		return (0);
+	if (tab_len == 1)
+		path = resolve_path(env_struct->envp, "~");
 	else
-		path = resolve_path(env, args[1]);
+		path = resolve_path(env_struct->envp, args[1]);
 	if (!path)
 		return (0);
 	if (chdir(path) == -1)
@@ -68,38 +86,7 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 		perror("cd");
 		return (1);
 	}
+	update_envlist(env_struct->env_list, "OLDPWD", get_env_value(env_struct->envp, "PWD"));
+	update_envlist(env_struct->env_list, "PWD", path);
 	return (0);
 }
-
-// {
-// 	t_head	*head_tmp;
-// 	char	*old_path;
-// 	char	*path;
-// 	int		tmp;
-// 	int		exit_status;
-
-// 	tmp = check_equal("cd", head, 0);
-// 	exit_status = 0;
-// 	if (tmp >= 0)
-// 	{
-// 		head_tmp = return_head(head, tmp);
-// 		old_path = attach_block(head_tmp);
-// 		if (!old_path || old_path[0] == '\0')
-// 		{
-// 			free(old_path);
-// 			free(head_tmp);
-// 			return (1);
-// 		}
-// 		path = resolve_path(env, old_path);
-// 		if (chdir(path) == -1)
-// 		{
-// 			printf("%s: No such file or directory\n", path);
-// 			exit_status = 1;
-// 		}
-// 		if (path != old_path)
-// 			free(path);
-// 		free(old_path);
-// 		return ((free(head_tmp)), exit_status);
-// 	}
-// 	return (exit_status);
-// }

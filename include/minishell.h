@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 17:21:13 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:26:01 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ typedef struct s_main
 {
 	t_envirronement	*env;
 	char			**g_env;
-	char			*path;
 	int				error;
 	t_head			*head;
 	t_command_head	*cmd_head;
@@ -173,7 +172,7 @@ void			signal_handler_cut(int sig);
 void			signal_handler(int sig);
 
 // pwd_cmd.c
-int				pwd_cmd(char **args);
+int				pwd_cmd(char **args, char **env);
 
 // fd_take.c
 char			**return_fd(char *content, char *c);
@@ -184,6 +183,7 @@ void			exit_cmd(t_head *head, t_main *main);
 void			free_head(t_head *head);
 
 // cd_cmd.c
+char			*get_env_value(char **env, const char *key);
 int				cd_cmd(t_envirronement *env_struct, char **args);
 
 // detect_var.c

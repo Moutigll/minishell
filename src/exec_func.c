@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 18:11:55 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 20:24:34 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ int	exec_func_c(char *command, char **args, t_pipex *pipex)
 	}
 	else if (!ft_strcmp(command, "pwd"))
 	{
-		if (args[1])
-			ft_putstr_fd("pwd: too many arguments\n", 2);
-		else
-			printf("%s\n", pipex->cmd_head->main->path);
+		pwd_cmd(args, pipex->cmd_head->main->env->envp);
 		is_builtin = 1;
 	}
 	return (is_builtin);
