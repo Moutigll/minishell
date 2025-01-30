@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:50:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/30 13:43:46 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:51:34 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	free_env(t_list *env)
 		env_var = tmp->content;
 		free(env_var->name);
 		free(env_var->value);
-		free(env_var);
 		free(tmp);
 	}
 }

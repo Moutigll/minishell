@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 18:03:49 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:52:34 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
 		content = lst->content;
 		if (content->mode == 1)
 		{
+			if (g_status == -1)
+				return ;
 			cmd->here_doc = handle_here_doc(content->fd, pipex);
 			if (cmd->here_doc == -1)
 				return ;

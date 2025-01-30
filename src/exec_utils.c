@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 18:08:07 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:38:42 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,17 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	size_t	delimiter_len;
 
 	delimiter_len = ft_strlen(delimiter);
+	signal(SIGINT, signal_handler_cut);
+	signal(SIGQUIT, signal_handler_cut);
+	disable_ctrl_backslash_echo();
 	if (pipe(pipe_fd) == -1)
 		return (clean_pipex(pipex, "Pipe error", 32), -1);
 	while (1)
 	{
 		write(1, "heredoc> ", 10);
 		line = get_next_line(0);
+		if (g_status == -1)
+			break ;
 		if (!line || (ft_strncmp(line, delimiter, delimiter_len) == 0
 				&& line[delimiter_len] == '\n'
 				&& line[delimiter_len + 1] == '\0'))
@@ -53,5 +58,6 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	if (line)
 		free(line);
 	close(pipe_fd[1]);
+	restore_ctrl_backslash_echo();
 	return (pipe_fd[0]);
 }

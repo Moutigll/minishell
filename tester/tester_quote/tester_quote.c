@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tester_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:32:35 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/06 13:15:23 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:51:18 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/tester.h"
 
 void	tester_quote()
-{ 
+{
 	char	*result;
 	char	*line;
 	int		fd;

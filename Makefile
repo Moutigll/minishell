@@ -36,6 +36,7 @@ MINISHELL_SRCS =	bfr_utils.c \
 					open_files.c \
 					parsing.c \
 					prompt.c \
+					realoc.c \
 					prompt_2.c \
 					reattach_head.c \
 					parsing_error.c \

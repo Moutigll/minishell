@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/28 17:21:17 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/29 17:54:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # include "readline/history.h"
 # include "signal.h"
 # include "stdio.h"
-# include <sys/wait.h>
-# include <errno.h>
+# include "sys/wait.h"
+# include "errno.h"
 
 # define MALLOC_ERROR 131
 
@@ -159,11 +159,14 @@ char			*return_key(char *str);
 // export_cmd.c
 int				find_block(t_head *head,
 					int *n, char **content_block, int boolean);
-int				export_cmd(t_list *lst, char **args );
+int				export_cmd(t_list *lst, char **args, t_main **main);
 t_head			*return_head(t_head *head, int i);
 t_list			*return_lst(t_head *head, int i);
 
 // signal.c
+void			disable_ctrl_backslash_echo();
+void			restore_ctrl_backslash_echo();
+void			signal_handler_cut(int sig);
 void			signal_handler(int sig);
 
 // pwd_cmd.c
@@ -237,6 +240,7 @@ int				handle_here_doc(char *delimiter, t_pipex *pipex);
 
 // exec_func.c
 void	is_func_cmd(t_pipex *pipex, int i);
+
 // env_utils.c
 void				free_env(t_list *env);
 int					get_env(char *command, int i);
@@ -249,7 +253,7 @@ t_head				*replace_variables(t_head *head, t_envirronement *env);
 
 // realoc.c
 char				**ft_realoc_ptr(char **tab, char *str);
-void				update_env(t_list *lst, char **envp);
+void				update_env(t_main **main);
 
 // reattach_head.c
 t_head				*reattach_head(t_head *head);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 19:49:38 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:40:46 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 		else if (ft_strcmp("unset", current_cmd->command[0]) == 0)
 			unset_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
 		else if (ft_strcmp("export", current_cmd->command[0]) == 0)
-			export_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
+			export_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command, &pipex->cmd_head->main);
 		else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
 			cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
 		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
