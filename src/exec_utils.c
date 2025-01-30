@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/30 13:38:42 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:05:28 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 		line = get_next_line(0);
 		if (g_status == -1)
 			break ;
+		if (!line)
+			printf("\nbash: warning: here-document finished (wanted `%s')\n", delimiter);
 		if (!line || (ft_strncmp(line, delimiter, delimiter_len) == 0
 				&& line[delimiter_len] == '\n'
 				&& line[delimiter_len + 1] == '\0'))

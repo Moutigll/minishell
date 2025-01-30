@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 12:51:34 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:25:33 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ static void	print_echo(char **args, int block, int flag)
 	}
 	if (flag == 0)
 		printf("\n");
-	g_status = 0;
 }
 
 static int	check_flag(char *str)

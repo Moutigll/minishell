@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/29 17:54:08 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:21:13 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,14 @@ void			env_cmd_direct(t_main *main);
 
 // export_add.c
 void			check_type_export(char *str, t_list *lst);
+int				check_quote_key(char *str);
 
 // parsing.c
 int				parsing_error(char *command, int etat);
 
 // parsing_error_brace.c
 int				check_pipe(char *str, int *statement);;
+int				parse_error_redirect(t_head *head);
 int				check_brace(char *str, int type);
 int				parse_error(t_head *head);
 
@@ -164,6 +166,7 @@ t_head			*return_head(t_head *head, int i);
 t_list			*return_lst(t_head *head, int i);
 
 // signal.c
+void			signal_handler_action(int sig, siginfo_t *info, void *context);
 void			disable_ctrl_backslash_echo();
 void			restore_ctrl_backslash_echo();
 void			signal_handler_cut(int sig);

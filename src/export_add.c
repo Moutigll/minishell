@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 20:25:38 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:22:50 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	check_type_export(char *str, t_list *lst)
 	while (str[i])
 		if (str[i++] == '=')
 			count++;
-	if (check_first_char(str[0]) == 0)
+	if (check_first_char(str[0]) == 0 || check_quote_key(str) == 1)
 	{
 		printf("`%s' not a valid identifier\n", str);
 		return ;

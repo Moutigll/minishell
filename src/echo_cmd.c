@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/29 16:06:39 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:28:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,4 @@ void	echo_command(char **args)
 	}
 	if (flag == 0)
 		ft_putstr_fd("\n", 1);
-	g_status = 0;
 }
