@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/30 20:07:26 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:55:45 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 		curr_node = curr_node->next;
 	}
 	else if (before[0] == '\0')
-		free(var_name);
+		free(before);
 	if (after[0] != '\0')
 	{
 		node = malloc(sizeof(t_node));
@@ -99,7 +99,6 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	}
 	else
 		free(after);
-	free(var_name);
 	return (1);
 }
 
@@ -119,10 +118,9 @@ static int	string_to_var(t_list *env, t_list *current_node)
 				return (0);
 			return (1);
 		}
-		else if (str[i] == '$' && str[i + 1] == '\0'
-			&& ((t_node *)current_node->next->content)->type != 1)
+		else if (str[i] == '$' && str[i + 1] == '\0' && ft_strlen(str) > 1
+			&& current_node->next && ((t_node *)current_node->next->content)->type != 1)
 		{
-			printf("GROSTEST\n");
 			cpy = ft_strndup(str, ft_strlen(str) - 1);
 			free(str);
 			((t_node *)current_node->content)->content = cpy;
@@ -131,6 +129,8 @@ static int	string_to_var(t_list *env, t_list *current_node)
 		}
 		else
 			i++;
+		if (str[i] == '\0' || str[i + 1] == '\0')
+			break ;
 	}
 	return (1);
 }

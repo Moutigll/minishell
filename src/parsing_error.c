@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:01:08 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:30:09 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ static int	change_redirect(int *state, char *str)
 	int	j;
 
 	j = 0;
-	while (str[j] && str[j] != '>' && str[j] != '<' && str[j] != ' ' && str[j] != '\t')
+	while (str[j] && str[j] != '>'
+		&& str[j] != '<' && str[j] != ' ' && str[j] != '\t')
 		j++;
 	if ((str[j] == '>' || str[j] == '<') && *state == 1)
 		return (1);
@@ -77,7 +78,9 @@ static int	check_redirect(t_list *lst)
 			return (printf("7 Parse error near `>>'\n"), g_status = 2, 1);
 		if (node->type == 2 && check_pipe(node->content, &statement))
 			return (printf("6 Parse error near `||'\n"), g_status = 2, 1);
-		if (node->type == 2 && (check_redirect_n(node->content, '>', '<') == 1 || check_redirect_n(node->content, '<', '>') == 1))
+		if (node->type == 2
+			&& (check_redirect_n(node->content, '>', '<') == 1
+				|| check_redirect_n(node->content, '<', '>') == 1))
 			return (1);
 		if (check_brace(node->content, node->type) == 1)
 			return (printf("Error bag assignment\n"), 1);
