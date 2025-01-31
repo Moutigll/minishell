@@ -6,13 +6,11 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 18:03:45 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:01:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-
 
 static int	check_redirect_n(char *str, char c, char vs)
 {
@@ -109,7 +107,7 @@ static int	last_char(char *content, char c)
 	int	len;
 
 	len = (int)ft_strlen(content) - 1;
-	if (len <= 0)
+	if (content[0] == '\0')
 		return (1);
 	while (len >= 0)
 	{
@@ -146,33 +144,5 @@ int	parse_error(t_head *head)
 		return (printf("4 Parse error near `%s'\n", last_content->content), g_status = 2, 1);
 	if (check_redirect(lst) == 1)
 		return (g_status = 2, 1);
-	return (0);
-}
-
-int	parse_error_redirect(t_head *head)
-{
-	t_node	*last_content;
-	t_list	*lst;
-
-	lst = head->head;
-	last_content = last_block(lst);
-	if (((t_node *)head->head->content)->content == NULL)
-	{
-		printf("Error: bad substitution\n");
-		return (g_status = 2, 1);
-	}
-	if (((t_node *)head->head->content)->content[0] == '|')
-	{
-		printf("Error: Invalid command\n");
-		return (g_status = 2, 1);
-	}
-	if (last_content == NULL)
-		return (0);
-	if (last_content->type == 2 && last_char(last_content->content, '>') == 1)
-		return (printf("8 Ambigous redirect `\\n'\n"), g_status = 2, 1);
-	if (last_content->type == 2 && last_char(last_content->content, '<') == 1)
-		return (printf("9 Ambigous redirect `\\n'\n"), g_status = 2, 1);
-	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)
-		return (printf("4 Parse error near `%s'\n", last_content->content), g_status = 2, 1);
 	return (0);
 }

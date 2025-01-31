@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:21:50 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 17:19:21 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:25:01 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,5 @@ int	print_ascii_sorted(t_list *lst)
 		visited = current;
 		min_node = find_min_node(lst, visited);
 	}
-	return (ft_lstclear(&visited, free), 0);
+	return (0);
 }

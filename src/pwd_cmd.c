@@ -3,24 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 12:51:36 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 20:25:20 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:12:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	pwd_cmd(char **args, char **env)
+int	pwd_cmd(char **args, t_envirronement *env)
 {
 	char	*path;
 
 	if (ft_strcmp(args[0], "pwd") == 0)
 	{
-		path = get_env_value(env, "PWD");
+		path = get_env_value(env->envp, "PWD");
 		printf("%s\n", path);
 		g_status = 0;
 	}
+	update_env(env);
 	return (0);
 }

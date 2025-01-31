@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_brace.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:15:13 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/27 18:44:59 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:04:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,21 @@ int	check_brace(char *str, int type)
 {
 	int	brace;
 	int	i;
+	int	j;
 
 	i = 0;
 	brace = 0;
 	while (str[i])
 	{
+		j = 0;
 		if (brace == 0 && str[i] == '{' && i > 0 && str[i - 1] == '$')
+		{
+			while (ft_isalnum(str[i + j]) || str[i + j] == '_')
+				j++;
+			if (str[i + j] != '}')
+				return (1);
 			brace++;
+		}
 		else if (brace > 0 && str[i] == '{')
 			return (1);
 		if (brace > 0 && str[i] == '}')

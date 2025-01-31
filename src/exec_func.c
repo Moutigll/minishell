@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/30 20:24:34 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:12:04 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	exec_func_c(char *command, char **args, t_pipex *pipex)
 	}
 	else if (!ft_strcmp(command, "pwd"))
 	{
-		pwd_cmd(args, pipex->cmd_head->main->env->envp);
+		pwd_cmd(args, pipex->cmd_head->main->env);
 		is_builtin = 1;
 	}
 	return (is_builtin);

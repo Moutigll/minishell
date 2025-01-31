@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 20:18:14 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:17:11 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 		path = resolve_path(env_struct->envp, args[1]);
 	if (!path)
 		return (0);
+	printf("path = %s\n", path);
 	if (chdir(path) == -1)
 	{
 		perror("cd");
@@ -88,5 +89,6 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 	}
 	update_envlist(env_struct->env_list, "OLDPWD", get_env_value(env_struct->envp, "PWD"));
 	update_envlist(env_struct->env_list, "PWD", path);
+	update_env(env_struct);
 	return (0);
 }

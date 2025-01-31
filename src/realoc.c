@@ -6,13 +6,13 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:15:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 17:37:00 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:08:50 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int check_ptr(t_main *main, char *key, char *value)
+static int check_ptr(t_envirronement *env, char *key, char *value)
 {
 	char	*result;
 	char	*tmp;
@@ -26,29 +26,29 @@ static int check_ptr(t_main *main, char *key, char *value)
 	free(tmp);
 	if (!result)
 		return (-1);
-	while (main->env->envp[i])
+	while (env->envp[i])
 	{
-		if (ft_strcmp(main->env->envp[i], result) == 0)
+		if (ft_strcmp(env->envp[i], result) == 0)
 			return (free(result), 1);
 		i++;
 	}
-	main->env->envp = ft_realoc_ptr(main->env->envp, result);
+	env->envp = ft_realoc_ptr(env->envp, result);
 	free(result);
 	return (0);
 }
 
-void	update_env(t_main **main)
+void	update_env(t_envirronement *env)
 {
 	t_env_var	*var;
 	t_list		*lst;
 
 	var = NULL;
-	lst = (*main)->env->env_list;
+	lst = env->env_list;
 	while (lst)
 	{
 		var = lst->content;
 		if (var != NULL && var->exported == 1)
-			check_ptr(*main, var->name, var->value);
+			check_ptr(env, var->name, var->value);
 		if (!lst->next)
 			break ;
 		lst = lst->next;

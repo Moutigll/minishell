@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 20:26:01 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/01/31 14:13:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_main
 	t_envirronement	*env;
 	char			**g_env;
 	int				error;
+	char			*path;
 	t_head			*head;
 	t_command_head	*cmd_head;
 }	t_main;
@@ -143,7 +144,6 @@ int				parsing_error(char *command, int etat);
 
 // parsing_error_brace.c
 int				check_pipe(char *str, int *statement);;
-int				parse_error_redirect(t_head *head);
 int				check_brace(char *str, int type);
 int				parse_error(t_head *head);
 
@@ -172,7 +172,7 @@ void			signal_handler_cut(int sig);
 void			signal_handler(int sig);
 
 // pwd_cmd.c
-int				pwd_cmd(char **args, char **env);
+int				pwd_cmd(char **args, t_envirronement *env);
 
 // fd_take.c
 char			**return_fd(char *content, char *c);
@@ -256,7 +256,7 @@ t_head				*replace_variables(t_head *head, t_envirronement *env);
 
 // realoc.c
 char				**ft_realoc_ptr(char **tab, char *str);
-void				update_env(t_main **main);
+void				update_env(t_envirronement *env);
 
 // reattach_head.c
 t_head				*reattach_head(t_head *head);
