@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:13:14 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:41:00 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,16 +136,16 @@ int				env_cmd(t_list *lst, char **args);
 void			env_cmd_direct(t_main *main);
 
 // export_add.c
-void			check_type_export(char *str, t_list *lst);
+int				check_type_export(char *str, t_list *lst);
 int				check_quote_key(char *str);
 
 // parsing.c
 int				parsing_error(char *command, int etat);
 
 // parsing_error_brace.c
-int				check_pipe(char *str, int *statement);;
+int				parse_error(t_head *head, t_main *main);
+int				check_pipe(char *str, int *statement);
 int				check_brace(char *str, int type);
-int				parse_error(t_head *head);
 
 // export_print.c
 t_list			*find_min_node(t_list *lst, t_list *visited);
@@ -207,7 +207,7 @@ int				check_equal(char *format, t_head *head, int tab);
 t_command_head	*return_main(t_head *head, t_main *main);
 
 // echo_cmd.c
-void			echo_command(char **args);
+void			echo_command(char **args, t_main *main);
 
 // input.c
 void			while_input(t_main *main);
@@ -286,7 +286,7 @@ int					is_in_or_out(char *str,
 // get_cmds_filename.c
 char				*get_filename(t_list **lst, int *j);
 
-int	unset_cmd(t_list *lst, char **args);
+int	unset_cmd(t_list *lst, char **args, t_main *main);
 
 // bfr_utils.c
 void				a5h7j(void);

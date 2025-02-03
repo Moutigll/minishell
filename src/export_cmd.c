@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:09:30 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:21:27 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ int	export_cmd(t_list *lst, char **args, t_main **main)
 	if (ft_strcmp(args[0], "export") == 0)
 	{
 		if (count_tab(args) == 1)
-			print_ascii_sorted(lst);
+			(*main)->error = print_ascii_sorted(lst);
 		else
 		{
 			while (args[i])
 				check_type_export(args[i++], lst);
 			update_env((*main)->env);
+			(*main)->error = 0;
 		}
 	}
-	(*main)->error = 0;
 	return (0);
 }

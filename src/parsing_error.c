@@ -3,22 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:30:09 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:51:05 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	check_redirect_n(char *str, char c, char vs)
+static void	check_redirect_n_part2(int *redirect, int count)
+{
+	*redirect = 0;
+	if (count > 0)
+		*redirect = 1;
+}
+
+static int	check_redirect_n(char *str, char c, char vs, int *redirect)
 {
 	int	count;
 	int	i;
 
 	i = 0;
 	count = 0;
+	if (str[i] == '\0' && *redirect == 1)
+		return (1);
 	while (str[i])
 	{
 		if (str[i] == '(' || str[i] == ')' || str[i] == '[' || str[i] == ']')
@@ -35,6 +44,7 @@ static int	check_redirect_n(char *str, char c, char vs)
 			count = 0;
 		i++;
 	}
+	check_redirect_n_part2(redirect, count);
 	return (0);
 }
 
@@ -44,8 +54,8 @@ static int	change_redirect(int *state, char *str)
 	int	j;
 
 	j = 0;
-	while (str[j] && str[j] != '>'
-		&& str[j] != '<' && str[j] != ' ' && str[j] != '\t')
+	while (str[j] && str[j] != '>' && str[j] != '<'
+		&& str[j] != ' ' && str[j] != '\t')
 		j++;
 	if ((str[j] == '>' || str[j] == '<') && *state == 1)
 		return (1);
@@ -63,25 +73,35 @@ static int	change_redirect(int *state, char *str)
 	return (0);
 }
 
+static void	declaration(int *state, int *statement,
+	int *redirect_1, int *redirect_2)
+{
+	*state = 0;
+	*statement = 0;
+	*redirect_1 = 0;
+	*redirect_2 = 0;
+}
+
 static int	check_redirect(t_list *lst)
 {
+	int		redirect_1;
+	int		redirect_2;
 	int		statement;
 	t_node	*node;
 	int		state;
 
-	state = 0;
-	statement = 0;
+	declaration(&state, &statement, &redirect_1, &redirect_2);
 	while (lst)
 	{
 		node = lst->content;
 		if (node->type == 2 && change_redirect(&state, node->content) == 1)
-			return (printf("7 Parse error near `>>'\n"), g_status = 2, 1);
+			return (printf("7 Parse error near `>>'\n"), 1);
 		if (node->type == 2 && check_pipe(node->content, &statement))
-			return (printf("6 Parse error near `||'\n"), g_status = 2, 1);
+			return (printf("6 Parse error near `||'\n"), 1);
 		if (node->type == 2
-			&& (check_redirect_n(node->content, '>', '<') == 1
-				|| check_redirect_n(node->content, '<', '>') == 1))
-			return (1);
+			&& (check_redirect_n(node->content, '>', '<', &redirect_1) == 1
+				|| check_redirect_n(node->content, '<', '>', &redirect_2) == 1))
+			return (printf("11 Ambigous redirect `(null)'\n"), 1);
 		if (check_brace(node->content, node->type) == 1)
 			return (printf("Error bag assignment\n"), 1);
 		if (!lst->next)
@@ -110,8 +130,6 @@ static int	last_char(char *content, char c)
 	int	len;
 
 	len = (int)ft_strlen(content) - 1;
-	if (content[0] == '\0')
-		return (1);
 	while (len >= 0)
 	{
 		if ((content[len] != ' ' || content[len] != '\t')
@@ -125,7 +143,7 @@ static int	last_char(char *content, char c)
 	return (0);
 }
 
-int	parse_error(t_head *head)
+int	parse_error(t_head *head, t_main *main)
 {
 	t_node	*last_content;
 	t_list	*lst;
@@ -135,17 +153,18 @@ int	parse_error(t_head *head)
 	if (((t_node *)head->head->content)->content[0] == '|')
 	{
 		printf("Error: Invalid command\n");
-		return (g_status = 2, 1);
+		return (main->error = 2, 1);
 	}
 	if (last_content == NULL)
 		return (0);
 	if (last_content->type == 2 && last_char(last_content->content, '>') == 1)
-		return (printf("8 Ambigous redirect `\\n'\n"), g_status = 2, 1);
+		return (printf("8 Ambigous redirect `\\n'\n"), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '<') == 1)
-		return (printf("9 Ambigous redirect `\\n'\n"), g_status = 2, 1);
+		return (printf("9 Ambigous redirect `\\n'\n"), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)
-		return (printf("4 Parse error near `%s'\n", last_content->content), g_status = 2, 1);
+		return (printf("4 Parse error near `%s'\n",
+				last_content->content), main->error = 2, 1);
 	if (check_redirect(lst) == 1)
-		return (g_status = 2, 1);
+		return (main->error = 2, 1);
 	return (0);
 }

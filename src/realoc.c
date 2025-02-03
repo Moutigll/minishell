@@ -6,13 +6,13 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:15:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:08:50 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:41:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int check_ptr(t_envirronement *env, char *key, char *value)
+static int	check_ptr(t_envirronement *env, char *key, char *value)
 {
 	char	*result;
 	char	*tmp;

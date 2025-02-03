@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MINISHELL="./minishell" # Path to the minishell executable
-ITERATIONS=15000 # Number of iterations to run
+ITERATIONS=100000 # Number of iterations to run
 TEMP_DIR="/tmp/minishell_fuzzing"
 TEMP_MINISHELL="$TEMP_DIR/minishell"
 LOGFILE="fuzzing_errors.log" # Output file for crash details

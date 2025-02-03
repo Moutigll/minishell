@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:51:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/28 14:44:16 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:40:47 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	check_contain(t_list *lst, char *key)
 	return (0);
 }
 
-int	unset_cmd(t_list *lst, char **args)
+int	unset_cmd(t_list *lst, char **args, t_main *main)
 {
 	int	i;
 
@@ -70,6 +70,6 @@ int	unset_cmd(t_list *lst, char **args)
 			i++;
 		}
 	}
-	print_ascii_sorted(lst);
-	return (g_status = 0, 0);
+	main->error = 0;
+	return (0);
 }

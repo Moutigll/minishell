@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:21:50 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:25:01 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:20:27 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,25 @@ t_list	*find_min_node(t_list *lst, t_list *visited)
 	return (min_node);
 }
 
+static void	clear_visited(t_list **lst, void (*del)(void *))
+{
+	t_list	*current;
+	t_list	*next;
+
+	if (!lst || !*lst)
+		return ;
+	current = *lst;
+	while (current)
+	{
+		next = current->next;
+		if (del && current->content)
+			del(current->content);
+		free(current);
+		current = next;
+	}
+	*lst = NULL;
+}
+
 int	print_ascii_sorted(t_list *lst)
 {
 	t_list		*min_node;
@@ -65,11 +84,11 @@ int	print_ascii_sorted(t_list *lst)
 			printf("declare -x %s\n", tmp->name);
 		current = malloc(sizeof(t_list));
 		if (!current)
-			return (g_status = MALLOC_ERROR, ft_lstclear(&visited, free), 0);
+			return (ft_lstclear(&visited, free), MALLOC_ERROR);
 		current->content = min_node->content;
 		current->next = visited;
 		visited = current;
 		min_node = find_min_node(lst, visited);
 	}
-	return (0);
+	return (clear_visited(&visited, NULL), 0);
 }

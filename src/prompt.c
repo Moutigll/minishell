@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:15:43 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:40:36 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,8 @@ static char	*remove_start_prompt(char *path, t_main *main)
 	j = 0;
 	count = 0;
 	while (path[i] && count != 3)
-	{
-		if (path[i] == '/')
+		if (path[i++] == '/')
 			count++;
-		i++;
-	}
 	result = malloc(sizeof(char) * (ft_strlen(path) - i + 3));
 	if (!result)
 		exit_on_error(main, MALLOC_ERROR);
@@ -99,8 +96,7 @@ static char	*remove_start_prompt(char *path, t_main *main)
 	}
 	result[j++] = ' ';
 	result[j] = '\0';
-	free(path);
-	return (verif_solo(result, main));
+	return (free(path), verif_solo(result, main));
 }
 
 char	*read_cmd(t_main *main)

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/31 14:12:04 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 12:19:49 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	exec_func_c(char *command, char **args, t_pipex *pipex)
 	is_builtin = 0;
 	if (!ft_strcmp(command, "echo"))
 	{
-		echo_command(args);
+		echo_command(args, pipex->cmd_head->main);
 		is_builtin = 1;
 	}
 	else if (!ft_strcmp(command, "pwd"))
