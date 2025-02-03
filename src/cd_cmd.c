@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/31 14:17:11 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:12:32 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@ char	*resolve_path(char **env, char *arg)
 
 int	cd_cmd(t_envirronement *env_struct, char **args)
 {
-	char	*path;
+	char	*get_cwd;
 	int		tab_len;
+	char	*path;
 
 	tab_len = ft_tablen((void **)args);
 	if (tab_len > 2)
@@ -81,14 +82,17 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 		path = resolve_path(env_struct->envp, args[1]);
 	if (!path)
 		return (0);
-	printf("path = %s\n", path);
 	if (chdir(path) == -1)
 	{
 		perror("cd");
 		return (1);
 	}
+	get_cwd = getcwd(NULL, 0);
 	update_envlist(env_struct->env_list, "OLDPWD", get_env_value(env_struct->envp, "PWD"));
-	update_envlist(env_struct->env_list, "PWD", path);
+	if (get_cwd != NULL)
+		update_envlist(env_struct->env_list, "PWD", get_cwd);
+	else
+		update_envlist(env_struct->env_list, "PWD", path);
 	update_env(env_struct);
 	return (0);
 }

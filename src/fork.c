@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 14:55:09 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:13:53 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 				current_cmd->command, &pipex->cmd_head->main);
 		else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
 			cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
+		else if (ft_strcmp("env", current_cmd->command[0]) == 0)
+			env_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
 		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
 		{
 			cmd_head = pipex->cmd_head;

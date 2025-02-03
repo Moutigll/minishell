@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 15:06:59 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:12:45 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	is_func_cmd(t_pipex *pipex, int i)
 	if (cmd->command[0] == NULL)
 		return ;
 	is_builtin = 0;
-	if (!ft_strcmp(cmd->command[0], "pwd"))
-		g_status = cd_cmd(pipex->cmd_head->main->env, cmd->command);
+	// if (!ft_strcmp(cmd->command[0], "pwd"))
+	// 	g_status = cd_cmd(pipex->cmd_head->main->env, cmd->command);
 	if (!ft_strcmp(cmd->command[0], "exit") || !ft_strcmp(cmd->command[0], "cd")
 		|| !ft_strcmp(cmd->command[0], "export")
 		|| !ft_strcmp(cmd->command[0], "unset")
