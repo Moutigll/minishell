@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 12:34:13 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:26:51 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	while_input(t_main *main)
 			if (ft_strlen(command) > 0 && parse_error(head, main) == 0)
 			{
 				free(command);
-				replace_variables(head, main->env);
+				replace_variables(head, main);
 				if (parse_error(head, main) == 0)
 				{
 					printf("OK\n");

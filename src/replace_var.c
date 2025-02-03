@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/31 14:55:45 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:41:37 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,19 +102,20 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	return (1);
 }
 
-static int	string_to_var(t_list *env, t_list *current_node)
+static int	string_to_var(t_main *main, t_list *current_node)
 {
 	char	*str;
 	char	*cpy;
+	char	*error;
 	int		i;
 
 	i = 0;
 	str = ((t_node *)current_node->content)->content;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] != '\0')
+		if (str[i] == '$' && str[i + 1] != '\0' && str[i + 1] != '?')
 		{
-			if (!handle_dollar_sign(current_node, env, i))
+			if (!handle_dollar_sign(current_node, main->env->env_list, i))
 				return (0);
 			return (1);
 		}
@@ -127,6 +128,15 @@ static int	string_to_var(t_list *env, t_list *current_node)
 			if (current_node->next)
 				((t_node *)current_node->next->content)->head = ((t_node *)current_node->content)->head; 
 		}
+		else if (str[i] == '$' && str[i + 1] == '?')
+		{
+			printf("error: %d\n", main->error);
+			error = ft_itoa(main->error);
+			((t_node *)current_node->content)->content = ft_str_replace(str, "$?", error);
+			str = ((t_node *)current_node->content)->content;
+			free(error);
+			i += ft_strlen(error) - 1;
+		}
 		else
 			i++;
 		if (str[i] == '\0' || str[i + 1] == '\0')
@@ -135,7 +145,7 @@ static int	string_to_var(t_list *env, t_list *current_node)
 	return (1);
 }
 
-t_head	*replace_variables(t_head *head, t_envirronement *env)
+t_head	*replace_variables(t_head *head, t_main *main)
 {
 	t_list	*current_node;
 	t_node	*node;
@@ -146,7 +156,7 @@ t_head	*replace_variables(t_head *head, t_envirronement *env)
 		node = (t_node *)current_node->content;
 		if (node->type != 1)
 		{
-			if (!string_to_var(env->env_list, current_node))
+			if (!string_to_var(main, current_node))
 				return (free_head(head), NULL);
 		}
 		current_node = current_node->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 14:56:36 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:27:59 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,11 +190,6 @@ int				cd_cmd(t_envirronement *env_struct, char **args);
 // detect_var.c
 int				verif_var(t_head *head, t_main *main, int n);
 
-// parsing_var.c
-int				search_exist(char *name_var, char **g_env);
-void			replace_var(t_head **head, t_main *main);
-char			*return_name_var(char *content, char c);
-
 // prompt_2.c
 int				return_slash(char *str);
 
@@ -252,8 +247,7 @@ t_list				*create_env_list(char **env);
 void				print_env(t_list *env);
 
 // env_var.c
-//static t_env_var	*find_env_var_node(t_list *env, const char *var_name);
-t_head				*replace_variables(t_head *head, t_envirronement *env);
+t_head				*replace_variables(t_head *head, t_main *main);
 
 // realoc.c
 char				**ft_realoc_ptr(char **tab, char *str);
