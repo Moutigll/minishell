@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/30 17:05:28 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 15:20:43 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,17 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 	free(pipex);
 }
 
+static int	handle_here_doc_start(char *delimiter,
+	int pipe_fd[2], t_pipex *pipex)
+{
+	signal(SIGINT, signal_handler_cut);
+	signal(SIGQUIT, signal_handler_cut);
+	disable_ctrl_backslash_echo();
+	if (pipe(pipe_fd) == -1)
+		return (clean_pipex(pipex, "Pipe error", 32), -1);
+	return (0);
+}
+
 int	handle_here_doc(char *delimiter, t_pipex *pipex)
 {
 	char	*line;
@@ -37,11 +48,8 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	size_t	delimiter_len;
 
 	delimiter_len = ft_strlen(delimiter);
-	signal(SIGINT, signal_handler_cut);
-	signal(SIGQUIT, signal_handler_cut);
-	disable_ctrl_backslash_echo();
-	if (pipe(pipe_fd) == -1)
-		return (clean_pipex(pipex, "Pipe error", 32), -1);
+	if (handle_here_doc_start(delimiter, &pipe_fd[2], pipex) == -1)
+		return (-1);
 	while (1)
 	{
 		write(1, "heredoc> ", 10);
@@ -49,7 +57,7 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 		if (g_status == -1)
 			break ;
 		if (!line)
-			printf("\nbash: warning: here-document finished (wanted `%s')\n", delimiter);
+			printf(ERR_HEREDOC, delimiter);
 		if (!line || (ft_strncmp(line, delimiter, delimiter_len) == 0
 				&& line[delimiter_len] == '\n'
 				&& line[delimiter_len + 1] == '\0'))
@@ -59,7 +67,5 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	}
 	if (line)
 		free(line);
-	close(pipe_fd[1]);
-	restore_ctrl_backslash_echo();
-	return (pipe_fd[0]);
+	return (close(pipe_fd[1]), restore_ctrl_backslash_echo(), pipe_fd[0]);
 }

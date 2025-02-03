@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 12:46:05 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:55:09 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 	is_func_cmd(pipex, i);
 	if (pipex->cmd_head->cmds[i]->command[0]
 		&& execve(pipex->cmd_head->cmds[i]->command[0],
-			pipex->cmd_head->cmds[i]->command, pipex->cmd_head->main->env->envp) == -1)
+			pipex->cmd_head->cmds[i]->command,
+			pipex->cmd_head->main->env->envp) == -1)
 	{
 		perror("Error: Failed to execute command");
 	}
@@ -59,9 +60,11 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 		if (current_cmd->command[0] == NULL)
 			return (0);
 		else if (ft_strcmp("unset", current_cmd->command[0]) == 0)
-			unset_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command, pipex->cmd_head->main);
+			unset_cmd(pipex->cmd_head->main->env->env_list,
+				current_cmd->command, pipex->cmd_head->main);
 		else if (ft_strcmp("export", current_cmd->command[0]) == 0)
-			export_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command, &pipex->cmd_head->main);
+			export_cmd(pipex->cmd_head->main->env->env_list,
+				current_cmd->command, &pipex->cmd_head->main);
 		else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
 			cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
 		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)

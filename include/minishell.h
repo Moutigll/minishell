@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 12:41:00 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:56:36 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void			print_arg(char **str);
 
 // define
 # define ERR_QUOTE "Error\nQuote open !"
+# define ERR_HEREDOC "\nbash: warning: here-document finished (wanted `%s')\n"
 
 // main.c
 void			exit_on_error(t_main *main, int error);

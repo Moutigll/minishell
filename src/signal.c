@@ -6,16 +6,16 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:33:18 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 15:21:03 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:51:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include "termios.h"
 
-void disable_ctrl_backslash_echo()
+void	disable_ctrl_backslash_echo(void)
 {
-	struct termios term;
+	struct termios	term;
 
 	if (isatty(STDIN_FILENO))
 	{
@@ -25,9 +25,9 @@ void disable_ctrl_backslash_echo()
 	}
 }
 
-void restore_ctrl_backslash_echo()
+void	restore_ctrl_backslash_echo(void)
 {
-	struct termios term;
+	struct termios	term;
 
 	if (isatty(STDIN_FILENO))
 	{
@@ -36,7 +36,6 @@ void restore_ctrl_backslash_echo()
 		tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	}
 }
-
 
 void	signal_handler_cut(int sig)
 {
@@ -67,4 +66,3 @@ void	signal_handler(int sig)
 		rl_redisplay();
 	}
 }
-

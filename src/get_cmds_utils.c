@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:30:39 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 20:25:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:53:38 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ int	get_nbargs_cmd(t_list *lst)
 			i++;
 		size = ft_strlen(node->content);
 		if (node->type == 2 && (node->content[size - 1] == '<'
-				|| node->content[size - 1] == '>') && ((t_node *)lst->next->content)->head)
+				|| node->content[size - 1] == '>')
+			&& ((t_node *)lst->next->content)->head)
 			i--;
 		lst = lst->next;
 	}

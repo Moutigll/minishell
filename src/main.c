@@ -6,13 +6,13 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 17:00:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:51:43 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile int g_status = 0;
+volatile int	g_status = 0;
 
 void	exit_on_error(t_main *main, int error)
 {
