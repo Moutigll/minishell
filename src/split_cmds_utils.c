@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_cmds_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:53:45 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/28 17:15:45 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:39:29 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	check_node_content(t_node *content)
 	return (count);
 }
 
-int	get_nb_head_cmds(t_head *head, t_parse_error *error)
+int	get_nb_head_cmds(t_head *head)
 {
 	t_list	*lst;
 	t_node	*content;

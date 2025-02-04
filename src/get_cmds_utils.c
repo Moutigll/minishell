@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:30:39 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 12:14:51 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:37:34 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void	free_cmd_struct(t_command_struct *cmd)
 int	get_nbargs_cmd(t_list *lst)
 {
 	int		i;
-	int		j;
 	int		size;
-	int		sep_type;
 	t_node	*node;
 
 	i = 0;

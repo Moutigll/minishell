@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 17:59:45 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:29:51 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 {
-	t_list	*tmp;
 
 	g_status = exit_status;
 	free(pipex->pid_tab);
@@ -30,8 +29,7 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 	free(pipex);
 }
 
-static int	handle_here_doc_start(char *delimiter,
-	int pipe_fd[2], t_pipex *pipex)
+static int	handle_here_doc_start(int pipe_fd[2], t_pipex *pipex)
 {
 	signal(SIGINT, signal_handler_cut);
 	signal(SIGQUIT, signal_handler_cut);
@@ -48,7 +46,7 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	size_t	delimiter_len;
 
 	delimiter_len = ft_strlen(delimiter);
-	if (handle_here_doc_start(delimiter, pipe_fd, pipex) == -1)
+	if (handle_here_doc_start(pipe_fd, pipex) == -1)
 		return (-1);
 	while (1)
 	{

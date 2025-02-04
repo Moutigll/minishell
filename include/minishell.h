@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 18:04:43 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:44:56 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ t_list			*find_min_node(t_list *lst, t_list *visited);
 int				print_ascii_sorted(t_list *lst);
 
 // export_add_second.c
-t_env_var		*new_var(char *str, char *key, char *value, int exported);
+t_env_var		*new_var(char *key, char *value, int exported);
 char			*return_value(char *str);
 int				check_first_char(char c);
 char			*return_key(char *str);
@@ -261,7 +261,7 @@ void				print_head(t_list *head);
 t_splitted_cmds		*split_head(t_head *head);
 
 // split_cmds_utils.c
-int					get_nb_head_cmds(t_head *head, t_parse_error *error);
+int					get_nb_head_cmds(t_head *head);
 int					tab_new_head(t_head **tab, int i);
 int					add_back_copy(t_list **head, t_list *lst);
 int					add_before_pipe(t_list **head, int ishead, char *content);

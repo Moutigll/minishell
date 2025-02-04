@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 13:39:54 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:44:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ static void	change_var(char *value, int index, t_list *lst)
 	}
 }
 
-static t_list	*new_var_node(char *str, char *key, char *value, int n)
+static t_list	*new_var_node(char *key, char *value, int n)
 {
 	t_env_var	*node;
 	t_list		*lst;
 
-	node = new_var(str, key, value, 1);
+	node = new_var(key, value, n);
 	if (!node)
 		return (free(key), free(value), NULL);
 	lst = ft_lstnew(node);
@@ -80,7 +80,6 @@ static int	add_var(t_list *lst, t_list *var)
 
 static int	add_node(t_list *lst, char *str, int count, int i)
 {
-	char		*value;
 	int			index;
 	char		*tmp;
 	char		*key;
@@ -95,11 +94,11 @@ static int	add_node(t_list *lst, char *str, int count, int i)
 	if (index >= 0)
 		change_var(tmp, index, lst);
 	else if ((count == 1 && str[i - 1] != '=') || count > 1)
-		add_var(lst, new_var_node(str, key, tmp, 1));
+		add_var(lst, new_var_node(key, tmp, 1));
 	else if (count == 1 && str[i - 1] == '=')
-		add_var(lst, new_var_node(str, key, ft_strdup(""), 1));
+		add_var(lst, new_var_node(key, ft_strdup(""), 1));
 	else
-		add_var(lst, new_var_node(str, key, ft_strdup(""), 0));
+		add_var(lst, new_var_node(key, ft_strdup(""), 0));
 	return (0);
 }
 

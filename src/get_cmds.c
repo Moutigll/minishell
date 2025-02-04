@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 18:22:48 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:36:38 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ void	check(char *str)
 	cmd = ft_strdup(str);
 	ft_remove_duplicates(cmd);
 	smallest = find_smallest(cmd, '0');
-	functions[smallest]();
+	functions[(int)smallest]();
 	while (smallest < 5 && smallest != -1)
 	{
-		smallest = find_smallest(cmd, cmd[smallest]);
+		smallest = find_smallest(cmd, cmd[(int)smallest]);
 		if (smallest < 5 && smallest != -1)
-			functions[smallest]();
+			functions[(int)smallest]();
 	}
 	free(cmd);
 }

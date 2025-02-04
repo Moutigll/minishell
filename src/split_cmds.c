@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:55:00 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 12:14:05 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:40:42 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,14 @@ static int	handle_type_two(t_head **current_head,
 	return (0);
 }
 
-static t_splitted_cmds	*initialize_split_tab(t_head *head,
-		t_parse_error *error)
+static t_splitted_cmds	*initialize_split_tab(t_head *head)
 {
 	t_splitted_cmds	*splitted;
 
 	splitted = malloc(sizeof(t_splitted_cmds));
 	if (!splitted)
 		return (NULL);
-	splitted->size = get_nb_head_cmds(head, error) + 1;
-	// printf("Nb cmds: %d\n", splitted->size);
-	if (error->error)
-	{
-		printf("Parse error near '%s'\n", error->target);
-		return (NULL);
-	}
+	splitted->size = get_nb_head_cmds(head) + 1;
 	splitted->tab = malloc(sizeof(t_head *) * (splitted->size + 1));
 	if (!splitted->tab)
 		return (NULL);
@@ -106,12 +99,10 @@ static int	process_list_nodes(t_head **tab,
 t_splitted_cmds	*split_head(t_head *head)
 {
 	t_splitted_cmds	*splitted;
-	t_parse_error	error;
 	t_head			*current_head;
 	t_list			*lst;
 
-	error.error = 0;
-	splitted = initialize_split_tab(head, &error);
+	splitted = initialize_split_tab(head);
 	if (!splitted)
 		return (NULL);
 	lst = head->head;

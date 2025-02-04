@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 18:35:58 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 20:16:05 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 			status = pipex->cmd_head->main->error;
 			clean_pipex(pipex, NULL, 0);
 			free_total(cmd_head->main, cmd_head);
+			ft_putstr_fd("exit\n", STDIN_FILENO);
 			exit(status);
 		}
 		else

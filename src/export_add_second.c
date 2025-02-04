@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:25:15 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/01/30 17:23:36 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:42:58 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*return_key(char *str)
 	return (result);
 }
 
-t_env_var	*new_var(char *str, char *key, char *value, int exported)
+t_env_var	*new_var(char *key, char *value, int exported)
 {
 	t_env_var	*tmp;
 

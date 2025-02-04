@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 17:40:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:49:02 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	open_infile(t_pipex *pipex, const char *infile)
+int	open_infile(const char *infile)
 {
 	int	infile_fd;
 
@@ -106,7 +106,7 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 			fake_open_infile(((t_fd_struct *)lst->content)->fd);
 		else
 		{
-			if (!open_infile(pipex, ((t_fd_struct *)lst->content)->fd))
+			if (!open_infile(((t_fd_struct *)lst->content)->fd))
 				return (1);
 		}
 		lst = lst->next;

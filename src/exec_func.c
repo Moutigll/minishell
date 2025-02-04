@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 18:21:14 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:46:54 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	exec_func_c(char *command, char **args, t_pipex *pipex)
 				args, pipex->cmd_head->main);
 	else if (!ft_strcmp(command, "env"))
 		print_env(pipex->cmd_head->main->env->env_list);
-	else if (!ft_strcmp(command, "exit"))
-		exit_cmd(pipex->cmd_head->main->head, pipex->cmd_head->main);
 }
 
 void	is_func_cmd(t_pipex *pipex, int i)
@@ -41,6 +39,7 @@ void	is_func_cmd(t_pipex *pipex, int i)
 	int					is_builtin;
 	int					status;
 
+	is_builtin = 0;
 	cmd = pipex->cmd_head->cmds[i];
 	if (cmd->command[0] == NULL)
 		return ;

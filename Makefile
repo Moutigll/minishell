@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -g -I include -I libft/include
+CFLAGS = -g -I include -I libft/include -Wall -Wextra -Werror
 NAME = minishell
 TESTER = minishell_tester
 SRC_DIR = src

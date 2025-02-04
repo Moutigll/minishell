@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MINISHELL="./minishell" # Path to the minishell executable
-ITERATIONS=100000 # Number of iterations to run
+ITERATIONS=1000000 # Number of iterations to run
 TEMP_DIR="/tmp/minishell_fuzzing"
 TEMP_MINISHELL="$TEMP_DIR/minishell"
 LOGFILE="fuzzing_errors.log" # Output file for crash details
@@ -24,7 +24,7 @@ function generate_random_length() {
 
 generate_random_input() {
     LENGTH=$(generate_random_length)
-    cat /dev/urandom | tr -dc "<>|'\"!@$+,	.:}{" | head -c "$LENGTH" # Generate random input with the characters between ''
+    cat /dev/urandom | tr -dc "<>|'\"!@$+,.:}{" | head -c "$LENGTH" # Generate random input with the characters between ''
 }
 
 mkdir -p "$TEMP_DIR"
