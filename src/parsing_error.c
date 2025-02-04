@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 13:51:05 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:42:20 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	change_redirect(int *state, char *str)
 	i = (int)ft_strlen(str);
 	if (i > 0)
 		i--;
-	while (str[i])
+	while (i >= 0 && str[i])
 	{
 		if (str[i] != '>' && str[i] != '<' && str[i] != ' ' && str[i] != '\t')
 			return (*state = 0, 0);
@@ -115,6 +115,8 @@ static t_node	*last_block(t_list *lst)
 {
 	t_node	*node;
 
+	if (!lst)
+		return (NULL);
 	while (lst)
 	{
 		node = lst->content;
@@ -150,7 +152,8 @@ int	parse_error(t_head *head, t_main *main)
 
 	lst = head->head;
 	last_content = last_block(lst);
-	if (((t_node *)head->head->content)->content[0] == '|')
+	if (head->head != NULL
+		&& ((t_node *)head->head->content)->content[0] == '|')
 	{
 		printf("Error: Invalid command\n");
 		return (main->error = 2, 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:55:00 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 19:40:48 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:14:05 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static t_splitted_cmds	*initialize_split_tab(t_head *head,
 	if (!splitted)
 		return (NULL);
 	splitted->size = get_nb_head_cmds(head, error) + 1;
-	printf("Nb cmds: %d\n", splitted->size);
+	// printf("Nb cmds: %d\n", splitted->size);
 	if (error->error)
 	{
 		printf("Parse error near '%s'\n", error->target);

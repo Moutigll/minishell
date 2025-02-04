@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:30:39 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 14:53:38 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:14:51 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_command_struct	*init_command_struct(t_list *head)
 	if (!cmd_struct)
 		return (NULL);
 	cmd_struct->nb_args = get_nbargs_cmd(head);
-	printf("Nb args: %d\n", cmd_struct->nb_args);
+	// printf("Nb args: %d\n", cmd_struct->nb_args);
 	cmd_struct->command = malloc(sizeof(char *) * (cmd_struct->nb_args + 1));
 	if (!cmd_struct->command)
 		return (free_cmd_struct(cmd_struct), NULL);

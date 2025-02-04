@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 15:26:51 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:35:50 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void	exit_signal(t_main *main, char *command)
 	printf("exit\n");
 	free_tab((void **)main->env->envp);
 	free(main->path);
+	free_env(main->env->env_list);
+	free(main->env);
 	free(main);
 	free(command);
 	exit(0);
@@ -58,15 +60,12 @@ void	while_input(t_main *main)
 		{
 			add_history(command);
 			head = sanitize_input(command, main);
-			// char *args[] = {"export", "oui=non", "5oui=", NULL};
-			// export_cmd(main->env->env_list, args);
 			if (ft_strlen(command) > 0 && parse_error(head, main) == 0)
 			{
 				free(command);
 				replace_variables(head, main);
 				if (parse_error(head, main) == 0)
 				{
-					printf("OK\n");
 					reattach_head(head);
 					t_splitted_cmds	*splitted = split_head(head);
 					t_command_head	*cmd_head = malloc(sizeof(t_command_head));
@@ -90,9 +89,14 @@ void	while_input(t_main *main)
 					//replace_var(&head, main);
 					//gest_command(head, main, command);
 				}
+				else
+					free_head(head);
 			}
 			else
+			{
 				free(command);
+				free_head(head);
+			}
 		}
 	}
 }

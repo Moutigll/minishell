@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 15:41:37 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:38:22 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,10 @@ static int	string_to_var(t_main *main, t_list *current_node)
 			free(str);
 			((t_node *)current_node->content)->content = cpy;
 			if (current_node->next)
-				((t_node *)current_node->next->content)->head = ((t_node *)current_node->content)->head; 
+				((t_node *)current_node->next->content)->head = ((t_node *)current_node->content)->head;
 		}
 		else if (str[i] == '$' && str[i + 1] == '?')
 		{
-			printf("error: %d\n", main->error);
 			error = ft_itoa(main->error);
 			((t_node *)current_node->content)->content = ft_str_replace(str, "$?", error);
 			str = ((t_node *)current_node->content)->content;

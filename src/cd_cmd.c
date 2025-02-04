@@ -6,11 +6,50 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 17:12:32 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:46:03 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static int	change_pwd(t_list	*lst, char **envp)
+{
+	char		*result;
+	t_env_var	*var;
+	char		*tmp;
+	int			len;
+	int			i;
+
+	while (lst)
+	{
+		i = 0;
+		var = lst->content;
+		len = ft_strlen(var->name);
+		while (envp[i])
+		{
+			if (ft_strncmp(var->name, envp[i], len - 1) == 0 && envp[i][len] == '=')
+			{
+				if (ft_strcmp(var->value, &envp[i][len + 1]) != 0)
+				{
+					tmp = ft_strjoin(var->name, "=");
+					if (!tmp)
+						return (MALLOC_ERROR);
+					result = ft_strjoin(tmp, var->value);
+					if (!result)
+						return (free(tmp), MALLOC_ERROR);
+					free(tmp);
+					free(envp[i]);
+					envp[i] = result;
+				}
+			}
+			i++;
+		}
+		if (!lst->next)
+			break ;
+		lst = lst->next;
+	}
+	return (0);
+}
 
 void	update_envlist(t_list *env, char *name, char *value)
 {
@@ -93,6 +132,5 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 		update_envlist(env_struct->env_list, "PWD", get_cwd);
 	else
 		update_envlist(env_struct->env_list, "PWD", path);
-	update_env(env_struct);
-	return (0);
+	return (change_pwd(env_struct->env_list, env_struct->envp));
 }

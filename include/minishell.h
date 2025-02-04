@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 15:27:59 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:40:28 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ int				check_equal(char *format, t_head *head, int tab);
 t_command_head	*return_main(t_head *head, t_main *main);
 
 // echo_cmd.c
-void			echo_command(char **args, t_main *main);
+int				echo_command(char **args);
 
 // input.c
 void			while_input(t_main *main);

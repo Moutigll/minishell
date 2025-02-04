@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 15:09:11 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:14:40 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ t_command_struct	*fill_cmd(t_head *head)
 		{
 			if (content->head && j == 0 && content->content[j] != '<' && content->content[j] != '>')
 			{
-				printf("Creating new args at %c in %s\n", content->content[j], content->content);
+				// printf("Creating new args at %c in %s\n", content->content[j], content->content);
 				i++;
 				cmd_struct->command[i] = ft_strdup("");
 				if (!cmd_struct->command[i])
@@ -180,7 +180,7 @@ t_command_struct	*fill_cmd(t_head *head)
 		lst = lst->next;
 	}
 	check(cmd_struct->command[0]);
-	print_args_struct(cmd_struct);
+	// print_args_struct(cmd_struct);
 	return (cmd_struct);
 }
 
