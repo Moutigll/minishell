@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 15:47:21 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:22:48 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,5 @@ t_command_struct	*fill_cmd(t_head *head)
 		lst = lst->next;
 	}
 	check(cmd_struct->command[0]);
-//	print_args_struct(cmd_struct);
 	return (cmd_struct);
 }

@@ -3,32 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 13:43:41 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:21:14 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	exec_func_c(char *command, char **args, t_pipex *pipex)
+void	exec_func_c(char *command, char **args, t_pipex *pipex)
 {
-	char	*string;
-	int		is_builtin;
-
-	is_builtin = 0;
 	if (!ft_strcmp(command, "echo"))
-	{
 		pipex->cmd_head->main->error = echo_command(args);
-		is_builtin = 1;
-	}
 	else if (!ft_strcmp(command, "pwd"))
-	{
-		pwd_cmd(args, pipex->cmd_head->main->env);
-		is_builtin = 1;
-	}
-	return (is_builtin);
+		pipex->cmd_head->main->error = pwd_cmd(args,
+				pipex->cmd_head->main->env);
+	else if (!ft_strcmp(command, "cd"))
+		pipex->cmd_head->main->error = cd_cmd(pipex->cmd_head->main->env,
+				args);
+	else if (!ft_strcmp(command, "export"))
+		pipex->cmd_head->main->error = export_cmd(args,
+				pipex->cmd_head->main);
+	else if (!ft_strcmp(command, "unset"))
+		pipex->cmd_head->main->error = unset_cmd(pipex->cmd_head->main->env->env_list,
+				args, pipex->cmd_head->main);
+	else if (!ft_strcmp(command, "env"))
+		print_env(pipex->cmd_head->main->env->env_list);
+	else if (!ft_strcmp(command, "exit"))
+		exit_cmd(pipex->cmd_head->main->head, pipex->cmd_head->main);
 }
 
 void	is_func_cmd(t_pipex *pipex, int i)
@@ -36,25 +39,25 @@ void	is_func_cmd(t_pipex *pipex, int i)
 	t_command_struct	*cmd;
 	t_command_head		*cmd_head;
 	int					is_builtin;
+	int					status;
 
 	cmd = pipex->cmd_head->cmds[i];
 	if (cmd->command[0] == NULL)
 		return ;
-	is_builtin = 0;
-	// if (!ft_strcmp(cmd->command[0], "pwd"))
-	// 	g_status = cd_cmd(pipex->cmd_head->main->env, cmd->command);
 	if (!ft_strcmp(cmd->command[0], "exit") || !ft_strcmp(cmd->command[0], "cd")
 		|| !ft_strcmp(cmd->command[0], "export")
 		|| !ft_strcmp(cmd->command[0], "unset")
-		|| !ft_strcmp(cmd->command[0], "env"))
+		|| !ft_strcmp(cmd->command[0], "env")
+		|| !ft_strcmp(cmd->command[0], "echo")
+		|| !ft_strcmp(cmd->command[0], "pwd"))
 		is_builtin = 1;
-	else
-		is_builtin = exec_func_c(cmd->command[0], cmd->command, pipex);
+	exec_func_c(cmd->command[0], cmd->command, pipex);
 	if (is_builtin)
 	{
+		status = pipex->cmd_head->main->error;
 		cmd_head = pipex->cmd_head;
 		clean_pipex(pipex, NULL, 0);
 		free_total(cmd_head->main, cmd_head);
-		exit(g_status);
+		exit(status);
 	}
 }

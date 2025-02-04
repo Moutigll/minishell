@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 14:36:56 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:30:27 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ static void	wait_for_children(t_pipex *pipex)
 		if (waitpid(pipex->pid_tab[i], &status, 0) == -1)
 			return ;
 		if (WIFEXITED(status))
-			g_status = WEXITSTATUS(status);
+			pipex->cmd_head->main->error = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			g_status = 128 + WTERMSIG(status);
+			pipex->cmd_head->main->error = WTERMSIG(status) + 128;
 		i++;
 	}
 }
@@ -93,21 +93,22 @@ void	exec_cmds(t_command_head *cmd_head)
 	if (!cmd_head || !cmd_head->cmds)
 		return ;
 	pipex = init_and_prepare_pipex(cmd_head);
-	if (g_status || !pipex)
+	if (pipex->cmd_head->main->error || !pipex)
 		return ;
 	get_path(pipex);
-	if (g_status)
-		return (clean_pipex(pipex, NULL, g_status));
+	if (pipex->cmd_head->main->error)
+		return (clean_pipex(pipex, NULL, pipex->cmd_head->main->error));
 	check_here_doc(pipex);
-	if (g_status)
-		return (clean_pipex(pipex, NULL, g_status));
+	if (pipex->cmd_head->main->error)
+		return (clean_pipex(pipex, NULL, pipex->cmd_head->main->error));
 	i = 0;
 	rpipe = -1;
 	while (i < pipex->cmd_head->size)
 	{
+		printf("");
 		rpipe = exec_cmd(pipex, rpipe, i);
 		i++;
 	}
 	wait_for_children(pipex);
-	clean_pipex(pipex, NULL, g_status);
+	clean_pipex(pipex, NULL, pipex->cmd_head->main->error);
 }

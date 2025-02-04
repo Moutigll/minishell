@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 13:40:28 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:04:43 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ char			*return_key(char *str);
 // export_cmd.c
 int				find_block(t_head *head,
 					int *n, char **content_block, int boolean);
-int				export_cmd(t_list *lst, char **args, t_main **main);
+int				export_cmd(char **args, t_main *main);
 t_head			*return_head(t_head *head, int i);
 t_list			*return_lst(t_head *head, int i);
 

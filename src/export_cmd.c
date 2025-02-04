@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 12:21:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:15:04 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	count_tab(char **args)
 	return (i);
 }
 
-int	export_cmd(t_list *lst, char **args, t_main **main)
+int	export_cmd(char **args, t_main *main)
 {
 	int		i;
 
@@ -30,13 +30,13 @@ int	export_cmd(t_list *lst, char **args, t_main **main)
 	if (ft_strcmp(args[0], "export") == 0)
 	{
 		if (count_tab(args) == 1)
-			(*main)->error = print_ascii_sorted(lst);
+			main->error = print_ascii_sorted(main->env->env_list);
 		else
 		{
 			while (args[i])
-				check_type_export(args[i++], lst);
-			update_env((*main)->env);
-			(*main)->error = 0;
+				check_type_export(args[i++], main->env->env_list);
+			update_env(main->env);
+			main->error = 0;
 		}
 	}
 	return (0);

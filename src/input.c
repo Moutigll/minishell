@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 12:35:50 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:38:58 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	while_input(t_main *main)
 					free(splitted);
 					cmd_head->main = main;
 					g_status = 0;
+					main->error = 0;
 					exec_cmds(cmd_head);
 					free(cmd_head);
 					//replace_var(&head, main);

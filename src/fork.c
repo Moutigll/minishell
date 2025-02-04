@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 14:35:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:35:58 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 {
 	t_command_struct	*current_cmd;
 	t_command_head		*cmd_head;
+	int					status;
 
 	current_cmd = pipex->cmd_head->cmds[i];
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
@@ -63,8 +64,7 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 			unset_cmd(pipex->cmd_head->main->env->env_list,
 				current_cmd->command, pipex->cmd_head->main);
 		else if (ft_strcmp("export", current_cmd->command[0]) == 0)
-			export_cmd(pipex->cmd_head->main->env->env_list,
-				current_cmd->command, &pipex->cmd_head->main);
+			export_cmd(current_cmd->command, pipex->cmd_head->main);
 		else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
 			cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
 		else if (ft_strcmp("env", current_cmd->command[0]) == 0)
@@ -72,9 +72,10 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
 		{
 			cmd_head = pipex->cmd_head;
+			status = pipex->cmd_head->main->error;
 			clean_pipex(pipex, NULL, 0);
 			free_total(cmd_head->main, cmd_head);
-			exit(g_status);
+			exit(status);
 		}
 		else
 			return (0);
@@ -91,12 +92,10 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	if (handle_special_cmds(pipex, i))
 		return (-1);
 	if (i != pipex->cmd_head->size - 1 && pipe(pipe_fd) == -1)
-		return (perror("Error: Failed to create pipe"),
-			g_status = 32, clean_pipex(pipex, NULL, 32), -1);
+		return (perror("Error: Failed to create pipe"), clean_pipex(pipex, NULL, 32), -1);
 	pid = fork();
 	if (pid == -1)
-		return (perror("Error: Failed to fork"), g_status = MALLOC_ERROR,
-			clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
+		return (perror("Error: Failed to fork"), clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
 	if (pid == 0)
 		handle_child_process(pipex, pipe_fd, read_pipe, i);
 	pipex->pid_tab[i] = pid;

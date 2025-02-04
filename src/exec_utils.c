@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 15:20:43 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:59:45 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	size_t	delimiter_len;
 
 	delimiter_len = ft_strlen(delimiter);
-	if (handle_here_doc_start(delimiter, &pipe_fd[2], pipex) == -1)
+	if (handle_here_doc_start(delimiter, pipe_fd, pipex) == -1)
 		return (-1);
 	while (1)
 	{
