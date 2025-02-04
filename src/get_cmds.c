@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 12:14:40 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:47:21 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,98 +91,126 @@ void	check(char *str)
 	free(cmd);
 }
 
+int	manage_type01(t_node *content, t_command_struct *cmd_struct, int *i)
+{
+	if (!content->head && content->type != 2)
+	{
+		if (*i == -1)
+		{
+			(*i)++;
+			cmd_struct->command[*i] = ft_strdup("");
+			if (!cmd_struct->command[*i])
+				return (free_cmd_struct(cmd_struct), 0);
+		}
+		cmd_struct->command[*i] = ft_strjoin_free(
+				cmd_struct->command[*i], content->content, 1, 0);
+	}
+	else if (content->head == 1 && content->type != 2)
+	{
+		(*i)++;
+		cmd_struct->command[*i] = ft_strdup(content->content);
+		if (!cmd_struct->command[*i])
+			return (free_cmd_struct(cmd_struct), 0);
+	}
+	return (1);
+}
+
+int	get_start_type2(t_command_struct *cmd,
+	t_node *content, int *i, int *j)
+{
+	char	*str;
+	char	*tmp;
+	int		start;
+
+	str = content->content;
+	if (content->head && *j == 0 && str[*j] != '<' && str[*j] != '>')
+	{
+		(*i)++;
+		cmd->command[*i] = ft_strdup("");
+		if (!cmd->command[*i])
+			return (free_cmd_struct(cmd), 0);
+	}
+	start = *j;
+	while (str[*j] && str[*j] != '<' && str[*j] != '>')
+		(*j)++;
+	if (*j > start)
+	{
+		tmp = ft_substr(content->content, start, *j - start);
+		if (!tmp)
+			return (free_cmd_struct(cmd), 0);
+		if (*i == -1)
+		{
+			(*i)++;
+			cmd->command[*i] = ft_strdup("");
+			if (!cmd->command[*i])
+				return (free_cmd_struct(cmd), 0);
+		}
+		cmd->command[*i] = ft_strjoin_free(cmd->command[*i], tmp, 1, 1);
+	}
+	return (1);
+}
+
+int	handle_redirection(t_command_struct *cmd_struct,
+	t_node **content, t_list **lst, int *j)
+{
+	t_fd_struct	*fd_struct;
+	int			in_or_out;
+	char		*filename;
+
+	fd_struct = malloc(sizeof(t_fd_struct));
+	if (!fd_struct)
+		return (free_cmd_struct(cmd_struct), 0);
+	in_or_out = is_in_or_out((*content)->content + *j, *lst, fd_struct);
+	filename = get_filename(lst, j);
+	if (*lst)
+		*content = (*lst)->content;
+	if (!filename)
+		return (0);
+	fd_struct->fd = filename;
+	if (in_or_out == 0)
+		ft_lstadd_back(((t_list **)cmd_struct->in_fd), ft_lstnew(fd_struct));
+	else
+		ft_lstadd_back(((t_list **)cmd_struct->out_fd), ft_lstnew(fd_struct));
+	return (1);
+}
+
 t_command_struct	*fill_cmd(t_head *head)
 {
 	t_command_struct	*cmd_struct;
 	t_node				*content;
 	t_list				*lst;
 	int					i;
-	int	start = 0;
-	int	j = 0;
+	int					j;
 
-	print_head(head->head);
 	cmd_struct = init_command_struct(head->head);
 	lst = head->head;
 	i = -1;
+	j = 0;
 	while (lst)
 	{
 		content = lst->content;
-		if (!content->head && content->type != 2)
+		if (content->type == 0 || content->type == 1)
 		{
-			if (i == -1)
-			{
-				i++;
-				cmd_struct->command[i] = ft_strdup("");
-				if (!cmd_struct->command[i])
-					return (free_cmd_struct(cmd_struct), NULL);
-			}
-			cmd_struct->command[i] = ft_strjoin_free(cmd_struct->command[i], content->content, 1, 0);
+			if (!manage_type01(content, cmd_struct, &i))
+				return (NULL);
 		}
-		else if (content->head == 1 && content->type != 2)
+		else if (content->type == 2)
 		{
-			i++;
-			cmd_struct->command[i] = ft_strdup(content->content);
-			if (!cmd_struct->command[i])
-				return (free_cmd_struct(cmd_struct), NULL);
-		}
-		else
-		{
-			if (content->head && j == 0 && content->content[j] != '<' && content->content[j] != '>')
-			{
-				// printf("Creating new args at %c in %s\n", content->content[j], content->content);
-				i++;
-				cmd_struct->command[i] = ft_strdup("");
-				if (!cmd_struct->command[i])
-					return (free_cmd_struct(cmd_struct), NULL);
-			}
-			start = j;
-			while (content->content[j] && content->content[j] != '<' && content->content[j] != '>')
-				j++;
-			if (j > start)
-			{
-				char *tmp = ft_substr(content->content, start, j - start);
-				if (!tmp)
-					return (free_cmd_struct(cmd_struct), NULL);
-				if (i == -1)
-				{
-					i++;
-					cmd_struct->command[i] = ft_strdup("");
-					if (!cmd_struct->command[i])
-						return (free_cmd_struct(cmd_struct), NULL);
-				}
-				cmd_struct->command[i] = ft_strjoin_free(cmd_struct->command[i], tmp, 1, 1);
-			}
+			if (!get_start_type2(cmd_struct, content, &i, &j))
+				return (NULL);
 			if (!content->content[j])
 			{
 				lst = lst->next;
 				j = 0;
 				continue ;
 			}
-			t_fd_struct	*fd_struct;
-			fd_struct = malloc(sizeof(t_fd_struct));
-			if (!fd_struct)
-				return (free_cmd_struct(cmd_struct), NULL);
-			int in_or_out = is_in_or_out(content->content + j, lst, fd_struct);
-			char *filename = get_filename(&lst, &j);
-			if (lst)
-				content = lst->content;
-			if (!filename)
+			if (!handle_redirection(cmd_struct, &content, &lst, &j))
 				return (NULL);
-			fd_struct->fd = filename;
-			if (in_or_out == 0)
-				ft_lstadd_back(((t_list **)cmd_struct->in_fd), ft_lstnew(fd_struct));
-			else
-				ft_lstadd_back(((t_list **)cmd_struct->out_fd), ft_lstnew(fd_struct));
-			printf("Adding fd %s to %s\n", filename, in_or_out == 0 ? "in" : "out");
-			printf("Starting back at %c in %s\n", content->content[j], content->content);
 			continue ;
 		}
 		lst = lst->next;
 	}
 	check(cmd_struct->command[0]);
-	// print_args_struct(cmd_struct);
+//	print_args_struct(cmd_struct);
 	return (cmd_struct);
 }
-
-//ls -'l'"" " " " " > file."txt" | re'v' << HERE
-//ls > fi'le'1<< fi"le"2>file3 <f"ile"4>> f'i'le5 trois autres argument >"un dernier fd"
