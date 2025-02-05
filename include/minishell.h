@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 18:09:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:50:01 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,9 @@
 
 # define MALLOC_ERROR 131
 
-extern volatile int		g_status;
-
 typedef struct s_command_head	t_command_head;
 typedef struct s_envirronement	t_envirronement;
+extern volatile int				g_status;
 
 typedef struct s_head
 {
@@ -127,139 +126,141 @@ typedef struct s_fd_struct
 	int		mode;
 }	t_fd_struct;
 
-void			print_arg(char **str);
-
 // define
 # define ERR_QUOTE "Error\nQuote open !"
 # define ERR_HEREDOC "\nbash: warning: here-document finished (wanted `%s')\n"
 
 // main.c
-void			exit_on_error(t_main *main, int error);
-void			error(char *message, int etat);
-void			print_list(t_list *lst);
+void				exit_on_error(t_main *main, int error);
+void				error(char *message, int etat);
+void				print_list(t_list *lst);
 
 // env_cmd.c
-int				env_cmd(t_list *lst, char **args);
-void			env_cmd_direct(t_main *main);
+int					env_cmd(t_list *lst, char **args);
+void				env_cmd_direct(t_main *main);
 
 // export_add.c
-int				check_type_export(char *str, t_list *lst);
-int				check_quote_key(char *str);
+int					check_type_export(char *str, t_list *lst);
+int					check_quote_key(char *str);
 
 // parsing.c
-int				parsing_error(char *command, int etat);
+int					parsing_error(char *command, int etat);
 
 // parsing_error_brace.c
-int				parse_error(t_head *head, t_main *main);
-int				check_pipe(char *str, int *statement);
-int				check_brace(char *str, int type);
+int					parse_error(t_head *head, t_main *main);
+int					check_pipe(char *str, int *statement);
+int					check_brace(char *str, int type);
 
 // export_print.c
-t_list			*find_min_node(t_list *lst, t_list *visited);
-int				print_ascii_sorted(t_list *lst);
+t_list				*find_min_node(t_list *lst, t_list *visited);
+int					print_ascii_sorted(t_list *lst);
 
 // export_add_second.c
-t_env_var		*new_var(char *key, char *value, int exported);
-char			*return_value(char *str);
-int				check_first_char(char c);
-char			*return_key(char *str);
+t_env_var			*new_var(char *key, char *value, int exported);
+char				*return_value(char *str);
+int					check_first_char(char c);
+char				*return_key(char *str);
 
 // parsing_error_utils.c
-int				change_pwd_part2(t_env_var	*var, char **envp, int i, int len);
-int				check_redirect_n(char *str, char c, char vs, int *redirect);
-void			check_redirect_n_part2(int *redirect, int count);
-int				change_redirect(int *state, char *str);
-int				change_pwd(t_list	*lst, char **envp);
+int					change_pwd_part2(t_env_var	*var,
+						char **envp, int i, int len);
+int					check_redirect_n(char *str, char c, char vs, int *redirect);
+void				check_redirect_n_part2(int *redirect, int count);
+int					change_redirect(int *state, char *str);
+int					change_pwd(t_list	*lst, char **envp);
 
 // export_cmd.c
-int				add_var(t_list *lst, t_list *var);
-int				find_block(t_head *head,
-					int *n, char **content_block, int boolean);
-int				export_cmd(char **args, t_main *main);
-t_head			*return_head(t_head *head, int i);
-t_list			*return_lst(t_head *head, int i);
+int					add_var(t_list *lst, t_list *var);
+int					find_block(t_head *head,
+						int *n, char **content_block, int boolean);
+int					export_cmd(char **args, t_main *main);
+t_head				*return_head(t_head *head, int i);
+t_list				*return_lst(t_head *head, int i);
 
 // signal.c
-void			signal_handler_action(int sig, siginfo_t *info, void *context);
-void			disable_ctrl_backslash_echo();
-void			restore_ctrl_backslash_echo();
-void			signal_handler_cut(int sig);
-void			signal_handler(int sig);
+void				signal_handler_action(int sig,
+						siginfo_t *info, void *context);
+void				disable_ctrl_backslash_echo(void);
+void				restore_ctrl_backslash_echo(void);
+void				signal_handler_cut(int sig);
+void				signal_handler(int sig);
 
 // pwd_cmd.c
-int				pwd_cmd(char **args, t_envirronement *env);
+int					pwd_cmd(char **args, t_envirronement *env);
 
 // fd_take.c
-char			**return_fd(char *content, char *c);
+char				**return_fd(char *content, char *c);
 
 // exit_cmd.c
-void			free_total(t_main *main, t_command_head *head_main);
-void			exit_cmd(t_head *head, t_main *main);
-void			free_head(t_head *head);
+void				free_total(t_main *main, t_command_head *head_main);
+void				exit_cmd(t_head *head, t_main *main);
+void				free_head(t_head *head);
 
 // cd_cmd.c
-char			*get_env_value(char **env, const char *key);
-int				cd_cmd(t_envirronement *env_struct, char **args);
+char				*get_env_value(char **env, const char *key);
+int					cd_cmd(t_envirronement *env_struct, char **args);
 
 // detect_var.c
-int				verif_var(t_head *head, t_main *main, int n);
+int					verif_var(t_head *head, t_main *main, int n);
 
 // prompt_2.c
-int				return_slash(char *str);
+int					return_slash(char *str);
 
 // ft_listnode.c
-void			ft_listnode(t_list **lst_tmp, int tab);
+void				ft_listnode(t_list **lst_tmp, int tab);
 
 // check_equal.c
-int				check_equal(char *format, t_head *head, int tab);
+int					check_equal(char *format, t_head *head, int tab);
 
 // decomp.c
-t_command_head	*return_main(t_head *head, t_main *main);
+t_command_head		*return_main(t_head *head, t_main *main);
 
 // echo_cmd.c
-int				echo_command(char **args);
+int					echo_command(char **args);
 
 // input.c
-void			while_input(t_main *main);
+void				while_input(t_main *main);
 
 // prompt.c
-char			*read_cmd(t_main *main);
+char				*read_cmd(t_main *main);
 
 // parsing.c
-int				parsing_error(char *command, int etat);
+int					parsing_error(char *command, int etat);
 
 // sanitize.c
-t_head			*sanitize_input(char *input, t_main *main);
+t_head				*sanitize_input(char *input, t_main *main);
 
 // file_tmp.c
-void			print_block(t_head *head);
+void				print_block(t_head *head);
 
 // exec_cmd.c
-void			exec_cmds(t_command_head *cmd_head);
+void				exec_cmds(t_command_head *cmd_head);
 
 // open_files.c
-int				open_infile(const char *infile);
-int				open_outfile(const char *outfile, int mode);
-void			fake_open_infile(char *file);
-void			fake_open_outfile(char *file, int mode);
+int					open_infile(const char *infile);
+int					open_outfile(const char *outfile, int mode);
+void				fake_open_infile(char *file);
+void				fake_open_outfile(char *file, int mode);
 
 // manage_fds.c
-int				open_fds(t_pipex *pipex, int i, int read_pipe);
+int					open_fds(t_pipex *pipex, int i, int read_pipe);
 
 // get_path.c
-void			get_path(t_pipex *pipex);
+void				get_path(t_pipex *pipex);
 
 // fork.c
-int				exit_part(t_pipex *pipex, char **args);
-int				exec_cmd(t_pipex *pipex, int read_pipe, int i);
+int					exit_part(t_pipex *pipex, char **args);
+int					exec_cmd(t_pipex *pipex, int read_pipe, int i);
 
 // exec_utils.c
-void			clean_pipex(t_pipex *pipex, char *error, int exit_status);
-void			init_pipex(t_pipex *pipex, t_command_head *cmd_head);
-int				handle_here_doc(char *delimiter, t_pipex *pipex);
+void				clean_pipex(t_pipex *pipex, char *error, int exit_status);
+void				init_pipex(t_pipex *pipex, t_command_head *cmd_head);
+int					handle_here_doc(char *delimiter, t_pipex *pipex);
 
 // exec_func.c
 void				is_func_cmd(t_pipex *pipex, int i);
+int					handle_special_cmds_part2(t_pipex *pipex,
+						t_command_struct *current_cmd);
 
 // env_utils.c
 void				free_env(t_list *env);
@@ -267,8 +268,18 @@ int					get_env(char *command, int i);
 t_list				*create_env_list(char **env);
 void				print_env(t_list *env);
 
-// env_var.c
+// replace_var.c
 t_head				*replace_variables(t_head *head, t_main *main);
+
+// replace_var_utils.c
+static t_env_var	*find_env_var_node(t_list *env, const char *var_name);
+static char			*extract_variable(char *str);
+static void			handle_dollar_sign_part2(char *after,
+						t_node *node, t_list *curr_node);
+static void			handle_dollar_sign_part3(char *before,
+						t_node *node, t_list *curr_node, t_env_var *env_var);
+static void			handle_dollar_sign_part4(char *before,
+						t_node *node, t_env_var *env_var);
 
 // realoc.c
 char				**ft_realoc_ptr(char **tab, char *str);
@@ -290,6 +301,13 @@ int					add_before_pipe(t_list **head, int ishead, char *content);
 // clean_cmd.c
 void				cleant_tab_cmd(t_head **tab);
 
+// get_cmds_part2.c
+void				check(char *str);
+int					manage_type01(t_node *content,
+						t_command_struct *cmd_struct, int *i);
+int					get_start_type2(t_command_struct *cmd,
+						t_node *content, int *i, int *j);
+
 // get_cmds.c
 t_command_struct	*fill_cmd(t_head *head);
 
@@ -302,7 +320,7 @@ int					is_in_or_out(char *str,
 // get_cmds_filename.c
 char				*get_filename(t_list **lst, int *j);
 
-int	unset_cmd(t_list *lst, char **args, t_main *main);
+int					unset_cmd(t_list *lst, char **args, t_main *main);
 
 // bfr_utils.c
 void				a5h7j(void);

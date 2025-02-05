@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 14:50:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:44:51 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,27 @@ void	is_func_cmd(t_pipex *pipex, int i)
 		free_total(cmd_head->main, cmd_head);
 		exit(status);
 	}
+}
+
+int	handle_special_cmds_part2(t_pipex *pipex,
+	t_command_struct *current_cmd)
+{
+	if (current_cmd->command[0] == NULL)
+		return (0);
+	else if (ft_strcmp("unset", current_cmd->command[0]) == 0)
+		unset_cmd(pipex->cmd_head->main->env->env_list,
+			current_cmd->command, pipex->cmd_head->main);
+	else if (ft_strcmp("export", current_cmd->command[0]) == 0)
+		export_cmd(current_cmd->command, pipex->cmd_head->main);
+	else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
+		pipex->cmd_head->main->error = cd_cmd(pipex->cmd_head->main->env,
+				current_cmd->command);
+	else if (ft_strcmp("env", current_cmd->command[0]) == 0)
+		env_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
+	else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
+		pipex->cmd_head->main->error = exit_part(pipex,
+				current_cmd->command);
+	else
+		return (0);
+	return (1);
 }

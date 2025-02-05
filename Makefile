@@ -23,6 +23,7 @@ MINISHELL_SRCS =	bfr_utils.c \
 					file_tmp.c \
 					fork.c \
 					ft_listnode.c \
+					get_cmds_part2.c \
 					get_cmds.c \
 					get_cmds_filename.c \
 					get_cmds_utils.c \
@@ -39,6 +40,7 @@ MINISHELL_SRCS =	bfr_utils.c \
 					pwd_cmd.c \
 					realoc.c \
 					reattach_head.c \
+					replace_var_utils.c \
 					replace_var.c \
 					sanitize_input.c \
 					signal.c \
