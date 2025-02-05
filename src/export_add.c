@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 11:59:21 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:25:26 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	change_var(char *value, int index, t_list *lst)
 		if (i == index)
 		{
 			free(var->value);
-			var->value = value;
+			var->value = ft_strdup(value);
 			var->exported = 1;
 			break ;
 		}
@@ -61,6 +61,8 @@ static t_list	*new_var_node(char *key, char *value, int n)
 	t_env_var	*node;
 	t_list		*lst;
 
+	if (!value)
+		return (NULL);
 	node = new_var(key, value, n);
 	if (!node)
 		return (free(key), free(value), NULL);
@@ -84,13 +86,14 @@ static int	add_node(t_list *lst, char *str, int count, int i)
 	if (!tmp)
 		return (free(key), MALLOC_ERROR);
 	if (index >= 0)
-		change_var(tmp, index, lst);
+		return (change_var(tmp, index, lst), free(key), free(tmp), 0);
 	else if ((count == 1 && str[i - 1] != '=') || count > 1)
-		add_var(lst, new_var_node(key, tmp, 1));
+		return (add_var(lst, new_var_node(key, tmp, 1)), 0);
 	else if (count == 1 && str[i - 1] == '=')
 		add_var(lst, new_var_node(key, ft_strdup(""), 1));
 	else
 		add_var(lst, new_var_node(key, ft_strdup(""), 0));
+	free(tmp);
 	return (0);
 }
 
