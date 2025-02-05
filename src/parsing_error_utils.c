@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 13:09:08 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:43:20 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,13 @@ int	check_redirect_n(char *str, char c, char vs, int *redirect)
 		if (str[i] == '(' || str[i] == ')' || str[i] == '[' || str[i] == ']')
 			return (printf("Error Parentheses/Brackets not supported\n"), 1);
 		else if (str[i] == c && count > 1)
-			return (printf("1 Parse error near `%c'\n", c), 1);
+			return (printf("Parse error near `%c'\n", c), 1);
 		else if (str[i] == c && count <= 1)
 			count++;
 		else if (str[i] == vs && count > 0)
-			return (printf("2 Parse error near `%c%c'\n", c, vs), 1);
+			return (printf("Parse error near `%c%c'\n", c, vs), 1);
 		else if (str[i] == '|' && count > 0)
-			return (printf("3 Parse error near `%c'\n", c), 1);
+			return (printf("Parse error near `%c'\n", c), 1);
 		else
 			count = 0;
 		i++;

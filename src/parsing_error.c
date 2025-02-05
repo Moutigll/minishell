@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 12:00:00 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:43:13 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ static int	check_redirect(t_list *lst)
 	{
 		node = lst->content;
 		if (node->type == 2 && change_redirect(&state, node->content) == 1)
-			return (printf("7 Parse error near `>>'\n"), 1);
+			return (printf("Parse error near `>>'\n"), 1);
 		if (node->type == 2 && check_pipe(node->content, &statement))
-			return (printf("6 Parse error near `||'\n"), 1);
+			return (printf("Parse error near `||'\n"), 1);
 		if (node->type == 2
 			&& (check_redirect_n(node->content, '>', '<', &redirect_1) == 1
 				|| check_redirect_n(node->content, '<', '>', &redirect_2) == 1))
-			return (printf("11 Ambigous redirect `(null)'\n"), 1);
+			return (printf("Ambigous redirect `(null)'\n"), 1);
 		if (check_brace(node->content, node->type) == 1)
 			return (printf("Error bag assignment\n"), 1);
 		if (!lst->next)
@@ -100,11 +100,11 @@ int	parse_error(t_head *head, t_main *main)
 	if (last_content == NULL)
 		return (0);
 	if (last_content->type == 2 && last_char(last_content->content, '>') == 1)
-		return (printf("8 Ambigous redirect `\\n'\n"), main->error = 2, 1);
+		return (printf("Ambigous redirect `\\n'\n"), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '<') == 1)
-		return (printf("9 Ambigous redirect `\\n'\n"), main->error = 2, 1);
+		return (printf("Ambigous redirect `\\n'\n"), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)
-		return (printf("4 Parse error near `%s'\n",
+		return (printf("Parse error near `%s'\n",
 				last_content->content), main->error = 2, 1);
 	if (check_redirect(lst) == 1)
 		return (main->error = 2, 1);

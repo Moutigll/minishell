@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 16:02:46 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:33:21 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
+int	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
 {
 	t_fd_struct	*content;
 	t_list		*lst;
@@ -25,18 +25,23 @@ void	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
 		if (content->mode == 1)
 		{
 			if (g_status == -1)
-				return ;
+				return (-1);
 			cmd->here_doc = handle_here_doc(content->fd, pipex);
 			if (cmd->here_doc == -1)
-				return ;
+			{
+				pipex->cmd_head->main->error = 130;
+				g_status = 0;
+				return (-1);
+			}
 			if (lst->next)
 				close(cmd->here_doc);
 		}
 		lst = lst->next;
 	}
+	return (0);
 }
 
-static void	check_here_doc(t_pipex	*pipex)
+static int	check_here_doc(t_pipex	*pipex)
 {
 	t_command_struct	**cmds;
 	int					i;
@@ -45,9 +50,11 @@ static void	check_here_doc(t_pipex	*pipex)
 	cmds = pipex->cmd_head->cmds;
 	while (i < pipex->cmd_head->size)
 	{
-		get_here_doc(cmds[i], pipex);
+		if (get_here_doc(cmds[i], pipex) == -1)
+			return (-1);
 		i++;
 	}
+	return (0);
 }
 
 static t_pipex	*init_and_prepare_pipex(t_command_head *cmd_head)
@@ -110,8 +117,7 @@ void	exec_cmds(t_command_head *cmd_head)
 	get_path(pipex);
 	if (pipex->cmd_head->main->error)
 		return (clean_pipex(pipex, NULL, pipex->cmd_head->main->error));
-	check_here_doc(pipex);
-	if (pipex->cmd_head->main->error)
+	if (check_here_doc(pipex) == -1 || pipex->cmd_head->main->error)
 		return (clean_pipex(pipex, NULL, pipex->cmd_head->main->error));
 	i = 0;
 	rpipe = -1;

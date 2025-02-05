@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 15:53:04 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 23:23:06 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,13 @@ int	handle_here_doc(char *delimiter, t_pipex *pipex)
 		write(1, "heredoc> ", 10);
 		line = get_next_line(0);
 		if (g_status == -1)
-			break ;
+			return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
 		if (!line)
+		{
 			printf(ERR_HEREDOC, delimiter);
-		if (!line || (ft_strncmp(line, delimiter, delimiter_len) == 0
+			close(pipe_fd[0]);
+		}
+		if ((!line) || (ft_strncmp(line, delimiter, delimiter_len) == 0
 				&& line[delimiter_len] == '\n'
 				&& line[delimiter_len + 1] == '\0'))
 			break ;

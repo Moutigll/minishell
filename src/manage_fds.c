@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_fds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:52:21 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 17:58:46 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 23:19:45 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	open_infiles(t_pipex *pipex, int i, int read_pipe)
 	lst = *pipex->cmd_head->cmds[i]->in_fd;
 	while (lst && pipex->cmd_head->cmds[i]->here_doc == -1)
 	{
-		if (lst->next)
+		if (lst->next && ((t_fd_struct *)lst->content)->mode != 1)
 			fake_open_infile(((t_fd_struct *)lst->content)->fd);
-		else
+		else if (((t_fd_struct *)lst->content)->mode != 1)
 		{
 			if (!open_infile(((t_fd_struct *)lst->content)->fd))
 				return (1);
@@ -36,6 +36,7 @@ int	open_infiles(t_pipex *pipex, int i, int read_pipe)
 			perror("Error: dup2 failed for read pipe");
 			return (1);
 		}
+		close(pipex->cmd_head->cmds[i]->here_doc);
 	}
 	return (0);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:29:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 18:30:37 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:49:31 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static t_env_var	*find_env_var_node(t_list *env, const char *var_name)
+t_env_var	*find_env_var_node(t_list *env, const char *var_name)
 {
 	t_env_var	*env_var;
 
@@ -26,7 +26,7 @@ static t_env_var	*find_env_var_node(t_list *env, const char *var_name)
 	return (NULL);
 }
 
-static char	*extract_variable(char *str)
+char	*extract_variable(char *str)
 {
 	int	is_bracket;
 	int	i;
@@ -48,7 +48,7 @@ static char	*extract_variable(char *str)
 	return (ft_substr(str, is_bracket, i - is_bracket));
 }
 
-static void	handle_dollar_sign_part2(char *after,
+void	handle_dollar_sign_part2(char *after,
 	t_node *node, t_list *curr_node)
 {
 	if (after[0] != '\0')
@@ -63,8 +63,8 @@ static void	handle_dollar_sign_part2(char *after,
 		free(after);
 }
 
-static void	handle_dollar_sign_part3(char *before,
-	t_node *node, t_list *curr_node, t_env_var *env_var)
+void	handle_dollar_sign_part3(char *before,
+	t_node *node, t_list **curr_node, t_env_var *env_var)
 {
 	if (env_var && before[0] != '\0')
 	{
@@ -72,14 +72,14 @@ static void	handle_dollar_sign_part3(char *before,
 		node->content = strdup(env_var->value);
 		node->type = 1;
 		node->head = 0;
-		ft_lstinsert_after(curr_node, ft_lstnew(node));
-		curr_node = curr_node->next;
+		ft_lstinsert_after(*curr_node, ft_lstnew(node));
+		*curr_node = (*curr_node)->next;
 	}
 	else if (before[0] == '\0')
 		free(before);
 }
 
-static void	handle_dollar_sign_part4(char *before,
+void	handle_dollar_sign_part4(char *before,
 	t_node *node, t_env_var *env_var)
 {
 	if (before[0] == '\0')

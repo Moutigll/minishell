@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 18:30:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:50:27 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,21 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	after = ft_substr(str, i + 1, ft_strlen(str) - i - 1);
 	free(str);
 	handle_dollar_sign_part4(before, node, find_env_var_node(env, var_name));
-	handle_dollar_sign_part3(before, node, curr_node,
+	handle_dollar_sign_part3(before, node, &curr_node,
 		find_env_var_node(env, var_name));
 	handle_dollar_sign_part2(after, node, curr_node);
 	return (free(var_name), 1);
 }
 
-static void	string_to_var_part2(char *str,
+static void	string_to_var_part2(char **str,
 	t_main *main, t_list *current_node, int *i)
 {
 	char	*error;
 
 	error = ft_itoa(main->error);
-	str = ft_str_replace(str, "$?", error);
+	*str = ft_str_replace(*str, "$?", error);
 	free(((t_node *)current_node->content)->content);
-	((t_node *)current_node->content)->content = str;
+	((t_node *)current_node->content)->content = *str;
 	*i += ft_strlen(error) - 1;
 	free(error);
 }
@@ -83,7 +83,7 @@ static int	string_to_var(t_main *main, t_list *current_node)
 			&& ((t_node *)current_node->next->content)->type != 1)
 			string_to_var_part3(str, current_node);
 		else if (str[i] == '$' && str[i + 1] == '?')
-			string_to_var_part2(str, main, current_node, &i);
+			string_to_var_part2(&str, main, current_node, &i);
 		else
 			i++;
 		if (str[i] == '\0' || str[i + 1] == '\0')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 18:44:51 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:54:04 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	exec_func_c(char *command, char **args, t_pipex *pipex)
 			= unset_cmd(pipex->cmd_head->main->env->env_list,
 				args, pipex->cmd_head->main);
 	else if (!ft_strcmp(command, "env"))
-		print_env(pipex->cmd_head->main->env->env_list);
+		pipex->cmd_head->main->error
+			= env_cmd(pipex->cmd_head->main->env->env_list, args);
 	else if (!ft_strcmp(command, "exit"))
 		pipex->cmd_head->main->error = exit_part(pipex, args);
 }
@@ -78,7 +79,9 @@ int	handle_special_cmds_part2(t_pipex *pipex,
 		pipex->cmd_head->main->error = cd_cmd(pipex->cmd_head->main->env,
 				current_cmd->command);
 	else if (ft_strcmp("env", current_cmd->command[0]) == 0)
-		env_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
+		pipex->cmd_head->main->error
+			= env_cmd(pipex->cmd_head->main->env->env_list,
+				current_cmd->command);
 	else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
 		pipex->cmd_head->main->error = exit_part(pipex,
 				current_cmd->command);
