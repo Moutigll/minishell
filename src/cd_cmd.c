@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 14:53:19 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:26:59 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ char	*resolve_path(char **env, char *arg)
 {
 	char	*path;
 
-	if (!arg || ft_strncmp(arg, "~", 2) == 0)
+	if (!arg)
 		path = get_env_value(env, "HOME");
+	else if (ft_strncmp(arg, "~", 2) == 0)
+		return (ft_strjoin(get_env_value(env, "HOME"), arg + 1));
 	else if (ft_strncmp(arg, "-", 2) == 0)
 		path = get_env_value(env, "OLDPWD");
 	else

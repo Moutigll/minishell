@@ -3,38 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 15:15:19 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:25:54 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static void	handle_child_process_part2(t_pipex *pipex,
-	int *pipe_fd, t_command_head *cmd_head, int i)
-{
-	if (ft_lstsize(*pipex->cmd_head->cmds[i]->out_fd) == 0
-		&& i != pipex->cmd_head->size - 1)
-	{
-		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-		{
-			perror("Error: dup2 failed for write pipe");
-			clean_pipex(pipex, NULL, 1);
-			free_total(cmd_head->main, cmd_head);
-			exit(1);
-		}
-	}
-	is_func_cmd(pipex, i);
-	if (pipex->cmd_head->cmds[i]->command[0]
-		&& execve(pipex->cmd_head->cmds[i]->command[0],
-			pipex->cmd_head->cmds[i]->command,
-			pipex->cmd_head->main->env->envp) == -1)
-	{
-		perror("Error: Failed to execute command");
-	}
-}
 
 void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 {
@@ -47,9 +23,30 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 		free_total(cmd_head->main, cmd_head);
 		exit(1);
 	}
+	if (ft_lstsize(*pipex->cmd_head->cmds[i]->out_fd) == 0
+		&& i != pipex->cmd_head->size - 1)
+	{
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+		{
+			perror("Error: dup2 failed for write pipe");
+			clean_pipex(pipex, NULL, 1);
+			free_total(cmd_head->main, cmd_head);
+			exit(1);
+		}
+	}
 	if (i != pipex->cmd_head->size - 1)
+	{
 		close(pipe_fd[0]);
-	handle_child_process_part2(pipex, pipe_fd, cmd_head, i);
+		close(pipe_fd[1]);
+	}
+	is_func_cmd(pipex, i);
+	if (pipex->cmd_head->cmds[i]->command[0]
+		&& execve(pipex->cmd_head->cmds[i]->command[0],
+			pipex->cmd_head->cmds[i]->command,
+			pipex->cmd_head->main->env->envp) == -1)
+	{
+		perror("Error: Failed to execute command");
+	}
 	clean_pipex(pipex, NULL, 1);
 	free_total(cmd_head->main, cmd_head);
 	exit(127);
@@ -120,14 +117,14 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	if (handle_special_cmds(pipex, i))
 		return (-1);
 	if (i != pipex->cmd_head->size - 1 && pipe(pipe_fd) == -1)
-		return (perror("Error: Failed to create pipe")
-			, clean_pipex(pipex, NULL, 32), -1);
+		return (perror("Error: Failed to create pipe"), clean_pipex(pipex, NULL, 32), -1);
 	pid = fork();
 	if (pid == -1)
-		return (perror("Error: Failed to fork")
-			, clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
+		return (perror("Error: Failed to fork"), clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
 	if (pid == 0)
 		handle_child_process(pipex, pipe_fd, read_pipe, i);
+	if (read_pipe != -1)
+		close(read_pipe);
 	pipex->pid_tab[i] = pid;
 	if (i != pipex->cmd_head->size - 1)
 	{
@@ -136,3 +133,4 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	}
 	return (-1);
 }
+

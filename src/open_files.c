@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 14:04:24 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:26:09 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 			return (1);
 		}
 	}
-	else if (read_pipe != -1)
+	if (read_pipe != -1)
 		close(read_pipe);
 	if (pipex->cmd_head->cmds[i]->here_doc != -1)
 	{
