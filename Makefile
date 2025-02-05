@@ -40,6 +40,7 @@ MINISHELL_SRCS =	bfr_utils.c \
 					prompt_2.c \
 					reattach_head.c \
 					parsing_error.c \
+					parsing_error_utils.c \
 					parsing_error_brace.c \
 					replace_var.c \
 					sanitize_input.c

@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   export_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 18:15:04 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:58:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	add_var(t_list *lst, t_list *var)
+{
+	if (var == NULL)
+		return (MALLOC_ERROR);
+	ft_lstadd_back(&lst, var);
+	return (0);
+}
 
 static int	count_tab(char **args)
 {

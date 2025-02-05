@@ -6,43 +6,11 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 19:36:38 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 13:11:54 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_args_struct(t_command_struct *cmd_struct)
-{
-	t_fd_struct	*fd_struct;
-	t_list		*lst;
-	int			i;
-
-	printf("\n----------------------\n");
-	i = 0;
-	while (i < cmd_struct->nb_args)
-	{
-		printf("Arg %d: [%s]\n", i, cmd_struct->command[i]);
-		i++;
-	}
-	printf("\nFDS:\n");
-	printf("IN:\n");
-	lst = ((t_list **)cmd_struct->in_fd)[0];
-	while (lst)
-	{
-		fd_struct = lst->content;
-		printf("Mode: %d | File: %s\n", fd_struct->mode, fd_struct->fd);
-		lst = lst->next;
-	}
-	printf("\nOUT:\n");
-	lst = ((t_list **)cmd_struct->out_fd)[0];
-	while (lst)
-	{
-		fd_struct = lst->content;
-		printf("Mode: %d | File: %s\n", fd_struct->mode, fd_struct->fd);
-		lst = lst->next;
-	}
-}
 
 int	find_smallest(char *str, char c)
 {

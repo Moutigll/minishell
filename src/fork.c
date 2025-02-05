@@ -6,25 +6,15 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 20:16:05 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:59:25 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
+static void	handle_child_process_part2(t_pipex *pipex,
+	int *pipe_fd, t_command_head *cmd_head, int i)
 {
-	t_command_head	*cmd_head;
-
-	cmd_head = pipex->cmd_head;
-	if (open_fds(pipex, i, read_pipe) == 1)
-	{
-		clean_pipex(pipex, "Error: Failed to open file descriptors", 1);
-		free_total(cmd_head->main, cmd_head);
-		exit(1);
-	}
-	if (i != pipex->cmd_head->size - 1)
-		close(pipe_fd[0]);
 	if (ft_lstsize(*pipex->cmd_head->cmds[i]->out_fd) == 0
 		&& i != pipex->cmd_head->size - 1)
 	{
@@ -44,17 +34,45 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 	{
 		perror("Error: Failed to execute command");
 	}
+}
+
+void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
+{
+	t_command_head	*cmd_head;
+
+	cmd_head = pipex->cmd_head;
+	if (open_fds(pipex, i, read_pipe) == 1)
+	{
+		clean_pipex(pipex, "Error: Failed to open file descriptors", 1);
+		free_total(cmd_head->main, cmd_head);
+		exit(1);
+	}
+	if (i != pipex->cmd_head->size - 1)
+		close(pipe_fd[0]);
+	handle_child_process_part2(pipex, pipe_fd, cmd_head, i);
 	clean_pipex(pipex, NULL, 1);
 	free_total(cmd_head->main, cmd_head);
 	exit(127);
+}
+
+static void	exit_part(t_command_head *cmd_head, t_pipex *pipex)
+{
+	int	status;
+
+	cmd_head = pipex->cmd_head;
+	status = pipex->cmd_head->main->error;
+	clean_pipex(pipex, NULL, 0);
+	free_total(cmd_head->main, cmd_head);
+	ft_putstr_fd("exit\n", STDIN_FILENO);
+	exit(status);
 }
 
 static int	handle_special_cmds(t_pipex *pipex, int i)
 {
 	t_command_struct	*current_cmd;
 	t_command_head		*cmd_head;
-	int					status;
 
+	cmd_head = NULL;
 	current_cmd = pipex->cmd_head->cmds[i];
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
 	{
@@ -70,19 +88,11 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 		else if (ft_strcmp("env", current_cmd->command[0]) == 0)
 			env_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
 		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
-		{
-			cmd_head = pipex->cmd_head;
-			status = pipex->cmd_head->main->error;
-			clean_pipex(pipex, NULL, 0);
-			free_total(cmd_head->main, cmd_head);
-			ft_putstr_fd("exit\n", STDIN_FILENO);
-			exit(status);
-		}
+			exit_part(cmd_head, pipex);
 		else
 			return (0);
-		return (1);
 	}
-	return (0);
+	return (1);
 }
 
 int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
@@ -93,10 +103,12 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	if (handle_special_cmds(pipex, i))
 		return (-1);
 	if (i != pipex->cmd_head->size - 1 && pipe(pipe_fd) == -1)
-		return (perror("Error: Failed to create pipe"), clean_pipex(pipex, NULL, 32), -1);
+		return (perror("Error: Failed to create pipe")
+			, clean_pipex(pipex, NULL, 32), -1);
 	pid = fork();
 	if (pid == -1)
-		return (perror("Error: Failed to fork"), clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
+		return (perror("Error: Failed to fork")
+			, clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
 	if (pid == 0)
 		handle_child_process(pipex, pipe_fd, read_pipe, i);
 	pipex->pid_tab[i] = pid;

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:33:18 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 14:51:08 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:27:25 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,5 @@ void	signal_handler(int sig)
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();
 	}
 }

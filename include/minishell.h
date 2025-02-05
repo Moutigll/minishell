@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 19:44:56 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 13:09:42 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,15 @@ char			*return_value(char *str);
 int				check_first_char(char c);
 char			*return_key(char *str);
 
+// parsing_error_utils.c
+int				change_pwd_part2(t_env_var	*var, char **envp, int i, int len);
+int				check_redirect_n(char *str, char c, char vs, int *redirect);
+void			check_redirect_n_part2(int *redirect, int count);
+int				change_redirect(int *state, char *str);
+int				change_pwd(t_list	*lst, char **envp);
+
 // export_cmd.c
+int				add_var(t_list *lst, t_list *var);
 int				find_block(t_head *head,
 					int *n, char **content_block, int boolean);
 int				export_cmd(char **args, t_main *main);

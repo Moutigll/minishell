@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 19:46:54 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:02:24 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	exec_func_c(char *command, char **args, t_pipex *pipex)
 		pipex->cmd_head->main->error = export_cmd(args,
 				pipex->cmd_head->main);
 	else if (!ft_strcmp(command, "unset"))
-		pipex->cmd_head->main->error = unset_cmd(pipex->cmd_head->main->env->env_list,
+		pipex->cmd_head->main->error
+			= unset_cmd(pipex->cmd_head->main->env->env_list,
 				args, pipex->cmd_head->main);
 	else if (!ft_strcmp(command, "env"))
 		print_env(pipex->cmd_head->main->env->env_list);

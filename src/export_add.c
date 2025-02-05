@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 19:44:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:59:21 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,6 @@ static t_list	*new_var_node(char *key, char *value, int n)
 	if (!lst)
 		return (free(node), NULL);
 	return (lst);
-}
-
-static int	add_var(t_list *lst, t_list *var)
-{
-	if (var == NULL)
-		return (MALLOC_ERROR);
-	ft_lstadd_back(&lst, var);
-	return (0);
 }
 
 static int	add_node(t_list *lst, char *str, int count, int i)

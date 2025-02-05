@@ -6,11 +6,59 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 17:15:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 11:32:40 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:56:56 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static int	found_arg(t_envirronement *env, int *i, int found)
+{
+	int	j;
+
+	if (found == 0)
+	{
+		free(env->envp[*i]);
+		j = *i;
+		while (env->envp[j])
+		{
+			env->envp[j] = env->envp[j + 1];
+			j++;
+		}
+	}
+	else
+		(*i)++;
+	return (0);
+}
+
+static int	remove_args(t_envirronement *env)
+{
+	t_list	*lst;
+	int		found;
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	while (env->envp[i])
+	{
+		found = 0;
+		lst = env->env_list;
+		while (lst)
+		{
+			tmp = ((t_env_var *)lst->content)->name;
+			if (strncmp(env->envp[i], tmp, ft_strlen(tmp)) == 0
+				&& (env->envp[i][ft_strlen(tmp)] == '\0'
+				|| env->envp[i][ft_strlen(tmp)] == '='))
+			{
+				found = 1;
+				break ;
+			}
+			lst = lst->next;
+		}
+		found_arg(env, &i, found);
+	}
+	return (0);
+}
 
 static int	check_ptr(t_envirronement *env, char *key, char *value)
 {
@@ -53,6 +101,7 @@ void	update_env(t_envirronement *env)
 			break ;
 		lst = lst->next;
 	}
+	remove_args(env);
 }
 
 char	**ft_realoc_ptr(char **tab, char *str)
