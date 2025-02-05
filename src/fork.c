@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 16:34:06 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:30:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static int	handle_child_process_part2(t_pipex *pipex, int i, int *pipe_fd)
+{
+	if (i != pipex->cmd_head->size - 1)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+	}
+	is_func_cmd(pipex, i);
+	if (pipex->cmd_head->cmds[i]->command[0])
+	{
+		close(pipex->stdin_backup);
+		close(pipex->stdout_backup);
+		if (execve(pipex->cmd_head->cmds[i]->command[0],
+				pipex->cmd_head->cmds[i]->command,
+				pipex->cmd_head->main->env->envp) == -1)
+			perror("Error: Failed to execute command");
+	}
+	return (0);
+}
 
 void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 {
@@ -34,20 +54,7 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 			exit(1);
 		}
 	}
-	if (i != pipex->cmd_head->size - 1)
-	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-	}
-	is_func_cmd(pipex, i);
-	if (pipex->cmd_head->cmds[i]->command[0])
-	{
-		close(pipex->stdin_backup);
-		close(pipex->stdout_backup);
-		if (execve(pipex->cmd_head->cmds[i]->command[0], pipex->cmd_head->cmds[i]->command,
-			pipex->cmd_head->main->env->envp) == -1)
-			perror("Error: Failed to execute command");
-	}
+	handle_child_process_part2(pipex, i, pipe_fd);
 	clean_pipex(pipex, NULL, 1);
 	free_total(cmd_head->main, cmd_head);
 	exit(127);
@@ -82,6 +89,29 @@ int	exit_part(t_pipex *pipex, char **args)
 	exit(status);
 }
 
+static int	handle_special_cmds_part2(t_pipex *pipex,
+	t_command_struct *current_cmd)
+{
+	if (current_cmd->command[0] == NULL)
+		return (0);
+	else if (ft_strcmp("unset", current_cmd->command[0]) == 0)
+		unset_cmd(pipex->cmd_head->main->env->env_list,
+			current_cmd->command, pipex->cmd_head->main);
+	else if (ft_strcmp("export", current_cmd->command[0]) == 0)
+		export_cmd(current_cmd->command, pipex->cmd_head->main);
+	else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
+		pipex->cmd_head->main->error = cd_cmd(pipex->cmd_head->main->env,
+				current_cmd->command);
+	else if (ft_strcmp("env", current_cmd->command[0]) == 0)
+		env_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
+	else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
+		pipex->cmd_head->main->error = exit_part(pipex,
+				current_cmd->command);
+	else
+		return (0);
+	return (1);
+}
+
 static int	handle_special_cmds(t_pipex *pipex, int i)
 {
 	t_command_struct	*current_cmd;
@@ -91,22 +121,11 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 	current_cmd = pipex->cmd_head->cmds[i];
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
 	{
-		if (current_cmd->command[0] == NULL)
-			return (0);
-		else if (ft_strcmp("unset", current_cmd->command[0]) == 0)
-			unset_cmd(pipex->cmd_head->main->env->env_list,
-				current_cmd->command, pipex->cmd_head->main);
-		else if (ft_strcmp("export", current_cmd->command[0]) == 0)
-			export_cmd(current_cmd->command, pipex->cmd_head->main);
-		else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
-			pipex->cmd_head->main->error = cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
-		else if (ft_strcmp("env", current_cmd->command[0]) == 0)
-			env_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
-		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
-			pipex->cmd_head->main->error = exit_part(pipex, current_cmd->command);
-		else
+		if (handle_special_cmds_part2(pipex, current_cmd) == 0)
 			return (0);
 	}
+	else
+		return (0);
 	return (1);
 }
 
@@ -118,10 +137,12 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	if (handle_special_cmds(pipex, i))
 		return (-1);
 	if (i != pipex->cmd_head->size - 1 && pipe(pipe_fd) == -1)
-		return (perror("Error: Failed to create pipe"), clean_pipex(pipex, NULL, 32), -1);
+		return (perror("Error: Failed to create pipe"),
+			clean_pipex(pipex, NULL, 32), -1);
 	pid = fork();
 	if (pid == -1)
-		return (perror("Error: Failed to fork"), clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
+		return (perror("Error: Failed to fork"),
+			clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
 	if (pid == 0)
 		handle_child_process(pipex, pipe_fd, read_pipe, i);
 	if (read_pipe != -1)
@@ -134,4 +155,3 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	}
 	return (-1);
 }
-

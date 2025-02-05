@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 15:58:22 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:05:12 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,21 @@ int	manage_type01(t_node *content, t_command_struct *cmd_struct, int *i)
 	return (1);
 }
 
+static int	get_start_type2_part2(int *i, t_command_struct *cmd, int n)
+{
+	if (n == 0)
+	{
+		(*i)++;
+		cmd->command[*i] = ft_strdup("");
+		if (!cmd->command[*i])
+			return (free_cmd_struct(cmd), 0);
+		return (1);
+	}
+	(*i)++;
+	cmd->command[*i] = ft_strdup("");
+	return (0);
+}
+
 int	get_start_type2(t_command_struct *cmd,
 	t_node *content, int *i, int *j)
 {
@@ -92,12 +107,8 @@ int	get_start_type2(t_command_struct *cmd,
 
 	str = content->content;
 	if (content->head && *j == 0 && str[*j] != '<' && str[*j] != '>')
-	{
-		(*i)++;
-		cmd->command[*i] = ft_strdup("");
-		if (!cmd->command[*i])
-			return (free_cmd_struct(cmd), 0);
-	}
+		if (get_start_type2_part2(i, cmd, 0) == 0)
+			return (0);
 	start = *j;
 	while (str[*j] && str[*j] != '<' && str[*j] != '>')
 		(*j)++;
@@ -108,8 +119,7 @@ int	get_start_type2(t_command_struct *cmd,
 			return (free_cmd_struct(cmd), 0);
 		if (*i == -1)
 		{
-			(*i)++;
-			cmd->command[*i] = ft_strdup("");
+			get_start_type2_part2(i, cmd, 1);
 			if (!cmd->command[*i])
 				return (free_cmd_struct(cmd), 0);
 		}
@@ -142,42 +152,55 @@ int	handle_redirection(t_command_struct *cmd_struct,
 	return (1);
 }
 
+int	fill_cmd_part2(t_list **lst, int *j, t_node *content)
+{
+	if (!content->content[*j])
+	{
+		*lst = (*lst)->next;
+		*j = 0;
+		return (0);
+	}
+	return (1);
+}
+
+static int	init_fill(t_count **count,
+	t_list **lst, t_head *head, t_command_struct **cmd_struct)
+{
+	*cmd_struct = init_command_struct(head->head);
+	*count = malloc(sizeof(t_count));
+	if (!(*count))
+		return (1);
+	(*count)->i = -1;
+	(*count)->j = 0;
+	*lst = head->head;
+	return (0);
+}
+
 t_command_struct	*fill_cmd(t_head *head)
 {
 	t_command_struct	*cmd_struct;
 	t_node				*content;
+	t_count				*count;
 	t_list				*lst;
-	int					i;
-	int					j;
 
-	cmd_struct = init_command_struct(head->head);
-	lst = head->head;
-	i = -1;
-	j = 0;
+	init_fill(&count, &lst, head, &cmd_struct);
 	while (lst)
 	{
 		content = lst->content;
-		if (content->type == 0 || content->type == 1)
-		{
-			if (!manage_type01(content, cmd_struct, &i))
-				return (NULL);
-		}
+		if ((content->type == 0 || content->type == 1)
+			&& !manage_type01(content, cmd_struct, &count->i))
+			return (free(count), NULL);
 		else if (content->type == 2)
 		{
-			if (!get_start_type2(cmd_struct, content, &i, &j))
-				return (NULL);
-			if (!content->content[j])
-			{
-				lst = lst->next;
-				j = 0;
+			if (!get_start_type2(cmd_struct, content, &count->i, &count->j))
+				return (free(count), NULL);
+			if (fill_cmd_part2(&lst, &count->j, content) == 0)
 				continue ;
-			}
-			if (!handle_redirection(cmd_struct, &content, &lst, &j))
-				return (NULL);
+			if (!handle_redirection(cmd_struct, &content, &lst, &count->j))
+				return (free(count), NULL);
 			continue ;
 		}
 		lst = lst->next;
 	}
-	check(cmd_struct->command[0]);
-	return (cmd_struct);
+	return (free(count), check(cmd_struct->command[0]), cmd_struct);
 }
