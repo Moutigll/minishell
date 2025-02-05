@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 12:59:25 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:15:19 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,32 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 	exit(127);
 }
 
-static void	exit_part(t_command_head *cmd_head, t_pipex *pipex)
+int	exit_part(t_pipex *pipex, char **args)
 {
-	int	status;
-
+	t_command_head	*cmd_head;
+	int				status;
+	int				i;
+	(void)args;
+	i = 0;
 	cmd_head = pipex->cmd_head;
 	status = pipex->cmd_head->main->error;
+	ft_putstr_fd("exit\n", STDIN_FILENO);
+	if (args[1] != NULL)
+	{
+		while (args[1][i])
+		{
+			if (!ft_isdigit(args[1][i++]))
+			{
+				printf("Error: exit: %s: numeric argument required\n", args[1]);
+				pipex->cmd_head->main->error = 2;
+				break ;
+			}
+		}
+	}
+	if (i != -1 && args[1] != NULL && args[2] != NULL)
+		return (printf("Error: exit: too many arguments\n"), 1);
 	clean_pipex(pipex, NULL, 0);
 	free_total(cmd_head->main, cmd_head);
-	ft_putstr_fd("exit\n", STDIN_FILENO);
 	exit(status);
 }
 
@@ -84,11 +101,11 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 		else if (ft_strcmp("export", current_cmd->command[0]) == 0)
 			export_cmd(current_cmd->command, pipex->cmd_head->main);
 		else if (ft_strcmp("cd", current_cmd->command[0]) == 0)
-			cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
+			pipex->cmd_head->main->error = cd_cmd(pipex->cmd_head->main->env, current_cmd->command);
 		else if (ft_strcmp("env", current_cmd->command[0]) == 0)
 			env_cmd(pipex->cmd_head->main->env->env_list, current_cmd->command);
 		else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
-			exit_part(cmd_head, pipex);
+			pipex->cmd_head->main->error = exit_part(pipex, current_cmd->command);
 		else
 			return (0);
 	}

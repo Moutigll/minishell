@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 13:09:42 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:50:24 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,7 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe);
 void			get_path(t_pipex *pipex);
 
 // fork.c
+int				exit_part(t_pipex *pipex, char **args);
 int				exec_cmd(t_pipex *pipex, int read_pipe, int i);
 
 // exec_utils.c

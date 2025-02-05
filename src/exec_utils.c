@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:58:42 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 12:02:46 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:03:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 {
-	g_status = exit_status;
+	pipex->cmd_head->main->error = exit_status;
 	free(pipex->pid_tab);
 	while (pipex->cmd_head->size--)
 		free_cmd_struct(pipex->cmd_head->cmds[pipex->cmd_head->size]);

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 12:53:45 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:56:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	while_input_part3(t_splitted_cmds *splitted
 	free(splitted);
 	cmd_head->main = main;
 	main->error = 0;
+	signal(SIGQUIT, signal_handler);
 	exec_cmds(cmd_head);
 	free(cmd_head);
 }

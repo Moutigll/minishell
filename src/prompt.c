@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 13:40:36 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 13:54:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ static char	*prompt_return(char *path, t_main *main)
 
 	fd = open("/etc/hostname", O_RDONLY);
 	user = getenv("USER");
+	if (user == NULL)
+		user = ft_strdup("(null)");
 	end_user = ft_strjoin(user, "@");
 	if (!end_user)
 		exit_on_error(main, MALLOC_ERROR);

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 18:18:18 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:41:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,10 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	if (before[0] == '\0')
 	{
 		if (env_var)
+		{
 			node->content = ft_strdup(env_var->value);
+			node->type = 1;
+		}
 		else
 			node->content = ft_strdup("");
 	}

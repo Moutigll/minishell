@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:12:28 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 12:02:57 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:34:29 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ void	print_head(t_list *head)
 	while (head)
 	{
 		content = head->content;
+		printf("Node: type:%d | ishead: %d | content: \"%s\"\n",
+			content->type, content->head, content->content);
 		head = head->next;
 	}
 }

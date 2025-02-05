@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 13:14:20 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:26:18 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static void	check_here_doc(t_pipex	*pipex)
 static t_pipex	*init_and_prepare_pipex(t_command_head *cmd_head)
 {
 	t_pipex	*pipex;
+	int		i;
 
 	pipex = malloc(sizeof(t_pipex));
 	if (!(pipex))
@@ -60,6 +61,12 @@ static t_pipex	*init_and_prepare_pipex(t_command_head *cmd_head)
 	pipex->pid_tab = malloc(sizeof(pid_t) * cmd_head->size);
 	if (!(pipex->pid_tab))
 		return (clean_pipex(pipex, NULL, MALLOC_ERROR), NULL);
+	i = 0;
+	while (i < cmd_head->size)
+	{
+		pipex->pid_tab[i] = -1;
+		i++;
+	}
 	pipex->cmd_head = cmd_head;
 	pipex->stdin_backup = dup(STDIN_FILENO);
 	pipex->stdout_backup = dup(STDOUT_FILENO);
@@ -74,6 +81,11 @@ static void	wait_for_children(t_pipex *pipex)
 	i = 0;
 	while (i < pipex->cmd_head->size)
 	{
+		if (pipex->pid_tab[i] == 0 || pipex->pid_tab[i] == -1)
+		{
+			i++;
+			continue ;
+		}
 		if (waitpid(pipex->pid_tab[i], &status, 0) == -1)
 			return ;
 		if (WIFEXITED(status))

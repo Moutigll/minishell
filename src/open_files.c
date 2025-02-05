@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 12:03:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:04:24 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	open_outfile(const char *outfile, int mode)
 	int	outfile_fd;
 	int	flags;
 
-	printf("outfile: %s\n", outfile);
 	flags = O_WRONLY | O_CREAT;
 	if (mode == 1)
 		flags |= O_APPEND;

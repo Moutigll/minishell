@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 12:51:36 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 12:19:24 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:55:36 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	pwd_cmd(char **args, t_envirronement *env)
 	{
 		path = get_env_value(env->envp, "PWD");
 		printf("%s\n", path);
-		g_status = 0;
 	}
 	update_env(env);
 	return (0);

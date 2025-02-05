@@ -4,4 +4,4 @@
 --show-leak-kinds=all
 --track-fds=yes
 --suppressions=ignore_readline.supp
--s
+
