@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/04 20:31:18 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:02:27 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	resolve_command(t_command_struct *cmd, char **paths)
 		if (access(cmd->command[0], X_OK) == -1)
 		{
 			perror("Error: Command not accessible");
+			free(cmd->command[0]);
 			cmd->command[0] = NULL;
 			return ;
 		}

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 15:28:33 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:24:00 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,19 @@ static char	*extract_variable(char *str)
 	return (ft_substr(str, is_bracket, i - is_bracket));
 }
 
+static t_node	*create_node(char *content, int type)
+{
+	t_node	*node;
+
+	node = malloc(sizeof(t_node));
+	if (!node)
+		return (NULL);
+	node->content = strdup(content);
+	node->type = type;
+	node->head = 0;
+	return (node);
+}
+
 static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 {
 	t_env_var	*env_var;
@@ -69,40 +82,24 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	i += ft_strlen(var_name);
 	after = ft_substr(str, i + 1, ft_strlen(str) - i - 1);
 	free(str);
+	free(var_name);
 	if (before[0] == '\0')
 	{
-		if (env_var)
-		{
-			node->content = ft_strdup(env_var->value);
-			node->type = 1;
-		}
-		else
-			node->content = ft_strdup("");
+		node->content = env_var ? ft_strdup(env_var->value) : ft_strdup("");
+		node->type = env_var ? 1 : 0;
+		free(before);
 	}
 	else
 		node->content = before;
 	if (env_var && before[0] != '\0')
 	{
-		node = malloc(sizeof(t_node));
-		node->content = strdup(env_var->value);
-		node->type = 1;
-		node->head = 0;
-		ft_lstinsert_after(curr_node, ft_lstnew(node));
+		ft_lstinsert_after(curr_node, ft_lstnew(create_node(env_var->value, 1)));
 		curr_node = curr_node->next;
 	}
-	else if (before[0] == '\0')
-		free(before);
 	if (after[0] != '\0')
-	{
-		node = malloc(sizeof(t_node));
-		node->content = after;
-		node->type = 0;
-		node->head = 0;
-		ft_lstinsert_after(curr_node, ft_lstnew(node));
-	}
+		ft_lstinsert_after(curr_node, ft_lstnew(create_node(after, 0)));
 	else
 		free(after);
-	free(var_name);
 	return (1);
 }
 

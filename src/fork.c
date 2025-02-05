@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 15:25:54 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 16:34:06 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
 		close(pipe_fd[1]);
 	}
 	is_func_cmd(pipex, i);
-	if (pipex->cmd_head->cmds[i]->command[0]
-		&& execve(pipex->cmd_head->cmds[i]->command[0],
-			pipex->cmd_head->cmds[i]->command,
-			pipex->cmd_head->main->env->envp) == -1)
+	if (pipex->cmd_head->cmds[i]->command[0])
 	{
-		perror("Error: Failed to execute command");
+		close(pipex->stdin_backup);
+		close(pipex->stdout_backup);
+		if (execve(pipex->cmd_head->cmds[i]->command[0], pipex->cmd_head->cmds[i]->command,
+			pipex->cmd_head->main->env->envp) == -1)
+			perror("Error: Failed to execute command");
 	}
 	clean_pipex(pipex, NULL, 1);
 	free_total(cmd_head->main, cmd_head);
@@ -57,7 +58,7 @@ int	exit_part(t_pipex *pipex, char **args)
 	t_command_head	*cmd_head;
 	int				status;
 	int				i;
-	(void)args;
+
 	i = 0;
 	cmd_head = pipex->cmd_head;
 	status = pipex->cmd_head->main->error;
