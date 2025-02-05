@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 14:50:24 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:55:28 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,13 @@ void			print_block(t_head *head);
 void			exec_cmds(t_command_head *cmd_head);
 
 // open_files.c
-int	open_fds(t_pipex *pipex, int i, int read_pipe);
+int				open_infile(const char *infile);
+int				open_outfile(const char *outfile, int mode);
+void			fake_open_infile(char *file);
+void			fake_open_outfile(char *file, int mode);
+
+// manage_fds.c
+int				open_fds(t_pipex *pipex, int i, int read_pipe);
 
 // get_path.c
 void			get_path(t_pipex *pipex);
@@ -247,7 +253,7 @@ void			init_pipex(t_pipex *pipex, t_command_head *cmd_head);
 int				handle_here_doc(char *delimiter, t_pipex *pipex);
 
 // exec_func.c
-void	is_func_cmd(t_pipex *pipex, int i);
+void				is_func_cmd(t_pipex *pipex, int i);
 
 // env_utils.c
 void				free_env(t_list *env);

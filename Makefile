@@ -7,43 +7,44 @@ TEST_DIR = tester
 OBJ_DIR = obj
 
 MINISHELL_SRCS =	bfr_utils.c \
+					cd_cmd.c \
 					clean_cmd.c \
 					echo_cmd.c \
+					env_cmd.c \
 					env_utils.c \
 					exec_cmd.c \
 					exec_func.c \
 					exec_utils.c \
-					file_tmp.c \
-					fork.c \
-					ft_listnode.c \
-					get_cmds_filename.c \
-					get_cmds.c \
-					get_cmds_utils.c \
-					split_cmds_utils.c \
-					split_cmds.c \
-					get_path.c \
-					pwd_cmd.c \
-					unset_cmd.c \
+					exit_cmd.c \
 					export_add.c \
 					export_add_second.c \
 					export_cmd.c \
 					export_print.c \
-					signal.c \
-					exit_cmd.c \
-					env_cmd.c \
-					cd_cmd.c \
+					file_tmp.c \
+					fork.c \
+					ft_listnode.c \
+					get_cmds.c \
+					get_cmds_filename.c \
+					get_cmds_utils.c \
+					get_path.c \
 					input.c \
+					manage_fds.c \
 					open_files.c \
 					parsing.c \
-					prompt.c \
-					realoc.c \
-					prompt_2.c \
-					reattach_head.c \
 					parsing_error.c \
-					parsing_error_utils.c \
 					parsing_error_brace.c \
+					parsing_error_utils.c \
+					prompt.c \
+					prompt_2.c \
+					pwd_cmd.c \
+					realoc.c \
+					reattach_head.c \
 					replace_var.c \
-					sanitize_input.c
+					sanitize_input.c \
+					signal.c \
+					split_cmds.c \
+					split_cmds_utils.c \
+					unset_cmd.c \
 
 MINISHELL_OBJS = $(addprefix $(OBJ_DIR)/, $(MINISHELL_SRCS:.c=.o))
 

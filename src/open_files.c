@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 15:26:09 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:55:36 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,56 +92,4 @@ void	fake_open_outfile(char *file, int mode)
 		perror("Error: Can't open outfile");
 	if (fd != -1 && close(fd) == -1)
 		perror("Error: Can't close outfile descriptor");
-}
-
-int	open_fds(t_pipex *pipex, int i, int read_pipe)
-{
-	t_list	*lst;
-
-	lst = *pipex->cmd_head->cmds[i]->in_fd;
-	while (lst && pipex->cmd_head->cmds[i]->here_doc == -1)
-	{
-		if (lst->next)
-			fake_open_infile(((t_fd_struct *)lst->content)->fd);
-		else
-		{
-			if (!open_infile(((t_fd_struct *)lst->content)->fd))
-				return (1);
-		}
-		lst = lst->next;
-	}
-	if (!(*pipex->cmd_head->cmds[i]->in_fd) && i != 0
-		&& read_pipe != -1 && pipex->cmd_head->cmds[i]->here_doc == -1)
-	{
-		if (dup2(read_pipe, STDIN_FILENO) == -1)
-		{
-			perror("Error: dup2 failed for read pipe");
-			return (1);
-		}
-	}
-	if (read_pipe != -1)
-		close(read_pipe);
-	if (pipex->cmd_head->cmds[i]->here_doc != -1)
-	{
-		if (dup2(pipex->cmd_head->cmds[i]->here_doc, STDIN_FILENO) == -1)
-		{
-			perror("Error: dup2 failed for here doc");
-			return (1);
-		}
-	}
-	lst = *pipex->cmd_head->cmds[i]->out_fd;
-	while (lst)
-	{
-		if (lst->next)
-			fake_open_outfile(((t_fd_struct *)lst->content)->fd,
-				((t_fd_struct *)lst->content)->mode);
-		else
-		{
-			if (!open_outfile(((t_fd_struct *)lst->content)->fd,
-					((t_fd_struct *)lst->content)->mode))
-				return (1);
-		}
-		lst = lst->next;
-	}
-	return (0);
 }
