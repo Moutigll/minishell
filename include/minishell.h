@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 18:50:01 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:09:29 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 # define MINISHELL_H
 
 # include "../libft/include/libft.h"
-# include "readline/readline.h"
-# include "readline/history.h"
-# include "signal.h"
-# include "stdio.h"
-# include "sys/wait.h"
-# include "errno.h"
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <sys/wait.h>
+# include <errno.h>
 
 # define MALLOC_ERROR 131
 
@@ -206,9 +206,6 @@ int					verif_var(t_head *head, t_main *main, int n);
 // prompt_2.c
 int					return_slash(char *str);
 
-// ft_listnode.c
-void				ft_listnode(t_list **lst_tmp, int tab);
-
 // check_equal.c
 int					check_equal(char *format, t_head *head, int tab);
 
@@ -229,9 +226,6 @@ int					parsing_error(char *command, int etat);
 
 // sanitize.c
 t_head				*sanitize_input(char *input, t_main *main);
-
-// file_tmp.c
-void				print_block(t_head *head);
 
 // exec_cmd.c
 void				exec_cmds(t_command_head *cmd_head);
@@ -272,13 +266,13 @@ void				print_env(t_list *env);
 t_head				*replace_variables(t_head *head, t_main *main);
 
 // replace_var_utils.c
-static t_env_var	*find_env_var_node(t_list *env, const char *var_name);
-static char			*extract_variable(char *str);
-static void			handle_dollar_sign_part2(char *after,
+t_env_var	*find_env_var_node(t_list *env, const char *var_name);
+char			*extract_variable(char *str);
+void			handle_dollar_sign_part2(char *after,
 						t_node *node, t_list *curr_node);
-static void			handle_dollar_sign_part3(char *before,
+void			handle_dollar_sign_part3(char *before,
 						t_node *node, t_list *curr_node, t_env_var *env_var);
-static void			handle_dollar_sign_part4(char *before,
+void			handle_dollar_sign_part4(char *before,
 						t_node *node, t_env_var *env_var);
 
 // realoc.c

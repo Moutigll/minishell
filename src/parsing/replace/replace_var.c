@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 19:50:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:16:55 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	after = ft_substr(str, i + 1, ft_strlen(str) - i - 1);
 	free(str);
 	handle_dollar_sign_part4(before, node, find_env_var_node(env, var_name));
-	handle_dollar_sign_part3(before, node, &curr_node,
+	handle_dollar_sign_part3(before, node, curr_node,
 		find_env_var_node(env, var_name));
 	handle_dollar_sign_part2(after, node, curr_node);
 	return (free(var_name), 1);

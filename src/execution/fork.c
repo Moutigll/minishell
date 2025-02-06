@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 18:43:48 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:18:17 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,7 @@ int	exit_part(t_pipex *pipex, char **args)
 static int	handle_special_cmds(t_pipex *pipex, int i)
 {
 	t_command_struct	*current_cmd;
-	t_command_head		*cmd_head;
 
-	cmd_head = NULL;
 	current_cmd = pipex->cmd_head->cmds[i];
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
 	{

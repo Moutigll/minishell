@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:29:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 19:49:31 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:16:40 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	handle_dollar_sign_part2(char *after,
 }
 
 void	handle_dollar_sign_part3(char *before,
-	t_node *node, t_list **curr_node, t_env_var *env_var)
+	t_node *node, t_list *curr_node, t_env_var *env_var)
 {
 	if (env_var && before[0] != '\0')
 	{
@@ -72,8 +72,8 @@ void	handle_dollar_sign_part3(char *before,
 		node->content = strdup(env_var->value);
 		node->type = 1;
 		node->head = 0;
-		ft_lstinsert_after(*curr_node, ft_lstnew(node));
-		*curr_node = (*curr_node)->next;
+		ft_lstinsert_after(curr_node, ft_lstnew(node));
+		curr_node = curr_node->next;
 	}
 	else if (before[0] == '\0')
 		free(before);

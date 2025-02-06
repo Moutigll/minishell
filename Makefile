@@ -6,64 +6,18 @@ SRC_DIR = src
 TEST_DIR = tester
 OBJ_DIR = obj
 
-MINISHELL_SRCS =	bfr_utils.c \
-					cd_cmd.c \
-					clean_cmd.c \
-					echo_cmd.c \
-					env_cmd.c \
-					env_utils.c \
-					exec_cmd.c \
-					exec_func.c \
-					exec_utils.c \
-					exit_cmd.c \
-					export_add.c \
-					export_add_second.c \
-					export_cmd.c \
-					export_print.c \
-					file_tmp.c \
-					fork.c \
-					ft_listnode.c \
-					get_cmds_part2.c \
-					get_cmds.c \
-					get_cmds_filename.c \
-					get_cmds_utils.c \
-					get_path.c \
-					input.c \
-					manage_fds.c \
-					open_files.c \
-					parsing.c \
-					parsing_error.c \
-					parsing_error_brace.c \
-					parsing_error_utils.c \
-					prompt.c \
-					prompt_2.c \
-					pwd_cmd.c \
-					realoc.c \
-					reattach_head.c \
-					replace_var_utils.c \
-					replace_var.c \
-					sanitize_input.c \
-					signal.c \
-					split_cmds.c \
-					split_cmds_utils.c \
-					unset_cmd.c \
+# Recherche de tous les fichiers .c dans src/ sauf main.c
+MINISHELL_SRCS = $(filter-out $(SRC_DIR)/main.c, $(shell find $(SRC_DIR) -type f -name "*.c"))
+MINISHELL_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(MINISHELL_SRCS))
 
-MINISHELL_OBJS = $(addprefix $(OBJ_DIR)/, $(MINISHELL_SRCS:.c=.o))
+MAIN_SRCS = src/main.c
+MAIN_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(MAIN_SRCS))
 
-MAIN_SRCS = main.c
-MAIN_OBJS = $(addprefix $(OBJ_DIR)/, $(MAIN_SRCS:.c=.o))
+TEST_MAIN_SRCS = tester/main_tester.c
+TEST_MAIN_OBJS = $(patsubst $(TEST_DIR)/%.c, $(OBJ_DIR)/%.o, $(TEST_MAIN_SRCS))
 
-TEST_MAIN_SRCS = main_tester.c
-TEST_MAIN_OBJS = $(addprefix $(OBJ_DIR)/, $(TEST_MAIN_SRCS:.c=.o))
-
-TEST_SRCS = tester_manager.c \
-			tester_block/tester_block.c \
-			tester_quote/tester_quote.c \
-			tester_checkequal/tester_checkequal.c \
-			tester_cmd/tester_cmd.c \
-			tester_echo/tester_echo.c
-
-TEST_OBJS = $(addprefix $(OBJ_DIR)/, $(TEST_SRCS:.c=.o))
+TEST_SRCS = $(shell find $(TEST_DIR) -type f -name "*.c")
+TEST_OBJS = $(patsubst $(TEST_DIR)/%.c, $(OBJ_DIR)/%.o, $(TEST_SRCS))
 
 LIBFT_PATH = libft
 LIBFT = $(LIBFT_PATH)/libft.a

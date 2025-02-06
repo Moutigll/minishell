@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 19:33:21 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:17:38 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,6 @@ void	exec_cmds(t_command_head *cmd_head)
 	rpipe = -1;
 	while (i < pipex->cmd_head->size)
 	{
-		printf("");
 		rpipe = exec_cmd(pipex, rpipe, i);
 		i++;
 	}

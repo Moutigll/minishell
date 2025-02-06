@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 13:54:14 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/06 23:45:47 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,10 @@ static char	*prompt_return(char *path, t_main *main)
 	if (!end_user)
 		exit_on_error(main, MALLOC_ERROR);
 	host = get_next_line(fd);
-	close(fd);
+	if (fd == -1 || host == NULL)
+		host = ft_strdup("(null)");
+	else
+		close(fd);
 	end_host = ft_strcut(host, '.');
 	free(host);
 	return (return_join(end_user, end_host, path, main));

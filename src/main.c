@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 14:51:43 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/06 21:11:55 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,12 @@ static void	copy_env_to_mainstruct(char **env, t_main *main)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_list	*lst_var;
 	t_main	*main;
 
 	(void) argc;
 	(void) argv;
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
-	lst_var = NULL;
 	main = malloc(sizeof(t_main));
 	if (!main)
 		return (MALLOC_ERROR);
