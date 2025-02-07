@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 19:40:44 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:32:24 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,9 @@ int	change_redirect(int *state, char *str)
 
 	j = 0;
 	while (str[j] && str[j] != '>' && str[j] != '<'
-		&& str[j] != ' ' && str[j] != '\t')
+		&& str[j] != ' ' && str[j] != '\t' && str[j] != '|')
 		j++;
-	if ((str[j] == '>' || str[j] == '<') && *state == 1)
+	if ((str[j] == '>' || str[j] == '<' || str[j] == '|') && *state == 1)
 		return (1);
 	i = (int)ft_strlen(str);
 	if (i > 0)

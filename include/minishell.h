@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 19:07:38 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:00:30 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_command_struct
 	t_list	**in_fd;
 	t_list	**out_fd;
 	char	**command;
+	char	*path;
 	int		nb_args;
 	int		here_doc;
 }	t_command_struct;

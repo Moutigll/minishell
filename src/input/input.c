@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 18:30:58 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:53:47 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,6 @@
 
 static void	exit_signal(t_main *main, char *command)
 {
-	int	status;
-
-	if (!main->error)
-		status = main->old_error;
-	else
-		status = main->error;
 	printf("exit\n");
 	free_tab((void **)main->env->envp);
 	free(main->path);
@@ -27,7 +21,7 @@ static void	exit_signal(t_main *main, char *command)
 	free(main->env);
 	free(main);
 	free(command);
-	exit(status);
+	exit(main->error);
 }
 
 static void	get_cmds(t_splitted_cmds *splitted

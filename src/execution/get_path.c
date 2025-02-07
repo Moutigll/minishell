@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 02:26:00 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 21:29:25 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ static char	*check_paths(char **paths, char *cmd)
 		free(path);
 		i++;
 	}
-	ft_putstr_fd("\033[33mWarning: Command not found in PATH: \033[0m", 2);
 	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": command not found\n", 2);
 	return (ft_putstr_fd("\n", 2), free(cmd), NULL);
 }
 

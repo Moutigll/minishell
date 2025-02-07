@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:30:39 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 02:28:45 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 21:24:29 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ t_command_struct	*init_command_struct(t_list *head)
 	cmd_struct->out_fd = malloc(sizeof(t_list **));
 	if (!cmd_struct->out_fd)
 		return (free_cmd_struct(cmd_struct), NULL);
+	cmd_struct->here_doc = -1;
+	cmd_struct->path = NULL;
 	((t_list **)cmd_struct->out_fd)[0] = NULL;
 	return (cmd_struct);
 }
