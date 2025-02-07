@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 19:43:20 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:29:52 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	change_pwd_part2(t_env_var	*var, char **envp, int i, int len)
+static int	change_pwd_var(t_env_var	*var, char **envp, int i, int len)
 {
 	char	*result;
 	char	*tmp;
@@ -48,7 +48,7 @@ int	change_pwd(t_list	*lst, char **envp)
 			if (ft_strncmp(var->name, envp[i], len - 1) == 0
 				&& envp[i][len] == '=')
 			{
-				if (change_pwd_part2(var, envp, i, len) != 0)
+				if (change_pwd_var(var, envp, i, len) != 0)
 					return (MALLOC_ERROR);
 			}
 			i++;
@@ -60,7 +60,7 @@ int	change_pwd(t_list	*lst, char **envp)
 	return (0);
 }
 
-void	check_redirect_n_part2(int *redirect, int count)
+static void	set_redirect(int *redirect, int count)
 {
 	*redirect = 0;
 	if (count > 0)
@@ -92,7 +92,7 @@ int	check_redirect_n(char *str, char c, char vs, int *redirect)
 			count = 0;
 		i++;
 	}
-	check_redirect_n_part2(redirect, count);
+	set_redirect(redirect, count);
 	return (0);
 }
 

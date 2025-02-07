@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:30:39 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 15:52:30 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:28:45 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_fd_list(t_list *lst)
+static void	free_fd_list(t_list *lst)
 {
 	t_fd_struct	*fd_struct;
 	t_list		*tmp;
@@ -48,7 +48,7 @@ void	free_cmd_struct(t_command_struct *cmd)
 	free(cmd);
 }
 
-int	get_nbargs_cmd(t_list *lst)
+static int	get_nbargs_cmd(t_list *lst)
 {
 	int		i;
 	int		size;

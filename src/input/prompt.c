@@ -6,7 +6,7 @@
 /*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:41:44 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/06 23:45:47 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 00:15:18 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,6 @@ static char	*verif_solo(char *path, t_main *main)
 	return (path);
 }
 
-static char	*return_join(char *str1, char *str2, char *path, t_main *main)
-{
-	char	*str_final;
-	char	*dest;
-
-	if (ft_strcmp((const char *)path, (const char *)"/home") == 0
-		|| return_slash(path) <= 1)
-		str_final = ft_strjoin(str2, ":");
-	else
-		str_final = ft_strjoin(str2, ":~");
-	if (!str_final)
-		exit_on_error(main, MALLOC_ERROR);
-	dest = ft_strjoin(str1, str_final);
-	if (!dest)
-		exit_on_error(main, MALLOC_ERROR);
-	free(str1);
-	free(str2);
-	free(str_final);
-	return (dest);
-}
-
 static char	*prompt_return(char *path, t_main *main)
 {
 	char	*end_user;
@@ -74,7 +53,9 @@ static char	*prompt_return(char *path, t_main *main)
 		close(fd);
 	end_host = ft_strcut(host, '.');
 	free(host);
-	return (return_join(end_user, end_host, path, main));
+	host = ft_strcut(end_host, '\n');
+	free(end_host);
+	return (return_join(end_user, host, path, main));
 }
 
 static char	*remove_start_prompt(char *path, t_main *main)
@@ -119,7 +100,7 @@ char	*read_cmd(t_main *main)
 	end_path = ft_strjoin(path, "$ ");
 	if (!end_path)
 		exit_on_error(main, MALLOC_ERROR);
-	if (return_slash(end_path) >= 2)
+	if (count_slash(path) > 1)
 		end_path = remove_start_prompt(end_path, main);
 	end_host = prompt_return(path, main);
 	print_prompt = ft_strjoin(end_host, end_path);

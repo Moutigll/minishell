@@ -2,11 +2,4 @@
 *.o
 *.out
 minishell_tester
-ls
-&&
-rm
-tmp_date
-tmp_ls
-tmp_ls1
-tmp_ls2
 fuzzing_errors.log

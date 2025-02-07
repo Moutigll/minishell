@@ -6,7 +6,7 @@
 /*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:29:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/06 21:16:40 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 01:08:32 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*extract_variable(char *str)
 	return (ft_substr(str, is_bracket, i - is_bracket));
 }
 
-void	handle_dollar_sign_part2(char *after,
+void	handle_content_after_var(char *after,
 	t_node *node, t_list *curr_node)
 {
 	if (after[0] != '\0')
@@ -63,7 +63,7 @@ void	handle_dollar_sign_part2(char *after,
 		free(after);
 }
 
-void	handle_dollar_sign_part3(char *before,
+void	handle_var_new_block(char *before,
 	t_node *node, t_list *curr_node, t_env_var *env_var)
 {
 	if (env_var && before[0] != '\0')
@@ -79,7 +79,7 @@ void	handle_dollar_sign_part3(char *before,
 		free(before);
 }
 
-void	handle_dollar_sign_part4(char *before,
+void	handle_var_is_first(char *before,
 	t_node *node, t_env_var *env_var)
 {
 	if (before[0] == '\0')

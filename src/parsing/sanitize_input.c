@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sanitize_input.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:21:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/03 14:49:26 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:31:17 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	add_block(int type, int ishead, char *content, t_head *head)
+static void	add_block(int type, int ishead, char *content, t_head *head)
 {
 	t_list	*node;
 	t_node	*node_content;

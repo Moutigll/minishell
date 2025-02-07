@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   reattach_head.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 00:12:28 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 14:34:29 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:31:07 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	print_head(t_list *head);
-
-int	is_quote_node(t_node *node)
+static int	is_quote_node(t_node *node)
 {
 	if (node->type == 0 || node->type == 1)
 		return (1);
@@ -56,19 +54,4 @@ t_head	*reattach_head(t_head *head)
 			current_node = current_node->next;
 	}
 	return (head);
-}
-
-/*-----------DEBUG--------*/
-
-void	print_head(t_list *head)
-{
-	t_node	*content;
-
-	while (head)
-	{
-		content = head->content;
-		printf("Node: type:%d | ishead: %d | content: \"%s\"\n",
-			content->type, content->head, content->content);
-		head = head->next;
-	}
 }

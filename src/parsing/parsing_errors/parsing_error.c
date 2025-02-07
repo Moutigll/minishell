@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 19:43:13 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 01:17:55 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,6 @@ static int	check_redirect(t_list *lst)
 	return (0);
 }
 
-static t_node	*last_block(t_list *lst)
-{
-	t_node	*node;
-
-	if (!lst)
-		return (NULL);
-	while (lst)
-	{
-		node = lst->content;
-		if (!lst->next)
-			break ;
-		lst = lst->next;
-	}
-	return (node);
-}
-
 static int	last_char(char *content, char c)
 {
 	int	len;
@@ -90,7 +74,7 @@ int	parse_error(t_head *head, t_main *main)
 	t_list	*lst;
 
 	lst = head->head;
-	last_content = last_block(lst);
+	last_content = ft_lstlast(head->head)->content;
 	if (head->head != NULL
 		&& ((t_node *)head->head->content)->content[0] == '|')
 	{

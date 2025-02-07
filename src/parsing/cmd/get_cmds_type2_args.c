@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_cmds_part2.c                                   :+:      :+:    :+:   */
+/*   get_cmds_type2_args.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:40:25 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 18:41:23 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:27:44 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	find_smallest(char *str, char c)
+static int	find_smallest(char *str, char c)
 {
 	char	smallest_char;
 	int		smallest;
@@ -83,7 +83,7 @@ int	manage_type01(t_node *content, t_command_struct *cmd_struct, int *i)
 	return (1);
 }
 
-static int	get_start_type2_part2(int *i, t_command_struct *cmd, int n)
+static int	create_type2_new_arg(int *i, t_command_struct *cmd, int n)
 {
 	if (n == 0)
 	{
@@ -107,7 +107,7 @@ int	get_start_type2(t_command_struct *cmd,
 
 	str = content->content;
 	if (content->head && *j == 0 && str[*j] != '<' && str[*j] != '>')
-		if (get_start_type2_part2(i, cmd, 0) == 0)
+		if (create_type2_new_arg(i, cmd, 0) == 0)
 			return (0);
 	start = *j;
 	while (str[*j] && str[*j] != '<' && str[*j] != '>')
@@ -119,7 +119,7 @@ int	get_start_type2(t_command_struct *cmd,
 			return (free_cmd_struct(cmd), 0);
 		if (*i == -1)
 		{
-			get_start_type2_part2(i, cmd, 1);
+			create_type2_new_arg(i, cmd, 1);
 			if (!cmd->command[*i])
 				return (free_cmd_struct(cmd), 0);
 		}

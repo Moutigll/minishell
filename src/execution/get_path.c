@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 16:02:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:26:00 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	**get_env_paths(char **envp)
+static char	**get_env_paths(char **envp)
 {
 	int		index;
 
@@ -27,7 +27,7 @@ char	**get_env_paths(char **envp)
 	return (NULL);
 }
 
-char	*check_paths(char **paths, char *cmd)
+static char	*check_paths(char **paths, char *cmd)
 {
 	char	*path;
 	char	*tmp;
@@ -56,7 +56,7 @@ char	*check_paths(char **paths, char *cmd)
 	return (ft_putstr_fd("\n", 2), free(cmd), NULL);
 }
 
-void	resolve_command(t_command_struct *cmd, char **paths)
+static void	resolve_command(t_command_struct *cmd, char **paths)
 {
 	if (!cmd->command || ft_strlen(cmd->command[0]) == 0)
 	{

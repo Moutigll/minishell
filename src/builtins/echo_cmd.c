@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 13:41:57 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 00:19:18 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	echo_command(char **args)
 
 	block = 1;
 	flag = 0;
-	if (args[block] && check_flag(args[block]) == 0)
+	while (args[block] && check_flag(args[block]) == 0)
 	{
 		block++;
 		flag = 1;

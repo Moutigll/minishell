@@ -6,55 +6,26 @@
 /*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/06 21:17:38 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 01:41:06 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
+void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 {
-	t_fd_struct	*content;
-	t_list		*lst;
-
-	lst = *cmd->in_fd;
-	cmd->here_doc = -1;
-	while (lst)
-	{
-		content = lst->content;
-		if (content->mode == 1)
-		{
-			if (g_status == -1)
-				return (-1);
-			cmd->here_doc = handle_here_doc(content->fd, pipex);
-			if (cmd->here_doc == -1)
-			{
-				pipex->cmd_head->main->error = 130;
-				g_status = 0;
-				return (-1);
-			}
-			if (lst->next)
-				close(cmd->here_doc);
-		}
-		lst = lst->next;
-	}
-	return (0);
-}
-
-static int	check_here_doc(t_pipex	*pipex)
-{
-	t_command_struct	**cmds;
-	int					i;
-
-	i = 0;
-	cmds = pipex->cmd_head->cmds;
-	while (i < pipex->cmd_head->size)
-	{
-		if (get_here_doc(cmds[i], pipex) == -1)
-			return (-1);
-		i++;
-	}
-	return (0);
+	pipex->cmd_head->main->error = exit_status;
+	free(pipex->pid_tab);
+	while (pipex->cmd_head->size--)
+		free_cmd_struct(pipex->cmd_head->cmds[pipex->cmd_head->size]);
+	free(pipex->cmd_head->cmds);
+	dup2(pipex->stdin_backup, STDIN_FILENO);
+	dup2(pipex->stdout_backup, STDOUT_FILENO);
+	close(pipex->stdin_backup);
+	close(pipex->stdout_backup);
+	if (error)
+		perror(error);
+	free(pipex);
 }
 
 static t_pipex	*init_and_prepare_pipex(t_command_head *cmd_head)

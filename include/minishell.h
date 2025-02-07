@@ -6,7 +6,7 @@
 /*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/06 21:09:29 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 02:22:18 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,6 @@ typedef struct s_head
 	int			size;
 }	t_head;
 
-typedef struct s_count
-{
-	int			i;
-	int			j;
-}	t_count;
-
 typedef struct s_main
 {
 	t_envirronement	*env;
@@ -48,6 +42,12 @@ typedef struct s_main
 	t_head			*head;
 	t_command_head	*cmd_head;
 }	t_main;
+
+typedef struct s_count
+{
+	int			i;
+	int			j;
+}	t_count;
 
 typedef struct s_node
 {
@@ -130,198 +130,175 @@ typedef struct s_fd_struct
 # define ERR_QUOTE "Error\nQuote open !"
 # define ERR_HEREDOC "\nbash: warning: here-document finished (wanted `%s')\n"
 
-// main.c
+//main.c
 void				exit_on_error(t_main *main, int error);
 void				error(char *message, int etat);
-void				print_list(t_list *lst);
 
-// env_cmd.c
-int					env_cmd(t_list *lst, char **args);
-void				env_cmd_direct(t_main *main);
+// utils
 
-// export_add.c
-int					check_type_export(char *str, t_list *lst);
-int					check_quote_key(char *str);
+	//utils.c
+char				**ft_realoc_ptr(char **tab, char *str);
+void				update_env(t_envirronement *env);
 
-// parsing.c
-int					parsing_error(char *command, int etat);
+	//bfr_utils.c
+void				a5h7j(void);
+void				z3p2d(void);
+void				k9t6q(void);
+void				x1m3u(void);
+void				v8b4y(void);
 
-// parsing_error_brace.c
-int					parse_error(t_head *head, t_main *main);
-int					check_pipe(char *str, int *statement);
-int					check_brace(char *str, int type);
+// input
 
-// export_print.c
-t_list				*find_min_node(t_list *lst, t_list *visited);
-int					print_ascii_sorted(t_list *lst);
+	//input.c
+void				while_input(t_main *main);
 
-// export_add_second.c
-t_env_var			*new_var(char *key, char *value, int exported);
-char				*return_value(char *str);
-int					check_first_char(char c);
-char				*return_key(char *str);
+	//prompt.c
+char				*read_cmd(t_main *main);
 
-// parsing_error_utils.c
-int					change_pwd_part2(t_env_var	*var,
-						char **envp, int i, int len);
-int					check_redirect_n(char *str, char c, char vs, int *redirect);
-void				check_redirect_n_part2(int *redirect, int count);
-int					change_redirect(int *state, char *str);
-int					change_pwd(t_list	*lst, char **envp);
+	//prompt_utils.c
+int					count_slash(char *str);
+char				*return_join(char *str1,
+						char *str2, char *path, t_main *main);
 
-// export_cmd.c
-int					add_var(t_list *lst, t_list *var);
-int					find_block(t_head *head,
-						int *n, char **content_block, int boolean);
-int					export_cmd(char **args, t_main *main);
-t_head				*return_head(t_head *head, int i);
-t_list				*return_lst(t_head *head, int i);
-
-// signal.c
-void				signal_handler_action(int sig,
-						siginfo_t *info, void *context);
+	//signal.c
 void				disable_ctrl_backslash_echo(void);
 void				restore_ctrl_backslash_echo(void);
 void				signal_handler_cut(int sig);
 void				signal_handler(int sig);
 
-// pwd_cmd.c
-int					pwd_cmd(char **args, t_envirronement *env);
+// parsing
 
-// fd_take.c
-char				**return_fd(char *content, char *c);
-
-// exit_cmd.c
-void				free_total(t_main *main, t_command_head *head_main);
-void				exit_cmd(t_head *head, t_main *main);
-void				free_head(t_head *head);
-
-// cd_cmd.c
-char				*get_env_value(char **env, const char *key);
-int					cd_cmd(t_envirronement *env_struct, char **args);
-
-// detect_var.c
-int					verif_var(t_head *head, t_main *main, int n);
-
-// prompt_2.c
-int					return_slash(char *str);
-
-// check_equal.c
-int					check_equal(char *format, t_head *head, int tab);
-
-// decomp.c
-t_command_head		*return_main(t_head *head, t_main *main);
-
-// echo_cmd.c
-int					echo_command(char **args);
-
-// input.c
-void				while_input(t_main *main);
-
-// prompt.c
-char				*read_cmd(t_main *main);
-
-// parsing.c
-int					parsing_error(char *command, int etat);
-
-// sanitize.c
+	//sanitize.c
 t_head				*sanitize_input(char *input, t_main *main);
 
-// exec_cmd.c
-void				exec_cmds(t_command_head *cmd_head);
+	//parsing.c
+int					parsing_error(char *command, int etat);
 
-// open_files.c
-int					open_infile(const char *infile);
-int					open_outfile(const char *outfile, int mode);
-void				fake_open_infile(char *file);
-void				fake_open_outfile(char *file, int mode);
+	//parsing_error_brace.c
+int					parse_error(t_head *head, t_main *main);
+int					check_pipe(char *str, int *statement);
+int					check_brace(char *str, int type);
 
-// manage_fds.c
-int					open_fds(t_pipex *pipex, int i, int read_pipe);
+	//parsing_error_utils.c
+int					check_redirect_n(char *str, char c, char vs, int *redirect);
+int					change_redirect(int *state, char *str);
+int					change_pwd(t_list	*lst, char **envp);
 
-// get_path.c
-void				get_path(t_pipex *pipex);
-
-// fork.c
-int					exit_part(t_pipex *pipex, char **args);
-int					exec_cmd(t_pipex *pipex, int read_pipe, int i);
-
-// exec_utils.c
-void				clean_pipex(t_pipex *pipex, char *error, int exit_status);
-void				init_pipex(t_pipex *pipex, t_command_head *cmd_head);
-int					handle_here_doc(char *delimiter, t_pipex *pipex);
-
-// exec_func.c
-void				is_func_cmd(t_pipex *pipex, int i);
-int					handle_special_cmds_part2(t_pipex *pipex,
-						t_command_struct *current_cmd);
-
-// env_utils.c
-void				free_env(t_list *env);
-int					get_env(char *command, int i);
-t_list				*create_env_list(char **env);
-void				print_env(t_list *env);
-
-// replace_var.c
+	//replace_var.c
 t_head				*replace_variables(t_head *head, t_main *main);
 
-// replace_var_utils.c
-t_env_var	*find_env_var_node(t_list *env, const char *var_name);
-char			*extract_variable(char *str);
-void			handle_dollar_sign_part2(char *after,
+	//replace_var_utils.c
+t_env_var			*find_env_var_node(t_list *env, const char *var_name);
+char				*extract_variable(char *str);
+void				handle_content_after_var(char *after,
 						t_node *node, t_list *curr_node);
-void			handle_dollar_sign_part3(char *before,
+void				handle_var_new_block(char *before,
 						t_node *node, t_list *curr_node, t_env_var *env_var);
-void			handle_dollar_sign_part4(char *before,
+void				handle_var_is_first(char *before,
 						t_node *node, t_env_var *env_var);
 
-// realoc.c
-char				**ft_realoc_ptr(char **tab, char *str);
-void				update_env(t_envirronement *env);
-
-// reattach_head.c
+	//reattach_head.c
 t_head				*reattach_head(t_head *head);
-void				print_head(t_list *head);
 
-// split_cmds.c
+	//split_cmds.c
 t_splitted_cmds		*split_head(t_head *head);
 
-// split_cmds_utils.c
+	//split_cmds_utils.c
 int					get_nb_head_cmds(t_head *head);
 int					tab_new_head(t_head **tab, int i);
 int					add_back_copy(t_list **head, t_list *lst);
 int					add_before_pipe(t_list **head, int ishead, char *content);
 
-// clean_cmd.c
-void				cleant_tab_cmd(t_head **tab);
+	//get_cmds.c
+t_command_struct	*fill_cmd(t_head *head);
 
-// get_cmds_part2.c
+	//get_cmds_utils.c
+void				free_cmd_struct(t_command_struct *cmd);
+t_command_struct	*init_command_struct(t_list *head);
+int					is_in_or_out(char *str,
+						t_list *list, t_fd_struct *fd_struct);
+
+	//get_cmds_type2_args.c
 void				check(char *str);
 int					manage_type01(t_node *content,
 						t_command_struct *cmd_struct, int *i);
 int					get_start_type2(t_command_struct *cmd,
 						t_node *content, int *i, int *j);
 
-// get_cmds.c
-t_command_struct	*fill_cmd(t_head *head);
-
-// get_cmds_utils.c
-void				free_cmd_struct(t_command_struct *cmd);
-t_command_struct	*init_command_struct(t_list *head);
-int					is_in_or_out(char *str,
-						t_list *list, t_fd_struct *fd_struct);
-
-// get_cmds_filename.c
+	//get_cmds_filename.c
 char				*get_filename(t_list **lst, int *j);
-
 int					unset_cmd(t_list *lst, char **args, t_main *main);
 
-// bfr_utils.c
-void				a5h7j(void);
-void				z3p2d(void);
-void				k9t6q(void);
-void				x1m3u(void);
-void				v8b4y(void);
+// execution
+
+	//manage_fds.c
+int					open_fds(t_pipex *pipex, int i, int read_pipe);
+
+	//open_files.c
+int					open_infile(const char *infile);
+int					open_outfile(const char *outfile, int mode);
+void				fake_open_infile(char *file);
+void				fake_open_outfile(char *file, int mode);
+
+	//exec_cmd.c
+void				exec_cmds(t_command_head *cmd_head);
+void				clean_pipex(t_pipex *pipex, char *error, int exit_status);
+
+	//get_path.c
+void				get_path(t_pipex *pipex);
+
+	//here_doc.c
+int					check_here_doc(t_pipex *pipex);
+
+	//fork.c
+int					exit_part(t_pipex *pipex, char **args);
+int					exec_cmd(t_pipex *pipex, int read_pipe, int i);
+
+	//exec_func.c
+void				is_func_cmd(t_pipex *pipex, int i);
+int					handle_special_cmds_func(t_pipex *pipex,
+						t_command_struct *current_cmd);
+
+// builtins
+
+	//export_add.c
+int					check_type_export(char *str, t_list *lst);
+int					check_quote_key(char *str);
+
+	//export_add_second.c
+t_env_var			*new_var(char *key, char *value, int exported);
+char				*return_value(char *str);
+char				*return_key(char *str);
+
+	//export_cmd.c
+int					add_var(t_list *lst, t_list *var);
+int					export_cmd(char **args, t_main *main);
+
+	//export_print.c
+int					print_ascii_sorted(t_list *lst);
+
+	//cd_cmd.c
+char				*get_env_value(char **env, const char *key);
+int					cd_cmd(t_envirronement *env_struct, char **args);
+
+	//echo_cmd.c
+int					echo_command(char **args);
+
+	//env_cmd.c
+int					env_cmd(t_list *lst, char **args);
+
+	//env_utils.c
+void				free_env(t_list *env);
+int					get_env(char *command, int i);
+t_list				*create_env_list(char **env);
+
+	//exit_cmd.c
+void				free_total(t_main *main, t_command_head *head_main);
+void				exit_cmd(t_head *head, t_main *main);
+void				free_head(t_head *head);
+
+	//pwd_cmd.c
+int					pwd_cmd(char **args, t_envirronement *env);
 
 # define B30 "\n\033[38;5;211m     ,(###%\
 ####%&%#############(#(#(####(((((\

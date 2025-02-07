@@ -6,7 +6,7 @@
 /*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/06 21:16:55 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 01:08:44 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	i += ft_strlen(var_name);
 	after = ft_substr(str, i + 1, ft_strlen(str) - i - 1);
 	free(str);
-	handle_dollar_sign_part4(before, node, find_env_var_node(env, var_name));
-	handle_dollar_sign_part3(before, node, curr_node,
+	handle_var_is_first(before, node, find_env_var_node(env, var_name));
+	handle_var_new_block(before, node, curr_node,
 		find_env_var_node(env, var_name));
-	handle_dollar_sign_part2(after, node, curr_node);
+	handle_content_after_var(after, node, curr_node);
 	return (free(var_name), 1);
 }
 
-static void	string_to_var_part2(char **str,
+static void	replace_error_code(char **str,
 	t_main *main, t_list *current_node, int *i)
 {
 	char	*error;
@@ -51,7 +51,7 @@ static void	string_to_var_part2(char **str,
 	free(error);
 }
 
-static void	string_to_var_part3(char *str, t_list *current_node)
+static void	remove_empty_var(char *str, t_list *current_node)
 {
 	char	*cpy;
 
@@ -81,9 +81,9 @@ static int	string_to_var(t_main *main, t_list *current_node)
 		else if (str[i] == '$' && str[i + 1] == '\0' && ft_strlen(str) > 1
 			&& current_node->next
 			&& ((t_node *)current_node->next->content)->type != 1)
-			string_to_var_part3(str, current_node);
+			remove_empty_var(str, current_node);
 		else if (str[i] == '$' && str[i + 1] == '?')
-			string_to_var_part2(&str, main, current_node, &i);
+			replace_error_code(&str, main, current_node, &i);
 		else
 			i++;
 		if (str[i] == '\0' || str[i + 1] == '\0')

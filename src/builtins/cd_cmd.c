@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 15:43:11 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:23:08 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	update_envlist(t_list *env, char *name, char *value)
+static void	update_envlist(t_list *env, char *name, char *value)
 {
 	t_env_var	*env_var;
 
@@ -47,7 +47,7 @@ char	*get_env_value(char **env, const char *key)
 	return (NULL);
 }
 
-char	*resolve_path(char **env, char *arg)
+static char	*resolve_path(char **env, char *arg)
 {
 	char	*path;
 

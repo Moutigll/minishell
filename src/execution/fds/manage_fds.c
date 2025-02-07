@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   manage_fds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:52:21 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 23:19:45 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:38:29 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	open_infiles(t_pipex *pipex, int i, int read_pipe)
+static int	open_infiles(t_pipex *pipex, int i, int read_pipe)
 {
 	t_list	*lst;
 
@@ -36,23 +36,14 @@ int	open_infiles(t_pipex *pipex, int i, int read_pipe)
 			perror("Error: dup2 failed for read pipe");
 			return (1);
 		}
-		close(pipex->cmd_head->cmds[i]->here_doc);
 	}
 	return (0);
 }
 
-int	open_outfiles(t_pipex *pipex, int i)
+static int	open_outfiles(t_pipex *pipex, int i)
 {
 	t_list	*lst;
 
-	if (pipex->cmd_head->cmds[i]->here_doc != -1)
-	{
-		if (dup2(pipex->cmd_head->cmds[i]->here_doc, STDIN_FILENO) == -1)
-		{
-			perror("Error: dup2 failed for here doc");
-			return (1);
-		}
-	}
 	lst = *pipex->cmd_head->cmds[i]->out_fd;
 	while (lst)
 	{
@@ -76,6 +67,15 @@ int	open_fds(t_pipex *pipex, int i, int read_pipe)
 		return (1);
 	if (read_pipe != -1)
 		close(read_pipe);
+	if (pipex->cmd_head->cmds[i]->here_doc != -1)
+	{
+		if (dup2(pipex->cmd_head->cmds[i]->here_doc, STDIN_FILENO) == -1)
+		{
+			perror("Error: dup2 failed for here doc");
+			return (1);
+		}
+		close(pipex->cmd_head->cmds[i]->here_doc);
+	}
 	if (open_outfiles(pipex, i))
 		return (1);
 	return (0);

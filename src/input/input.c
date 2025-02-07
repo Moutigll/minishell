@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 19:06:53 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 00:34:36 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	print_list(t_list *lst)
-{
-	while (lst)
-	{
-		printf("|%s|\n", (char *)lst->content);
-		if (!lst->next)
-			break ;
-		lst = lst->next;
-	}
-}
 
 static void	exit_signal(t_main *main, char *command)
 {
@@ -35,7 +24,7 @@ static void	exit_signal(t_main *main, char *command)
 	exit(0);
 }
 
-static void	while_input_part3(t_splitted_cmds *splitted
+static void	get_cmds(t_splitted_cmds *splitted
 	, t_command_head *cmd_head, t_main *main)
 {
 	int	i;
@@ -55,7 +44,7 @@ static void	while_input_part3(t_splitted_cmds *splitted
 	free(cmd_head);
 }
 
-static void	while_input_part2(char *command, t_main *main)
+static void	tokenize_input(char *command, t_main *main)
 {
 	t_splitted_cmds	*splitted;
 	t_command_head	*cmd_head;
@@ -74,7 +63,7 @@ static void	while_input_part2(char *command, t_main *main)
 				return ;
 			cmd_head->size = splitted->size;
 			cmd_head->cmds = malloc(sizeof(t_command_struct) * splitted->size);
-			while_input_part3(splitted, cmd_head, main);
+			get_cmds(splitted, cmd_head, main);
 		}
 		else
 			free_head(head);
@@ -104,7 +93,7 @@ void	while_input(t_main *main)
 			exit_signal(main, command);
 		add_history(command);
 		if (parsing_error(command, 0))
-			while_input_part2(command, main);
+			tokenize_input(command, main);
 		free(command);
 	}
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 19:54:04 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:24:46 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	exec_func_c(char *command, char **args, t_pipex *pipex)
+static void	exec_func_c(char *command, char **args, t_pipex *pipex)
 {
 	if (!ft_strcmp(command, "echo"))
 		pipex->cmd_head->main->error = echo_command(args);
@@ -65,7 +65,7 @@ void	is_func_cmd(t_pipex *pipex, int i)
 	}
 }
 
-int	handle_special_cmds_part2(t_pipex *pipex,
+int	handle_special_cmds_func(t_pipex *pipex,
 	t_command_struct *current_cmd)
 {
 	if (current_cmd->command[0] == NULL)
@@ -85,6 +85,11 @@ int	handle_special_cmds_part2(t_pipex *pipex,
 	else if (ft_strcmp("exit", current_cmd->command[0]) == 0)
 		pipex->cmd_head->main->error = exit_part(pipex,
 				current_cmd->command);
+	else if (ft_strcmp("echo", current_cmd->command[0]) == 0)
+		pipex->cmd_head->main->error = echo_command(current_cmd->command);
+	else if (ft_strcmp("pwd", current_cmd->command[0]) == 0)
+		pipex->cmd_head->main->error = pwd_cmd(current_cmd->command,
+				pipex->cmd_head->main->env);
 	else
 		return (0);
 	return (1);

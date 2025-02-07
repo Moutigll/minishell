@@ -6,7 +6,7 @@
 /*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:50:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/06 21:14:34 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 01:27:57 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,21 +105,4 @@ t_list	*create_env_list(char **env)
 		i++;
 	}
 	return (lst);
-}
-
-void	print_env(t_list *env)
-{
-	t_list		*tmp;
-	t_env_var	*env_var;
-
-	tmp = env;
-	printf("Printing env:\n");
-	while (tmp)
-	{
-		env_var = tmp->content;
-		printf("name: %s\n", env_var->name);
-		printf("value: %s\n", env_var->value);
-		printf("exported: %d\n", env_var->exported);
-		tmp = tmp->next;
-	}
 }

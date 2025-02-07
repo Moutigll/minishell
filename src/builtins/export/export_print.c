@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export_print.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:21:50 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/03 12:20:27 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:22:37 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	is_node_visited(t_list *visited, t_list *node)
+static int	is_node_visited(t_list *visited, t_list *node)
 {
 	while (visited)
 	{
@@ -23,7 +23,7 @@ int	is_node_visited(t_list *visited, t_list *node)
 	return (0);
 }
 
-t_list	*find_min_node(t_list *lst, t_list *visited)
+static t_list	*find_min_node(t_list *lst, t_list *visited)
 {
 	t_list		*min_node;
 	t_env_var	*tmp;

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds_filename.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:34:54 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/01/29 17:59:17 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:27:35 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_filename_part1(t_list **lst, t_node **node, int *j, int *start)
+static char	*check_first_node(t_list **lst, t_node **node, int *j, int *start)
 {
 	char	*filename;
 
@@ -41,7 +41,7 @@ char	*get_filename_part1(t_list **lst, t_node **node, int *j, int *start)
 	return (filename);
 }
 
-char	*get_filename_part2(t_list **lst, t_node *node, int *j, char *filename)
+static char	*get_remaining_nodes(t_list **lst, t_node *node, int *j, char *filename)
 {
 	while ((*lst))
 	{
@@ -77,7 +77,7 @@ char	*get_filename(t_list **lst, int *j)
 	int		start;
 
 	start = *j;
-	filename = get_filename_part1(lst, &node, j, &start);
+	filename = check_first_node(lst, &node, j, &start);
 	if (!filename || (node->content[*j]
 			&& (node->content[*j] == '<' || node->content[*j] == '>')))
 		return (filename);
@@ -91,5 +91,5 @@ char	*get_filename(t_list **lst, int *j)
 		return (filename);
 	}
 	*j = 0;
-	return (get_filename_part2(lst, node, j, filename));
+	return (get_remaining_nodes(lst, node, j, filename));
 }

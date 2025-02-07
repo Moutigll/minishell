@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 19:41:14 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 01:33:23 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	check_type_export(char *str, t_list *lst)
 	while (str[i])
 		if (str[i++] == '=')
 			count++;
-	if (check_first_char(str[0]) == 0 || check_quote_key(str) == 1)
+	if ((!ft_isalpha(str[0]) && str[0] != '_') || check_quote_key(str) == 1)
 	{
 		printf("`%s' not a valid identifier\n", str);
 		return (1);

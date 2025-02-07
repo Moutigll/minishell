@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_add_second.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:25:15 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/04 19:42:58 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 01:33:34 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,6 @@ int	check_quote_key(char *str)
 			return (1);
 		i++;
 	}
-	return (0);
-}
-
-int	check_first_char(char c)
-{
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	if (c == '_')
-		return (1);
 	return (0);
 }
 

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:31:37 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 18:41:15 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 02:29:13 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_redirection(t_command_struct *cmd_struct,
+static int	handle_redirection(t_command_struct *cmd_struct,
 	t_node **content, t_list **lst, int *j)
 {
 	t_fd_struct	*fd_struct;
@@ -36,7 +36,7 @@ int	handle_redirection(t_command_struct *cmd_struct,
 	return (1);
 }
 
-int	fill_cmd_part2(t_list **lst, int *j, t_node *content)
+static int	is_redirection(t_list **lst, int *j, t_node *content)
 {
 	if (!content->content[*j])
 	{
@@ -78,7 +78,7 @@ t_command_struct	*fill_cmd(t_head *head)
 		{
 			if (!get_start_type2(cmd_struct, content, &count->i, &count->j))
 				return (free(count), NULL);
-			if (fill_cmd_part2(&lst, &count->j, content) == 0)
+			if (!is_redirection(&lst, &count->j, content))
 				continue ;
 			if (!handle_redirection(cmd_struct, &content, &lst, &count->j))
 				return (free(count), NULL);

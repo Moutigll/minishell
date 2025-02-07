@@ -6,7 +6,7 @@
 /*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/06 21:18:17 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 02:25:27 by moutig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static int	handle_child_process_part2(t_pipex *pipex, int i, int *pipe_fd)
 	return (0);
 }
 
-void	handle_child_process(t_pipex *pipex, int *pipe_fd, int read_pipe, int i)
+static void	handle_child_process(t_pipex *pipex,
+		int *pipe_fd, int read_pipe, int i)
 {
 	t_command_head	*cmd_head;
 
@@ -96,7 +97,7 @@ static int	handle_special_cmds(t_pipex *pipex, int i)
 	current_cmd = pipex->cmd_head->cmds[i];
 	if (current_cmd->command != NULL && pipex->cmd_head->size == 1)
 	{
-		if (handle_special_cmds_part2(pipex, current_cmd) == 0)
+		if (handle_special_cmds_func(pipex, current_cmd) == 0)
 			return (0);
 	}
 	else
