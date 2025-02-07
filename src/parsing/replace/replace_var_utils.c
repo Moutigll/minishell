@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:29:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 01:08:32 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:50:19 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*extract_variable(char *str)
 }
 
 void	handle_content_after_var(char *after,
-	t_node *node, t_list *curr_node)
+	t_node *node, t_list **curr_node)
 {
 	if (after[0] != '\0')
 	{
@@ -57,14 +57,15 @@ void	handle_content_after_var(char *after,
 		node->content = after;
 		node->type = 0;
 		node->head = 0;
-		ft_lstinsert_after(curr_node, ft_lstnew(node));
+		ft_lstinsert_after(*curr_node, ft_lstnew(node));
+		*curr_node = (*curr_node)->next;
 	}
 	else
 		free(after);
 }
 
 void	handle_var_new_block(char *before,
-	t_node *node, t_list *curr_node, t_env_var *env_var)
+	t_node *node, t_list **curr_node, t_env_var *env_var)
 {
 	if (env_var && before[0] != '\0')
 	{
@@ -72,8 +73,8 @@ void	handle_var_new_block(char *before,
 		node->content = strdup(env_var->value);
 		node->type = 1;
 		node->head = 0;
-		ft_lstinsert_after(curr_node, ft_lstnew(node));
-		curr_node = curr_node->next;
+		ft_lstinsert_after(*curr_node, ft_lstnew(node));
+		*curr_node = (*curr_node)->next;
 	}
 	else if (before[0] == '\0')
 		free(before);

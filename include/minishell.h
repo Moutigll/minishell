@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 02:22:18 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 18:25:08 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_main
 {
 	t_envirronement	*env;
 	char			**g_env;
+	int				old_error;
 	int				error;
 	char			*path;
 	t_head			*head;
@@ -191,9 +192,9 @@ t_head				*replace_variables(t_head *head, t_main *main);
 t_env_var			*find_env_var_node(t_list *env, const char *var_name);
 char				*extract_variable(char *str);
 void				handle_content_after_var(char *after,
-						t_node *node, t_list *curr_node);
+						t_node *node, t_list **curr_node);
 void				handle_var_new_block(char *before,
-						t_node *node, t_list *curr_node, t_env_var *env_var);
+						t_node *node, t_list **curr_node, t_env_var *env_var);
 void				handle_var_is_first(char *before,
 						t_node *node, t_env_var *env_var);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_files.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/05 23:19:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:18:33 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ int	open_infile(const char *infile)
 
 	if (access(infile, R_OK) == -1)
 	{
-		perror("Error: Infile is not readable");
+		perror(infile);
 		return (0);
 	}
 	infile_fd = open(infile, O_RDONLY);
 	if (infile_fd == -1)
 	{
-		perror("Error: Can't open infile");
+		perror(infile);
 		return (0);
 	}
 	if (dup2(infile_fd, STDIN_FILENO) == -1)
@@ -50,7 +50,7 @@ int	open_outfile(const char *outfile, int mode)
 	outfile_fd = open(outfile, flags, 0644);
 	if (outfile_fd == -1)
 	{
-		perror("Error: Can't open outfile");
+		perror(outfile);
 		return (0);
 	}
 	if (dup2(outfile_fd, STDOUT_FILENO) == -1)
@@ -68,12 +68,12 @@ void	fake_open_infile(char *file)
 	int	fd;
 
 	if (access(file, R_OK) == -1)
-		perror("Infile is not readable");
+		perror(file);
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		perror("Can't open infile");
+		perror(file);
 	if (fd != -1 && close(fd) == -1)
-		perror("Can't close infile descriptor");
+		perror("Error: Can't close infile descriptor");
 }
 
 void	fake_open_outfile(char *file, int mode)
@@ -87,10 +87,10 @@ void	fake_open_outfile(char *file, int mode)
 	else
 		flags |= O_TRUNC;
 	if (access(file, W_OK) == -1)
-		perror("Error: Outfile is not writable");
+		perror(file);
 	fd = open(file, flags, 0644);
 	if (fd == -1)
-		perror("Error: Can't open outfile");
+		perror(file);
 	if (fd != -1 && close(fd) == -1)
 		perror("Error: Can't close outfile descriptor");
 }

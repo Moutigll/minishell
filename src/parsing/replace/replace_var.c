@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 01:08:44 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 18:01:41 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	after = ft_substr(str, i + 1, ft_strlen(str) - i - 1);
 	free(str);
 	handle_var_is_first(before, node, find_env_var_node(env, var_name));
-	handle_var_new_block(before, node, curr_node,
+	handle_var_new_block(before, node, &curr_node,
 		find_env_var_node(env, var_name));
-	handle_content_after_var(after, node, curr_node);
+	handle_content_after_var(after, node, &curr_node);
 	return (free(var_name), 1);
 }
 
@@ -72,7 +72,7 @@ static int	string_to_var(t_main *main, t_list *current_node)
 	str = ((t_node *)current_node->content)->content;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] != '\0' && str[i + 1] != '?')
+		if (str[i] == '$' && str[i + 1] != '\0' && str[i + 1] != ' ' && str[i + 1] != '?')
 		{
 			if (!handle_dollar_sign(current_node, main->env->env_list, i))
 				return (0);

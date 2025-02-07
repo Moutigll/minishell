@@ -4,3 +4,4 @@
 *.out
 minishell_tester
 fuzzing_errors.log
+mstest*/

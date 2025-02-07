@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 00:34:36 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 18:30:58 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 static void	exit_signal(t_main *main, char *command)
 {
+	int	status;
+
+	if (!main->error)
+		status = main->old_error;
+	else
+		status = main->error;
 	printf("exit\n");
 	free_tab((void **)main->env->envp);
 	free(main->path);
@@ -21,7 +27,7 @@ static void	exit_signal(t_main *main, char *command)
 	free(main->env);
 	free(main);
 	free(command);
-	exit(0);
+	exit(status);
 }
 
 static void	get_cmds(t_splitted_cmds *splitted
@@ -38,6 +44,7 @@ static void	get_cmds(t_splitted_cmds *splitted
 	free(splitted->tab);
 	free(splitted);
 	cmd_head->main = main;
+	main->old_error = main->error;
 	main->error = 0;
 	signal(SIGQUIT, signal_handler);
 	exec_cmds(cmd_head);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 02:25:27 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 18:27:01 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	handle_child_process(t_pipex *pipex,
 	cmd_head = pipex->cmd_head;
 	if (open_fds(pipex, i, read_pipe) == 1)
 	{
-		clean_pipex(pipex, "Error: Failed to open file descriptors", 1);
+		clean_pipex(pipex, NULL, 1);
 		free_total(cmd_head->main, cmd_head);
 		exit(1);
 	}
@@ -69,7 +69,10 @@ int	exit_part(t_pipex *pipex, char **args)
 
 	i = 0;
 	cmd_head = pipex->cmd_head;
-	status = pipex->cmd_head->main->error;
+	if (!pipex->cmd_head->main->error)
+		status = pipex->cmd_head->main->old_error;
+	else
+		status = pipex->cmd_head->main->error;
 	ft_putstr_fd("exit\n", STDIN_FILENO);
 	if (args[1] != NULL)
 	{
