@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 21:29:25 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:54:55 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*check_paths(char **paths, char *cmd)
 	}
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": command not found\n", 2);
-	return (ft_putstr_fd("\n", 2), free(cmd), NULL);
+	return (free(cmd), NULL);
 }
 
 static void	resolve_command(t_command_struct *cmd, char **paths)
@@ -101,7 +101,10 @@ void	get_path(t_pipex *pipex)
 			&& ft_strcmp(cmd->command[0], "env") != 0
 			&& ft_strcmp(cmd->command[0], "cd") != 0
 			&& ft_strcmp(cmd->command[0], "exit") != 0)
+		{
+			cmd->path = ft_strdup(cmd->command[0]);
 			resolve_command(cmd, paths);
+		}
 		i++;
 	}
 	free_tab((void **)paths);

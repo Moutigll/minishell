@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 21:29:54 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:54:21 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static int	handle_child_process_part2(t_pipex *pipex, int i, int *pipe_fd)
 {
+	char	*path;
+
 	if (i != pipex->cmd_head->size - 1)
 	{
 		close(pipe_fd[0]);
@@ -24,10 +26,12 @@ static int	handle_child_process_part2(t_pipex *pipex, int i, int *pipe_fd)
 	{
 		close(pipex->stdin_backup);
 		close(pipex->stdout_backup);
-		if (execve(pipex->cmd_head->cmds[i]->command[0],
-				pipex->cmd_head->cmds[i]->command,
+		path = pipex->cmd_head->cmds[i]->command[0];
+		pipex->cmd_head->cmds[i]->command[0] = pipex->cmd_head->cmds[i]->path;
+		if (execve(path, pipex->cmd_head->cmds[i]->command,
 				pipex->cmd_head->main->env->envp) == -1)
 			perror("Error: Failed to execute command");
+		free(path);
 	}
 	return (0);
 }

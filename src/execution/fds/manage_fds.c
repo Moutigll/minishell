@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:52:21 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 19:25:37 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:44:06 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static int	open_infiles(t_pipex *pipex, int i, int read_pipe)
 			return (1);
 		}
 	}
+	if (error == 0)
+		return (1);
 	return (0);
 }
 
@@ -62,6 +64,8 @@ static int	open_outfiles(t_pipex *pipex, int i)
 		}
 		lst = lst->next;
 	}
+	if (error == 0)
+		return (1);
 	return (0);
 }
 

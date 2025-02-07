@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 21:29:44 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 23:08:36 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void	exec_cmds(t_command_head *cmd_head)
 	pipex = init_and_prepare_pipex(cmd_head);
 	if (pipex->cmd_head->main->error || !pipex)
 		return ;
+	if (check_here_doc(pipex) == -1 || pipex->cmd_head->main->error)
+		return (clean_pipex(pipex, NULL, pipex->cmd_head->main->error));
 	get_path(pipex);
 	if (pipex->cmd_head->main->error)
-		return (clean_pipex(pipex, NULL, pipex->cmd_head->main->error));
-	if (check_here_doc(pipex) == -1 || pipex->cmd_head->main->error)
 		return (clean_pipex(pipex, NULL, pipex->cmd_head->main->error));
 	i = 0;
 	rpipe = -1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 01:39:38 by moutig            #+#    #+#             */
-/*   Updated: 2025/02/07 02:18:11 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 23:07:21 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,49 @@ static int	handle_here_doc_start(int pipe_fd[2],
 	return (0);
 }
 
+char	*here_doc_replace_var(char *str, t_main *main)
+{
+	t_env_var	*var_node;
+	char		*var_name;
+	char		*var;
+	char		*new_str;
+	int			i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+		{
+			var_name = extract_variable(str + i + 1);
+			var_node = find_env_var_node(main->env->env_list, var_name);
+			var = ft_strdup("$");
+			if (str[i + 1] == '{')
+				var = ft_strjoin_free(var, "{", 1, 0);
+			var = ft_strjoin_free(var, var_name, 1, 0);
+			if (str[i + 1] == '{')
+				var = ft_strjoin_free(var, "}", 1, 0);
+			if (var_node)
+				new_str = ft_str_replace(str, var, var_node->value);
+			else if (var_name && var_name[0] == '?' && !var_name[1])
+			{
+				char	*value;
+
+				value = ft_itoa(main->error);
+				new_str = ft_str_replace(str, var, value);
+				free(value);
+			}
+			else
+				new_str = ft_str_replace(str, var, "");
+			free(var);
+			free(var_name);
+			free(str);
+			str = new_str;
+		}
+		i++;
+	}
+	return (str);
+}
+
 static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 {
 	char	*line;
@@ -36,13 +79,12 @@ static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
+		if (line)
+			line = here_doc_replace_var(line, pipex->cmd_head->main);
 		if (g_status == -1)
 			return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
 		if (!line)
-		{
 			printf(ERR_HEREDOC, delimiter);
-			close(pipe_fd[0]);
-		}
 		if ((!line) || (ft_strncmp(line, delimiter, delimiter_len) == 0
 				&& line[delimiter_len] == '\n'
 				&& line[delimiter_len + 1] == '\0'))
