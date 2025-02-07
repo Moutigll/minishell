@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 02:29:52 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 19:40:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,15 @@ int	check_redirect_n(char *str, char c, char vs, int *redirect)
 	while (str[i])
 	{
 		if (str[i] == '(' || str[i] == ')' || str[i] == '[' || str[i] == ']')
-			return (printf("Error Parentheses/Brackets not supported\n"), 1);
+			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
 		else if (str[i] == c && count > 1)
-			return (printf("Parse error near `%c'\n", c), 1);
+			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
 		else if (str[i] == c && count <= 1)
 			count++;
 		else if (str[i] == vs && count > 0)
-			return (printf("Parse error near `%c%c'\n", c, vs), 1);
+			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
 		else if (str[i] == '|' && count > 0)
-			return (printf("Parse error near `%c'\n", c), 1);
+			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
 		else
 			count = 0;
 		i++;
