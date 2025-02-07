@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sanitize_input.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:21:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 02:31:17 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 19:34:20 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	process_word(int start, int *i, char *input, t_head *head)
 	int	ishead;
 
 	ishead = 0;
-	if (start == 0 || input[start - 1] == ' ')
+	if (start == 0 || input[start - 1] == ' ' || input[start - 1] == '\t')
 		ishead = 1;
 	add_block(2, ishead, ft_substr(input, start, *i - start), head);
 }
@@ -59,9 +59,10 @@ static void	process_quote(int *i, char *input, t_head *head)
 		(*i)++;
 	type = 0;
 	ishead = 0;
-	if (input[start - 1] == ' '
+	if (input[start - 1] == ' ' || input[start - 1] == '\t'
 		|| ((input[start - 1] == '"' || input[start - 1] == '\'')
-			&& (start < 2 || input[start - 2] == ' ')))
+			&& (start < 2 || input[start - 2] == ' '
+				|| input[start - 2] == '\t')))
 		ishead = 1;
 	if (start > 0 && input[start - 1] == '"' && input[*i] == '"')
 		type = 0;
@@ -86,7 +87,7 @@ t_head	*sanitize_input(char *input, t_main *main)
 	{
 		start = i;
 		while (input[i] != ' ' && input[i] != '"'
-			&& input[i] != '\0' && input[i] != '\'')
+			&& input[i] != '\0' && input[i] != '\'' && input[i] != '\t')
 			i++;
 		if (start != i)
 			process_word(start, &i, input, head);

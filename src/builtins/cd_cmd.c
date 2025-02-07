@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 02:23:08 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 18:57:27 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static int	cd_cmd_part2(int tab_len, char *path,
 		return (0);
 	if (chdir(path) == -1)
 	{
-		perror("cd");
+		print_error("cd");
 		return (1);
 	}
 	return (0);

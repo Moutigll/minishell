@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 18:25:08 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:07:38 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ typedef struct s_fd_struct
 //main.c
 void				exit_on_error(t_main *main, int error);
 void				error(char *message, int etat);
+void				print_error(char *message);
 
 // utils
 
@@ -238,8 +239,8 @@ int					open_fds(t_pipex *pipex, int i, int read_pipe);
 	//open_files.c
 int					open_infile(const char *infile);
 int					open_outfile(const char *outfile, int mode);
-void				fake_open_infile(char *file);
-void				fake_open_outfile(char *file, int mode);
+int					fake_open_infile(char *file);
+int					fake_open_outfile(char *file, int mode);
 
 	//exec_cmd.c
 void				exec_cmds(t_command_head *cmd_head);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/06 21:11:55 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 18:51:34 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ void	exit_on_error(t_main *main, int error)
 {
 	free_total(main, main->cmd_head);
 	exit(error);
+}
+
+void	print_error(char *message)
+{
+	ft_putstr_fd("minicoquille: ", STDERR_FILENO);
+	perror(message);
 }
 
 void	error(char *message, int etat)

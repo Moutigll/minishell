@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:02:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 18:18:33 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:08:47 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,18 @@ int	open_infile(const char *infile)
 
 	if (access(infile, R_OK) == -1)
 	{
-		perror(infile);
+		print_error((char *)infile);
 		return (0);
 	}
 	infile_fd = open(infile, O_RDONLY);
 	if (infile_fd == -1)
 	{
-		perror(infile);
+		print_error((char *)infile);
 		return (0);
 	}
 	if (dup2(infile_fd, STDIN_FILENO) == -1)
 	{
-		perror("Error: dup2 failed for infile");
+		print_error((char *)infile);
 		close(infile_fd);
 		return (0);
 	}
@@ -50,12 +50,12 @@ int	open_outfile(const char *outfile, int mode)
 	outfile_fd = open(outfile, flags, 0644);
 	if (outfile_fd == -1)
 	{
-		perror(outfile);
+		print_error((char *)outfile);
 		return (0);
 	}
 	if (dup2(outfile_fd, STDOUT_FILENO) == -1)
 	{
-		perror("Error: dup2 failed for outfile");
+		print_error((char *)outfile);
 		close(outfile_fd);
 		return (0);
 	}
@@ -63,20 +63,21 @@ int	open_outfile(const char *outfile, int mode)
 	return (1);
 }
 
-void	fake_open_infile(char *file)
+int	fake_open_infile(char *file)
 {
 	int	fd;
 
 	if (access(file, R_OK) == -1)
-		perror(file);
+		return (print_error(file), 0);
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		perror(file);
+		return (print_error(file), 0);
 	if (fd != -1 && close(fd) == -1)
-		perror("Error: Can't close infile descriptor");
+		return (print_error(file), 0);
+	return (1);
 }
 
-void	fake_open_outfile(char *file, int mode)
+int	fake_open_outfile(char *file, int mode)
 {
 	int	fd;
 	int	flags;
@@ -87,10 +88,11 @@ void	fake_open_outfile(char *file, int mode)
 	else
 		flags |= O_TRUNC;
 	if (access(file, W_OK) == -1)
-		perror(file);
+		return (print_error(file), 0);
 	fd = open(file, flags, 0644);
 	if (fd == -1)
-		perror(file);
+		return (print_error(file), 0);
 	if (fd != -1 && close(fd) == -1)
-		perror("Error: Can't close outfile descriptor");
+		return (print_error(file), 0);
+	return (1);
 }
