@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 01:33:23 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/07 21:11:19 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,14 @@ static int	add_node(t_list *lst, char *str, int count, int i)
 	if (key == NULL)
 		return (MALLOC_ERROR);
 	index = check_exist(lst, key);
-	tmp = return_value(str);
-	if (!tmp)
-		return (free(key), MALLOC_ERROR);
+	if (str[ft_strlen(key)] != '\0')
+	{
+		tmp = return_value(str);
+		if (!tmp)
+			return (free(key), MALLOC_ERROR);
+	}
+	else
+		tmp = ft_strdup("");
 	if (index >= 0)
 		return (change_var(tmp, index, lst), free(key), free(tmp), 0);
 	else if ((count == 1 && str[i - 1] != '=') || count > 1)
@@ -105,11 +110,25 @@ int	check_type_export(char *str, t_list *lst)
 	i = 0;
 	count = 0;
 	while (str[i])
+	{
+		if (count == 0 && (str[i] == '-' || str[i] == '+'
+			|| str[i] == '.' || str[i] == '{' || str[i] == '}'
+				|| str[i] == '*' || str[i] == '#' || str[i] == '@'
+				|| str[i] == '!' || str[i] == '~' || str[i] == '^'))
+		{
+			ft_putstr_fd("export: `", 2);
+			ft_putstr_fd(str, 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			return (1);
+		}
 		if (str[i++] == '=')
 			count++;
+	}
 	if ((!ft_isalpha(str[0]) && str[0] != '_') || check_quote_key(str) == 1)
 	{
-		printf("`%s' not a valid identifier\n", str);
+		ft_putstr_fd("export: `", 2);
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
 		return (1);
 	}
 	return (add_node(lst, str, count, i));

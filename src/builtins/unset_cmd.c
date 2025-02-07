@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:51:16 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/05 11:41:24 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:20:15 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	unset_cmd(t_list *lst, char **args, t_main *main)
 			i++;
 		}
 	}
-	update_env(main->env);
 	main->error = 0;
+	update_env(main->env);
 	return (0);
 }

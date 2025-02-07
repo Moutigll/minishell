@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 19:53:48 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/07 20:44:32 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ static int	check_redirect(t_list *lst)
 	{
 		node = lst->content;
 		if (node->type == 2 && change_redirect(&state, node->content) == 1)
-			return (ft_putstr_fd("Parse error near `>>'\n", 2), 1);
+			return (ft_putstr_fd("syntax error near unexpected token `>'\n", 2), 1);
 		if (node->type == 2 && check_pipe(node->content, &statement))
-			return (ft_putstr_fd("Parse error near `||'\n", 2), 1);
+			return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2), 1);
 		if (node->type == 2
 			&& (check_redirect_n(node->content, '>', '<', &redirect_1) == 1
 				|| check_redirect_n(node->content, '<', '>', &redirect_2) == 1))
@@ -83,6 +83,8 @@ int	parse_error(t_head *head, t_main *main)
 	}
 	if (last_content == NULL)
 		return (0);
+	if (check_redirect(lst) == 1)
+		return (main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '>') == 1)
 		return (ft_putstr_fd("syntax error near unexpected token `newline'\n", 2), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '<') == 1)
@@ -90,7 +92,5 @@ int	parse_error(t_head *head, t_main *main)
 	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)
 		return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(last_content->content, 2), ft_putstr_fd("\'\n", 2),
 				main->error = 2, 1);
-	if (check_redirect(lst) == 1)
-		return (main->error = 2, 1);
 	return (0);
 }
