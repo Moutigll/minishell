@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 18:57:27 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:47:08 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 	path = NULL;
 	tab_len = ft_tablen((void **)args);
 	if (tab_len > 2)
-		return (printf("cd: too many arguments\n"), 1);
+		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);
 	else if (args[1] && args[1][0] == '\0')
 		return (0);
 	if (cd_cmd_part2(tab_len, path, env_struct, args) == 1)

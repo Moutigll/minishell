@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 01:39:38 by moutig            #+#    #+#             */
-/*   Updated: 2025/02/07 23:07:21 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 15:57:40 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,25 +72,41 @@ static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	char	*line;
 	int		pipe_fd[2];
 	size_t	delimiter_len;
+	int		len;
+	char	*new_line;
 
+	line = NULL;
+	new_line = NULL;
 	if (handle_here_doc_start(pipe_fd, pipex, &delimiter_len, delimiter) == -1)
 		return (-1);
+	write(1, "> ", 2);
 	while (1)
 	{
-		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
-		if (line)
-			line = here_doc_replace_var(line, pipex->cmd_head->main);
+		new_line = get_next_line(STDIN_FILENO);
+		if (new_line == NULL)
+		{
+			if (line && new_line)
+				line = ft_strjoin(line, new_line);
+			else if (!line)
+				return (write(1, "\n", 1), close(pipe_fd[0]), close(pipe_fd[1]), -1);
+		}
+		if (line && new_line)
+			line = ft_strjoin_free(line, new_line, 1, 0);
+		else if (new_line)
+			line = new_line;
+		len = ft_strlen(line);
 		if (g_status == -1)
 			return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
-		if (!line)
-			printf(ERR_HEREDOC, delimiter);
-		if ((!line) || (ft_strncmp(line, delimiter, delimiter_len) == 0
-				&& line[delimiter_len] == '\n'
-				&& line[delimiter_len + 1] == '\0'))
-			break ;
-		write(pipe_fd[1], line, ft_strlen(line));
-		free(line);
+		if (len > 0 && line[len - 1] == '\n')
+		{
+			if (ft_strncmp(line, delimiter, delimiter_len) == 0
+				&& line[delimiter_len] == '\n' && line[delimiter_len + 1] == '\0')
+				break ;
+			write(pipe_fd[1], line, len);
+			write(1, "> ", 2);
+			free(line);
+			line = NULL;
+		}
 	}
 	if (line)
 		free(line);

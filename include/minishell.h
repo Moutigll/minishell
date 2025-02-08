@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 21:00:30 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/07 22:19:20 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ typedef struct s_fd_struct
 
 // define
 # define ERR_QUOTE "Error\nQuote open !"
+# define ERR_PIPE "syntax error near unexpected token `|'\n"
+# define ERR_REDIRECT "syntax error near unexpected token `>'\n"
 # define ERR_HEREDOC "\nbash: warning: here-document finished (wanted `%s')\n"
 
 //main.c
