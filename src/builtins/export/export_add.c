@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 21:11:19 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:13:49 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	check_type_export(char *str, t_list *lst)
 				|| str[i] == '*' || str[i] == '#' || str[i] == '@'
 				|| str[i] == '!' || str[i] == '~' || str[i] == '^'))
 		{
-			ft_putstr_fd("export: `", 2);
+			ft_putstr_fd("minicoquille: export: `", 2);
 			ft_putstr_fd(str, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			return (1);

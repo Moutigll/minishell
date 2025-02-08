@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 22:20:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:35:06 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,20 +77,19 @@ int	parse_error(t_head *head, t_main *main)
 	last_content = ft_lstlast(head->head)->content;
 	if (head->head != NULL
 		&& ((t_node *)head->head->content)->content[0] == '|')
-		return (perror(((t_node *)head->head->content)->content)
-			, main->error = 2, 1);
+		return (ft_putstr_fd("minicoquille: parse error near `|'\n", 2), main->error = 2, 1);
 	if (last_content == NULL)
 		return (0);
 	if (check_redirect(lst) == 1)
 		return (main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '>') == 1)
-		return (ft_putstr_fd("syntax error near unexpected token `newline'\n"
+		return (ft_putstr_fd("minicoquille: syntax error near unexpected token `newline'\n"
 				, 2), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '<') == 1)
-		return (ft_putstr_fd("syntax error near unexpected token `newline'\n"
+		return (ft_putstr_fd("minicoquille: syntax error near unexpected token `newline'\n"
 				, 2), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)
-		return (ft_putstr_fd("Parse error near `", 2)
+		return (ft_putstr_fd("minicoquille: parse error near `", 2)
 			, ft_putstr_fd(last_content->content, 2), ft_putstr_fd("\'\n", 2),
 			main->error = 2, 1);
 	return (0);

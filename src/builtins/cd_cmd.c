@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 21:47:08 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:22:04 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static char	*resolve_path(char **env, char *arg)
 static int	cd_cmd_part2(int tab_len, char *path,
 	t_envirronement *env_struct, char **args)
 {
+	char	*error;
+
 	if (tab_len == 1)
 		path = resolve_path(env_struct->envp, "~");
 	else
@@ -75,7 +77,9 @@ static int	cd_cmd_part2(int tab_len, char *path,
 		return (0);
 	if (chdir(path) == -1)
 	{
-		print_error("cd");
+		error = ft_strjoin("cd: ", path);
+		print_error(error);
+		free(error);
 		return (1);
 	}
 	return (0);
@@ -90,7 +94,7 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 	path = NULL;
 	tab_len = ft_tablen((void **)args);
 	if (tab_len > 2)
-		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);
+		return (ft_putstr_fd("minicoquille: cd: too many arguments\n", 2), 1);
 	else if (args[1] && args[1][0] == '\0')
 		return (0);
 	if (cd_cmd_part2(tab_len, path, env_struct, args) == 1)

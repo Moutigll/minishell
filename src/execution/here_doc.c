@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 01:39:38 by moutig            #+#    #+#             */
-/*   Updated: 2025/02/08 15:57:40 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:26:26 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	while (1)
 	{
 		new_line = get_next_line(STDIN_FILENO);
+		if (line)
+			line = here_doc_replace_var(line, pipex->cmd_head->main);
 		if (new_line == NULL)
 		{
 			if (line && new_line)

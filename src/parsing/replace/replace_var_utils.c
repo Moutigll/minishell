@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:29:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 17:50:19 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:05:19 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*extract_variable(char *str)
 		is_bracket = 0;
 		i = 0;
 	}
-	while (ft_isalnum(str[i]) || str[i] == '_')
+	while (ft_isalnum(str[i]) || str[i] == '_' || str[i] == '?')
 		i++;
 	if (is_bracket && str[i] != '}')
 		return (NULL);
