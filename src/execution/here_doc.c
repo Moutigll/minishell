@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 01:39:38 by moutig            #+#    #+#             */
-/*   Updated: 2025/02/08 16:26:26 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:36:48 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,22 +83,30 @@ static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	while (1)
 	{
 		new_line = get_next_line(STDIN_FILENO);
-		if (line)
-			line = here_doc_replace_var(line, pipex->cmd_head->main);
+		if (g_status == -1)
+			return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
+		if (new_line)
+			new_line = here_doc_replace_var(new_line, pipex->cmd_head->main);
 		if (new_line == NULL)
 		{
 			if (line && new_line)
 				line = ft_strjoin(line, new_line);
 			else if (!line)
-				return (write(1, "\n", 1), close(pipe_fd[0]), close(pipe_fd[1]), -1);
+			{
+				close(pipe_fd[0]);
+				close(pipe_fd[1]);
+				write(1, "\n", 2);
+				ft_putstr_fd("minicoquille: warning: here-document finished (wanted `", 2);
+				ft_putstr_fd(delimiter, 2);
+				ft_putstr_fd("')\n", 2);
+				break ;
+			}
 		}
 		if (line && new_line)
 			line = ft_strjoin_free(line, new_line, 1, 0);
 		else if (new_line)
 			line = new_line;
 		len = ft_strlen(line);
-		if (g_status == -1)
-			return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
 		if (len > 0 && line[len - 1] == '\n')
 		{
 			if (ft_strncmp(line, delimiter, delimiter_len) == 0

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 16:35:06 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:07:45 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,30 @@ static void	declaration(int *state, int *statement,
 	*statement = 0;
 	*redirect_1 = 0;
 	*redirect_2 = 0;
+}
+
+void	print_redirect(char *str)
+{
+	int		count;
+	char	c;
+	int		i;
+
+	i = 0;
+	count = 0;
+	c = str[i];
+	while (str[i])
+	{
+		if (str[i] == c)
+		{
+			if (count == 4)
+				break ;
+			count++;
+			if (count >= 3)
+				ft_putchar_fd(c, 2);
+		}
+		i++;
+	}
+	ft_putstr_fd("'\n", 2);
 }
 
 static int	check_redirect(t_list *lst)
@@ -34,13 +58,13 @@ static int	check_redirect(t_list *lst)
 	{
 		node = lst->content;
 		if (node->type == 2 && change_redirect(&state, node->content) == 1)
-			return (ft_putstr_fd(ERR_REDIRECT, 2), 1);
+			return (1);
 		if (node->type == 2 && check_pipe(node->content, &statement))
-			return (ft_putstr_fd(ERR_PIPE, 2), 1);
+			return (ft_putstr_fd("minicoquille: ", 2), ft_putstr_fd(ERR_PIPE, 2), 1);
 		if (node->type == 2
 			&& (check_redirect_n(node->content, '>', '<', &redirect_1) == 1
 				|| check_redirect_n(node->content, '<', '>', &redirect_2) == 1))
-			return (ft_putstr_fd("Ambigous redirect `(null)'\n", 2), 1);
+			return (ft_putstr_fd("minicoquille: syntax error near unexpected token `", 2), print_redirect(node->content), 1);
 		if (check_brace(node->content, node->type) == 1)
 			return (ft_putstr_fd("Error bag assignment\n", 2), 1);
 		if (!lst->next)

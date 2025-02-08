@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 16:35:58 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:11:38 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,46 @@ int	check_redirect_n(char *str, char c, char vs, int *redirect)
 	while (str[i])
 	{
 		if (str[i] == '(' || str[i] == ')' || str[i] == '[' || str[i] == ']')
-			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
+			return (1);
 		else if (str[i] == c && count > 1)
-			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
+			return (1);
 		else if (str[i] == c && count <= 1)
 			count++;
 		else if (str[i] == vs && count > 0)
-			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
+			return (1);
 		else if (str[i] == '|' && count > 0)
-			return (ft_putstr_fd("Parse error near `", 2), ft_putstr_fd(&c, 2), ft_putstr_fd("\'\n\"", 2), 1);
+			return (1);
 		else
 			count = 0;
 		i++;
 	}
 	set_redirect(redirect, count);
 	return (0);
+}
+
+void	count_redirect(char *str)
+{
+	int		count;
+	int		i;
+	char	c;
+
+	i = 0;
+	count = 0;
+	c = str[i];
+	if (c != '>' && c != '<')
+		return ;
+	while (str[i])
+	{
+		if (count == 2)
+			break ;
+		if (str[i] == c)
+		{
+			ft_putchar_fd(c, 2);
+			count++;
+		}
+		i++;
+	}
+	ft_putstr_fd("'\n", 2);
 }
 
 int	change_redirect(int *state, char *str)
@@ -106,7 +131,7 @@ int	change_redirect(int *state, char *str)
 		&& str[j] != ' ' && str[j] != '\t' && str[j] != '|')
 		j++;
 	if ((str[j] == '>' || str[j] == '<' || str[j] == '|') && *state == 1)
-		return (1);
+		return (ft_putstr_fd("minicoquille: ", 2), ft_putstr_fd("syntax error near unexpected token `", 2), count_redirect(str), 1);
 	i = (int)ft_strlen(str);
 	if (i > 0)
 		i--;
