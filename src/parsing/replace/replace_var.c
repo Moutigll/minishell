@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/08 16:05:24 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 21:31:38 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 {
+	t_env_var	*env_var;
 	t_node		*node;
 	char		*var_name;
 	char		*before;
@@ -29,11 +30,14 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	if (str[i + 1] == '{')
 		i += 2;
 	i += ft_strlen(var_name);
+	if (str[i + 1] != '\0' && str[i + 1] != '\n' && str[i + 1] != ' ' && str[i + 1] != '$' && str[i + 1] != '\'')
+		env_var = NULL;
+	else
+		env_var = find_env_var_node(env, var_name);
 	after = ft_substr(str, i + 1, ft_strlen(str) - i - 1);
 	free(str);
-	handle_var_is_first(before, node, find_env_var_node(env, var_name));
-	handle_var_new_block(before, node, &curr_node,
-		find_env_var_node(env, var_name));
+	handle_var_is_first(before, node, env_var, &curr_node);
+	handle_var_new_block(before, node, &curr_node, env_var);
 	handle_content_after_var(after, node, &curr_node);
 	return (free(var_name), 1);
 }

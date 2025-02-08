@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 16:37:02 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:22:08 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static void	copy_env_to_mainstruct(char **env, t_main *main)
 int	main(int argc, char **argv, char **env)
 {
 	t_main	*main;
+	char	*shlvl;
 
 	(void) argc;
 	(void) argv;
@@ -72,6 +73,9 @@ int	main(int argc, char **argv, char **env)
 		exit_on_error(main, MALLOC_ERROR);
 	main->env->env_list = create_env_list(env);
 	main->env->envp = main->g_env;
+	shlvl = ft_itoa(ft_atoi(get_env_value(main->env->envp, "SHLVL")) + 1);
+	update_envlist(main->env->env_list, "SHLVL", shlvl);
+	free(shlvl);
 	while_input(main);
 	return (0);
 }

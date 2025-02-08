@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 21:54:55 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:52:19 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static char	**get_env_paths(char **envp)
 			return (ft_split(envp[index] + 5, ':'));
 		index++;
 	}
-	ft_putstr_fd("\033[33mWarning: PATH not found in environment!\033[0m\n", 2);
 	return (NULL);
 }
 
@@ -60,7 +59,7 @@ static void	resolve_command(t_command_struct *cmd, char **paths)
 {
 	if (!cmd->command || ft_strlen(cmd->command[0]) == 0)
 	{
-		write(STDERR_FILENO, "Error: Empty command\n", 21);
+		ft_putstr_fd(": command not found\n", 2);
 		cmd->command[0] = NULL;
 		return ;
 	}
@@ -68,7 +67,8 @@ static void	resolve_command(t_command_struct *cmd, char **paths)
 	{
 		if (access(cmd->command[0], X_OK) == -1)
 		{
-			perror("Error: Command not accessible");
+			ft_putstr_fd(cmd->command[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
 			free(cmd->command[0]);
 			cmd->command[0] = NULL;
 			return ;

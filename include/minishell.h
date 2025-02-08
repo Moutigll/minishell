@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 22:19:20 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/08 21:13:35 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void				handle_content_after_var(char *after,
 void				handle_var_new_block(char *before,
 						t_node *node, t_list **curr_node, t_env_var *env_var);
 void				handle_var_is_first(char *before,
-						t_node *node, t_env_var *env_var);
+						t_node *node, t_env_var *env_var, t_list **curr_node);
 
 	//reattach_head.c
 t_head				*reattach_head(t_head *head);
@@ -283,6 +283,7 @@ int					export_cmd(char **args, t_main *main);
 int					print_ascii_sorted(t_list *lst);
 
 	//cd_cmd.c
+void				update_envlist(t_list *env, char *name, char *value);
 char				*get_env_value(char **env, const char *key);
 int					cd_cmd(t_envirronement *env_struct, char **args);
 

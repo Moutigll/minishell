@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 17:49:06 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:12:12 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	check_numeric(char *str)
 	}
 	while (str[i] != '\0')
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(str[i]) && str[i] != ' ')
 			return (0);
 		if (len > 18)
 			return (0);
@@ -75,8 +75,6 @@ static int	check_numeric(char *str)
 		i++;
 		len++;
 	}
-	if (len > 19)
-		return (0);
 	return (1);
 }
 

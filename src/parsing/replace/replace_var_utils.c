@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:29:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/08 16:05:19 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 21:19:29 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ char	*extract_variable(char *str)
 		is_bracket = 0;
 		i = 0;
 	}
-	while (ft_isalnum(str[i]) || str[i] == '_' || str[i] == '?')
+	if (str[i] == '?' && (str[i + 1] == '\0' || str[i + 1] == '\n'
+			|| (is_bracket && str[i + 1] == '}')))
+		return (ft_strdup("?"));
+	while (ft_isalnum(str[i]) || str[i] == '_')
 		i++;
 	if (is_bracket && str[i] != '}')
 		return (NULL);
@@ -81,14 +84,44 @@ void	handle_var_new_block(char *before,
 }
 
 void	handle_var_is_first(char *before,
-	t_node *node, t_env_var *env_var)
+	t_node *node, t_env_var *env_var, t_list **curr_node)
 {
+	char	**split;
+	int		i;
+
 	if (before[0] == '\0')
 	{
 		if (env_var)
 		{
-			node->content = ft_strdup(env_var->value);
+			i = 0;
+			while (env_var->value[i] == ' ')
+				i++;
+			if (env_var->value && env_var->value[i] == '\0')
+			{
+				node->content = ft_strdup("");
+				node->type = 1;
+				node->head = 1;
+				return ;
+			}
+			split = ft_split(env_var->value, ' ');
+			node->content = split[0];
 			node->type = 1;
+			i = 1;
+			if (split[i])
+				node->head = 1;
+			while (split[i])
+			{
+				node = malloc(sizeof(t_node));
+				node->content = split[i];
+				node->type = 1;
+				node->head = 1;
+				ft_lstinsert_after(*curr_node, ft_lstnew(node));
+				*curr_node = (*curr_node)->next;
+				i++;
+			}
+			if ((*curr_node)->next && ft_tablen((void **)split) > 1)
+				((t_node *)(*curr_node)->next->content)->head = 1;
+			free(split);
 		}
 		else
 			node->content = ft_strdup("");

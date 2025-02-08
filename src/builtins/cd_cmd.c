@@ -6,13 +6,13 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 16:22:04 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 19:26:52 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	update_envlist(t_list *env, char *name, char *value)
+void	update_envlist(t_list *env, char *name, char *value)
 {
 	t_env_var	*env_var;
 
