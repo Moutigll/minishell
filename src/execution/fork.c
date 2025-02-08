@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 21:54:21 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:42:09 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,73 +63,6 @@ static void	handle_child_process(t_pipex *pipex,
 	clean_pipex(pipex, NULL, 1);
 	free_total(cmd_head->main, cmd_head);
 	exit(127);
-}
-
-static void	check_argument(char **args, int *status, t_pipex **pipex)
-{
-	if (args[1] != NULL && args[2] != NULL)
-	{
-		ft_putstr_fd("Error: exit: too many arguments\n", 2);
-		*status = 1;
-	}
-	if (ft_tablen((void **)args) >= 2 && args[1][0] == '\0')
-	{
-		ft_putstr_fd("Error: exit: ", 2);
-		ft_putstr_fd(args[1], 2);
-		ft_putstr_fd(": numeric argument required\n", 2);
-		(*pipex)->cmd_head->main->error = 2;
-		*status = 2;
-	}
-}
-
-static void	check_numeric(char **args, t_pipex **pipex, int *status, int *boolean)
-{
-	int	i;
-
-	i = 0;
-	if (args[1] != NULL)
-	{
-		while (args[1][i])
-		{
-			if (!ft_isdigit(args[1][i]))
-			{
-				ft_putstr_fd("Error: exit: ", 2);
-				ft_putstr_fd(args[1], 2);
-				ft_putstr_fd(": numeric argument required\n", 2);
-				(*pipex)->cmd_head->main->error = 2;
-				*status = 2;
-				break ;
-			}
-			else
-				*boolean = 1;
-			i++;
-		}
-	}
-}
-
-int	exit_part(t_pipex *pipex, char **args)
-{
-	t_command_head	*cmd_head;
-	int				boolean;
-	int				status;
-
-	boolean = 0;
-	cmd_head = pipex->cmd_head;
-	if (!pipex->cmd_head->main->error)
-		status = pipex->cmd_head->main->old_error;
-	else
-		status = pipex->cmd_head->main->error;
-	ft_putstr_fd("exit\n", STDIN_FILENO);
-	check_argument(args, &status, &pipex);
-	check_numeric(args, &pipex, &status, &boolean);
-	if (ft_tablen((void **)args) >= 2 && status != 1 && boolean == 1)
-	{
-		pipex->cmd_head->main->error = ft_atoi(args[1]);
-		status = ft_atoi(args[1]);
-	}
-	clean_pipex(pipex, NULL, 0);
-	free_total(cmd_head->main, cmd_head);
-	exit(status);
 }
 
 static int	handle_special_cmds(t_pipex *pipex, int i)
