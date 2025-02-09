@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 19:26:52 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:32:16 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,14 @@ static char	*resolve_path(char **env, char *arg)
 	else if (ft_strncmp(arg, "~", 2) == 0)
 		return (ft_strjoin(get_env_value(env, "HOME"), arg + 1));
 	else if (ft_strncmp(arg, "-", 2) == 0)
+	{
 		path = get_env_value(env, "OLDPWD");
+		if (path)
+		{
+			ft_putstr_fd(path, 1);
+			ft_putstr_fd("\n", 1);
+		}
+	}
 	else
 		return (arg);
 	if (path)

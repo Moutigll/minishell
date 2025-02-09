@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 20:09:04 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/08 21:31:38 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:40:39 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	handle_dollar_sign(t_list *curr_node, t_list *env, int i)
 	if (str[i + 1] == '{')
 		i += 2;
 	i += ft_strlen(var_name);
-	if (str[i + 1] != '\0' && str[i + 1] != '\n' && str[i + 1] != ' ' && str[i + 1] != '$' && str[i + 1] != '\'')
+	if (str[i + 1] != '\0' && str[i + 1] != '\n' && str[i + 1] != ' ' && str[i + 1] != '$' && str[i + 1] != '\'' && str[i + 1] != '/')
 		env_var = NULL;
 	else
 		env_var = find_env_var_node(env, var_name);
