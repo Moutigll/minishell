@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 20:53:47 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 02:03:12 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	exit_signal(t_main *main, char *command)
 	free_tab((void **)main->env->envp);
 	free(main->path);
 	free_env(main->env->env_list);
+	free(main->home);
 	free(main->env);
 	free(main);
 	free(command);
@@ -77,6 +78,7 @@ void	while_input(t_main *main)
 {
 	char	*command;
 	char	*prompt;
+	int		i;
 
 	while (1)
 	{
@@ -92,6 +94,11 @@ void	while_input(t_main *main)
 		free(prompt);
 		if (command == NULL)
 			exit_signal(main, command);
+		i = 0;
+		while (command[i] == ' ')
+			i++;
+		if (command[i] == '\0')
+			continue ;
 		add_history(command);
 		if (parsing_error(command, 0))
 			tokenize_input(command, main);

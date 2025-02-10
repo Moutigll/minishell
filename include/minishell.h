@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 21:13:35 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 00:30:09 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_main
 	int				old_error;
 	int				error;
 	char			*path;
+	char			*home;
 	t_head			*head;
 	t_command_head	*cmd_head;
 }	t_main;

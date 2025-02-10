@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/09 17:32:16 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 00:38:20 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,17 @@ static char	*resolve_path(char **env, char *arg)
 	char	*path;
 
 	if (!arg)
+	{
 		path = get_env_value(env, "HOME");
-	else if (ft_strncmp(arg, "~", 2) == 0)
-		return (ft_strjoin(get_env_value(env, "HOME"), arg + 1));
+		if (!path)
+			ft_putstr_fd("minicoquille: cd: HOME not set\n", 2);
+	}
+	else if (arg[0] == '~')
+	{
+		path = get_env_value(env, "HOME");
+		if (path)
+			path = ft_strjoin(path, arg + 1);
+	}
 	else if (ft_strncmp(arg, "-", 2) == 0)
 	{
 		path = get_env_value(env, "OLDPWD");
@@ -63,6 +71,8 @@ static char	*resolve_path(char **env, char *arg)
 			ft_putstr_fd(path, 1);
 			ft_putstr_fd("\n", 1);
 		}
+		else
+			ft_putstr_fd("minicoquille: cd: OLDPWD not set\n", 2);
 	}
 	else
 		return (arg);
@@ -71,13 +81,13 @@ static char	*resolve_path(char **env, char *arg)
 	return (NULL);
 }
 
-static int	cd_cmd_part2(int tab_len, char *path,
+static int	cd_cmd_part2(char *path,
 	t_envirronement *env_struct, char **args)
 {
 	char	*error;
 
-	if (tab_len == 1)
-		path = resolve_path(env_struct->envp, "~");
+	if (!args[1])
+		path = resolve_path(env_struct->envp, NULL);
 	else
 		path = resolve_path(env_struct->envp, args[1]);
 	if (!path)
@@ -104,7 +114,7 @@ int	cd_cmd(t_envirronement *env_struct, char **args)
 		return (ft_putstr_fd("minicoquille: cd: too many arguments\n", 2), 1);
 	else if (args[1] && args[1][0] == '\0')
 		return (0);
-	if (cd_cmd_part2(tab_len, path, env_struct, args) == 1)
+	if (cd_cmd_part2(path, env_struct, args) == 1)
 		return (1);
 	get_cwd = getcwd(NULL, 0);
 	update_envlist(env_struct->env_list,

@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:19:43 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 19:22:08 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 00:30:48 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	main(int argc, char **argv, char **env)
 	main->env->envp = main->g_env;
 	shlvl = ft_itoa(ft_atoi(get_env_value(main->env->envp, "SHLVL")) + 1);
 	update_envlist(main->env->env_list, "SHLVL", shlvl);
+	main->home = ft_strdup(get_env_value(main->env->envp, "HOME"));
 	free(shlvl);
 	while_input(main);
 	return (0);
