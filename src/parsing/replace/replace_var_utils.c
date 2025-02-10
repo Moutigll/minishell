@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_var_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:29:47 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/10 18:52:56 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:21:59 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*extract_variable(char *str)
 	while (ft_isalnum(str[i]) || str[i] == '_')
 		i++;
 	if (is_bracket && str[i] != '}')
-		return (NULL);
+		return (ft_strdup(""));
 	return (ft_substr(str, is_bracket, i - is_bracket));
 }
 
@@ -81,51 +81,4 @@ void	handle_var_new_block(char *before,
 	}
 	else if (before[0] == '\0')
 		free(before);
-}
-
-void	handle_var_is_first(char *before,
-	t_node *node, t_env_var *env_var, t_list **curr_node)
-{
-	char	**split;
-	int		i;
-
-	if (before[0] == '\0')
-	{
-		if (env_var)
-		{
-			i = 0;
-			while (env_var->value[i] == ' ')
-				i++;
-			if (env_var->value && env_var->value[i] == '\0')
-			{
-				node->content = ft_strdup("");
-				node->type = 1;
-				node->head = 1;
-				return ;
-			}
-			split = ft_split(env_var->value, ' ');
-			node->content = split[0];
-			node->type = 1;
-			i = 1;
-			if (split[i])
-				node->head = 1;
-			while (split[i])
-			{
-				node = malloc(sizeof(t_node));
-				node->content = split[i];
-				node->type = 1;
-				node->head = 1;
-				ft_lstinsert_after(*curr_node, ft_lstnew(node));
-				*curr_node = (*curr_node)->next;
-				i++;
-			}
-			if ((*curr_node)->next && ft_tablen((void **)split) > 1)
-				((t_node *)(*curr_node)->next->content)->head = 1;
-			free(split);
-		}
-		else
-			node->content = ft_strdup("");
-	}
-	else
-		node->content = before;
 }

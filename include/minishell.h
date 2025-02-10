@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 19:06:09 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:48:39 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ void				restore_ctrl_backslash_echo(void);
 void				signal_handler_cut(int sig);
 void				signal_handler(int sig);
 
-
 // sanitize.c
 t_head				*sanitize_input(char *input, t_main *main);
 
@@ -198,6 +197,9 @@ void				handle_content_after_var(char *after,
 						t_node *node, t_list **curr_node);
 void				handle_var_new_block(char *before,
 						t_node *node, t_list **curr_node, t_env_var *env_var);
+
+	//replace_var_node.c
+void				remove_empty_var(char *str, t_list *current_node);
 void				handle_var_is_first(char *before,
 						t_node *node, t_env_var *env_var, t_list **curr_node);
 
@@ -236,7 +238,8 @@ int					unset_cmd(t_list *lst, char **args, t_main *main);
 // execution
 
 	//manage_fds.c
-int					message_here_doc(char *line, char *new_line, char *delimiter);
+int					message_here_doc(char *line,
+						char *new_line, char *delimiter);
 char				*here_doc_replace_var(char *str, t_main *main);
 int					open_fds(t_pipex *pipex, int i, int read_pipe);
 
