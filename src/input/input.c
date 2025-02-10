@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 17:32:58 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:42:53 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,28 @@ static void	tokenize_input(char *command, t_main *main)
 			free_head(head);
 	}
 	else
+		return (free(command), free_head(head));
+}
+
+int	check_is_space(char *command)
+{
+	int	i;
+
+	i = 0;
+	while (command[i] == ' ' || command[i] == '\t')
+		i++;
+	if (command[i] == '\0')
 	{
-		free_head(head);
 		free(command);
+		return (1);
 	}
+	return (0);
 }
 
 void	while_input(t_main *main)
 {
 	char	*command;
 	char	*prompt;
-	int		i;
 
 	while (1)
 	{
@@ -101,14 +112,8 @@ void	while_input(t_main *main)
 		free(prompt);
 		if (command == NULL)
 			exit_signal(main, command);
-		i = 0;
-		while (command[i] == ' ')
-			i++;
-		if (command[i] == '\0')
-		{
-			free(command);
+		if (check_is_space(command))
 			continue ;
-		}
 		add_history(command);
 		if (parsing_error(command, 0))
 			tokenize_input(command, main);

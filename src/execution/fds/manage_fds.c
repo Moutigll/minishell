@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   manage_fds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:52:21 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/10 16:49:49 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:40:30 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	open_infiles(t_pipex *pipex, int i, int read_pipe)
+static int	open_infiles(t_pipex *pipex, int i)
 {
 	t_list	*lst;
 
@@ -30,15 +30,6 @@ static int	open_infiles(t_pipex *pipex, int i, int read_pipe)
 				return (1);
 		}
 		lst = lst->next;
-	}
-	if (!(*pipex->cmd_head->cmds[i]->in_fd) && i != 0
-		&& read_pipe != -1 && pipex->cmd_head->cmds[i]->here_doc == -1)
-	{
-		if (dup2(read_pipe, STDIN_FILENO) == -1)
-		{
-			perror("Error: dup2 failed for read pipe");
-			return (1);
-		}
 	}
 	return (0);
 }
@@ -70,8 +61,17 @@ static int	open_outfiles(t_pipex *pipex, int i)
 
 int	open_fds(t_pipex *pipex, int i, int read_pipe)
 {
-	if (open_infiles(pipex, i, read_pipe) == 1)
+	if (open_infiles(pipex, i) == 1)
 		return (1);
+	if (!(*pipex->cmd_head->cmds[i]->in_fd) && i != 0
+		&& read_pipe != -1 && pipex->cmd_head->cmds[i]->here_doc == -1)
+	{
+		if (dup2(read_pipe, STDIN_FILENO) == -1)
+		{
+			perror("Error: dup2 failed for read pipe");
+			return (1);
+		}
+	}
 	if (read_pipe != -1)
 		close(read_pipe);
 	if (pipex->cmd_head->cmds[i]->here_doc != -1)

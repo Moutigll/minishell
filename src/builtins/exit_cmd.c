@@ -6,7 +6,7 @@
 /*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 12:00:55 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 00:30:39 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:35:07 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,34 +44,42 @@ void	free_total(t_main *main, t_command_head *head_main)
 	free(main);
 }
 
-static int	check_numeric(char *str)
+static int	skip_whitespace_and_sign(char *str, int *sign)
 {
-	int			i;
-	int			sign;
-	const char	*max;
-	const char	*min;
-	int			len;
+	int	i;
 
 	i = 0;
-	sign = 1;
-	max = "9223372036854775807";
-	min = "9223372036854775808";
-	len = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r' || str[i] == '\v' || str[i] == '\f' || str[i] == '0')
+	*sign = 1;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
+		|| str[i] == '\r' || str[i] == '\v' || str[i] == '\f' || str[i] == '0')
 		i++;
 	if (str[i] == '-' || str[i] == '+' || str[i] == '0')
 	{
 		if (str[i] == '-')
-			sign = -1;
+			*sign = -1;
 		i++;
 	}
+	return (i);
+}
+
+static int	check_numeric(char *str)
+{
+	int			i;
+	int			sign;
+	int			len;
+	const char	*max;
+	const char	*min;
+
+	max = "9223372036854775807";
+	min = "9223372036854775808";
+	len = 0;
+	i = skip_whitespace_and_sign(str, &sign);
 	while (str[i] != '\0')
 	{
 		if (!ft_isdigit(str[i]) && str[i] != ' ')
 			return (0);
-		if (len > 18)
-			return (0);
-		if (len == 18 && ((sign == 1 && str[i] > max[len]) || (sign == -1 && str[i] > min[len])))
+		if (len > 18 || (len == 18 && ((sign == 1 && str[i] > max[len])
+					|| (sign == -1 && str[i] > min[len]))))
 			return (0);
 		i++;
 		len++;

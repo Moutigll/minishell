@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_cmd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 11:54:39 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:20:37 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:36:24 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,22 @@ static char	*resolve_path(char **env, char *arg)
 {
 	char	*path;
 
+	path = get_env_value(env, "HOME");
 	if (!arg)
 	{
-		path = get_env_value(env, "HOME");
 		if (!path)
 			ft_putstr_fd("minicoquille: cd: HOME not set\n", 2);
 	}
-	else if (arg[0] == '~')
-	{
-		path = get_env_value(env, "HOME");
-		if (path)
-			path = ft_strjoin(path, arg + 1);
-	}
+	else if (arg[0] == '~' && path)
+		path = ft_strjoin(path, arg + 1);
 	else if (ft_strncmp(arg, "-", 2) == 0)
 	{
 		path = get_env_value(env, "OLDPWD");
 		if (path)
-		{
 			ft_putstr_fd(path, 1);
-			ft_putstr_fd("\n", 1);
-		}
 		else
-			ft_putstr_fd("minicoquille: cd: OLDPWD not set\n", 2);
+			ft_putstr_fd("minicoquille: cd: OLDPWD not set", 2);
+		ft_putstr_fd("\n", 1);
 	}
 	else
 		return (arg);

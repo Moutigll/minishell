@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 17:07:45 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:47:10 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,13 @@ static int	check_redirect(t_list *lst)
 		if (node->type == 2 && change_redirect(&state, node->content) == 1)
 			return (1);
 		if (node->type == 2 && check_pipe(node->content, &statement))
-			return (ft_putstr_fd("minicoquille: ", 2), ft_putstr_fd(ERR_PIPE, 2), 1);
+			return (ft_putstr_fd("minicoquille: ", 2),
+				ft_putstr_fd(ERR_PIPE, 2), 1);
 		if (node->type == 2
 			&& (check_redirect_n(node->content, '>', '<', &redirect_1) == 1
 				|| check_redirect_n(node->content, '<', '>', &redirect_2) == 1))
-			return (ft_putstr_fd("minicoquille: syntax error near unexpected token `", 2), print_redirect(node->content), 1);
+			return (ft_putstr_fd("minicoquille: \
+syntax error near unexpected token `", 2), print_redirect(node->content), 1);
 		if (check_brace(node->content, node->type) == 1)
 			return (ft_putstr_fd("Error bag assignment\n", 2), 1);
 		if (!lst->next)
@@ -101,16 +103,18 @@ int	parse_error(t_head *head, t_main *main)
 	last_content = ft_lstlast(head->head)->content;
 	if (head->head != NULL
 		&& ((t_node *)head->head->content)->content[0] == '|')
-		return (ft_putstr_fd("minicoquille: parse error near `|'\n", 2), main->error = 2, 1);
+		return (ft_putstr_fd("minicoquille: \
+parse error near `|'\n", 2), main->error = 2, 1);
 	if (last_content == NULL)
 		return (0);
 	if (check_redirect(lst) == 1)
 		return (main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '>') == 1)
-		return (ft_putstr_fd("minicoquille: syntax error near unexpected token `newline'\n"
-				, 2), main->error = 2, 1);
+		return (ft_putstr_fd("minicoquille: \
+syntax error near unexpected token `newline'\n", 2), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '<') == 1)
-		return (ft_putstr_fd("minicoquille: syntax error near unexpected token `newline'\n"
+		return (ft_putstr_fd("minicoquille: \
+syntax error near unexpected token `newline'\n"
 				, 2), main->error = 2, 1);
 	if (last_content->type == 2 && last_char(last_content->content, '|') == 1)
 		return (ft_putstr_fd("minicoquille: parse error near `", 2)

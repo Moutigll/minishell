@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 16:30:38 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/10 17:42:46 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:37:18 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	clean_pipex(t_pipex *pipex, char *error, int exit_status)
 	free(pipex->pid_tab);
 	while (pipex->cmd_head->size--)
 	{
-		if (pipex->cmd_head->cmds[pipex->cmd_head->size]->path != pipex->cmd_head->cmds[pipex->cmd_head->size]->command[0])
+		if (pipex->cmd_head->cmds[pipex->cmd_head->size]->path
+			!= pipex->cmd_head->cmds[pipex->cmd_head->size]->command[0])
 			free(pipex->cmd_head->cmds[pipex->cmd_head->size]->path);
 		free_cmd_struct(pipex->cmd_head->cmds[pipex->cmd_head->size]);
 	}

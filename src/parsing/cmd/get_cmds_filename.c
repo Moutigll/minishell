@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds_filename.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:34:54 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 02:27:35 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/10 18:43:34 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ static char	*check_first_node(t_list **lst, t_node **node, int *j, int *start)
 	return (filename);
 }
 
-static char	*get_remaining_nodes(t_list **lst, t_node *node, int *j, char *filename)
+static char	*get_remaining_nodes(t_list **lst,
+	t_node *node, int *j, char *filename)
 {
 	while ((*lst))
 	{

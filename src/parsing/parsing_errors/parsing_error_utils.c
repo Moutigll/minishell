@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:22:36 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:47:55 by ele-lean         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,8 @@ int	change_redirect(int *state, char *str)
 		&& str[j] != ' ' && str[j] != '\t' && str[j] != '|')
 		j++;
 	if ((str[j] == '>' || str[j] == '<' || str[j] == '|') && *state == 1)
-		return (ft_putstr_fd("minicoquille: ", 2), ft_putstr_fd("syntax error near unexpected token `", 2), count_redirect(str), 1);
+		return (ft_putstr_fd("minicoquille: ", 2), ft_putstr_fd("\
+syntax error near unexpected token `", 2), count_redirect(str), 1);
 	i = (int)ft_strlen(str);
 	if (i > 0)
 		i--;
