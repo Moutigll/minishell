@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/08 16:42:09 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:19:58 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 			clean_pipex(pipex, NULL, MALLOC_ERROR), -1);
 	if (pid == 0)
 		handle_child_process(pipex, pipe_fd, read_pipe, i);
+	if (pipex->cmd_head->cmds[i]->here_doc != -1)
+		close(pipex->cmd_head->cmds[i]->here_doc);
 	if (read_pipe != -1)
 		close(read_pipe);
 	pipex->pid_tab[i] = pid;

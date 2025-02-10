@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 00:30:09 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:08:16 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,7 @@ int					handle_special_cmds_func(t_pipex *pipex,
 // builtins
 
 	//export_add.c
-int					check_type_export(char *str, t_list *lst);
+int					check_type_export(char *str, t_envirronement *var);
 int					check_quote_key(char *str);
 
 	//export_add_second.c

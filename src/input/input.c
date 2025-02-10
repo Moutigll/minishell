@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 02:03:12 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:32:58 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 static void	exit_signal(t_main *main, char *command)
 {
+	int	error;
+
+	error = main->error;
 	printf("exit\n");
 	free_tab((void **)main->env->envp);
 	free(main->path);
@@ -22,7 +25,7 @@ static void	exit_signal(t_main *main, char *command)
 	free(main->env);
 	free(main);
 	free(command);
-	exit(main->error);
+	exit(error);
 }
 
 static void	get_cmds(t_splitted_cmds *splitted
@@ -55,6 +58,7 @@ static void	tokenize_input(char *command, t_main *main)
 	head = sanitize_input(command, main);
 	if (ft_strlen(command) > 0 && parse_error(head, main) == 0)
 	{
+		free(command);
 		replace_variables(head, main);
 		if (parse_error(head, main) == 0)
 		{
@@ -71,7 +75,10 @@ static void	tokenize_input(char *command, t_main *main)
 			free_head(head);
 	}
 	else
+	{
 		free_head(head);
+		free(command);
+	}
 }
 
 void	while_input(t_main *main)
@@ -98,10 +105,12 @@ void	while_input(t_main *main)
 		while (command[i] == ' ')
 			i++;
 		if (command[i] == '\0')
+		{
+			free(command);
 			continue ;
+		}
 		add_history(command);
 		if (parsing_error(command, 0))
 			tokenize_input(command, main);
-		free(command);
 	}
 }

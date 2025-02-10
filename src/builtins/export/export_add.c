@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/08 16:13:49 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:24:09 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static t_list	*new_var_node(char *key, char *value, int n)
 	return (lst);
 }
 
-static int	add_node(t_list *lst, char *str, int count, int i)
+static int	add_node(t_envirronement *var, char *str, int count, int i)
 {
 	int			index;
 	char		*tmp;
@@ -81,7 +81,7 @@ static int	add_node(t_list *lst, char *str, int count, int i)
 	key = return_key(str);
 	if (key == NULL)
 		return (MALLOC_ERROR);
-	index = check_exist(lst, key);
+	index = check_exist(var->env_list, key);
 	if (str[ft_strlen(key)] != '\0')
 	{
 		tmp = return_value(str);
@@ -90,19 +90,21 @@ static int	add_node(t_list *lst, char *str, int count, int i)
 	}
 	else
 		tmp = ft_strdup("");
-	if (index >= 0)
-		return (change_var(tmp, index, lst), free(key), free(tmp), 0);
+	if (index >= 0 && tmp[0] != '\0')
+		return (change_var(tmp, index, var->env_list), change_pwd(var->env_list, var->envp), free(key), free(tmp), 0);
 	else if ((count == 1 && str[i - 1] != '=') || count > 1)
-		return (add_var(lst, new_var_node(key, tmp, 1)), 0);
+		return (add_var(var->env_list, new_var_node(key, tmp, 1)), 0);
 	else if (count == 1 && str[i - 1] == '=')
-		add_var(lst, new_var_node(key, ft_strdup(""), 1));
+		add_var(var->env_list, new_var_node(ft_strdup(key), ft_strdup(""), 1));
 	else
-		add_var(lst, new_var_node(key, ft_strdup(""), 0));
+		add_var(var->env_list, new_var_node(ft_strdup(key), ft_strdup(""), 0));
+	update_envlist(var->env_list, key, tmp);
+	free(key);
 	free(tmp);
 	return (0);
 }
 
-int	check_type_export(char *str, t_list *lst)
+int	check_type_export(char *str, t_envirronement *var)
 {
 	int		count;
 	int		i;
@@ -131,5 +133,5 @@ int	check_type_export(char *str, t_list *lst)
 		ft_putstr_fd("': not a valid identifier\n", 2);
 		return (1);
 	}
-	return (add_node(lst, str, count, i));
+	return (add_node(var, str, count, i));
 }

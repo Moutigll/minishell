@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmds_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 11:30:39 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 21:24:29 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:38:34 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	free_cmd_struct(t_command_struct *cmd)
 	i = 0;
 	while (i < cmd->nb_args)
 	{
-		free(cmd->command[i]);
+		if (cmd->command[i] != NULL)
+			free(cmd->command[i]);
 		i++;
 	}
 	free(cmd->command);

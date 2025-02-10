@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 01:39:38 by moutig            #+#    #+#             */
-/*   Updated: 2025/02/08 21:13:39 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:21:49 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 				line = ft_strjoin(line, new_line);
 			else if (!line)
 			{
-				close(pipe_fd[0]);
-				close(pipe_fd[1]);
 				write(1, "\n", 2);
 				ft_putstr_fd("minicoquille: warning: here-document finished (wanted `", 2);
 				ft_putstr_fd(delimiter, 2);
@@ -120,7 +118,9 @@ static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 	}
 	if (line)
 		free(line);
-	return (close(pipe_fd[1]), restore_ctrl_backslash_echo(), pipe_fd[0]);
+	printf("CLOSE\n");
+	close(pipe_fd[1]);
+	return (restore_ctrl_backslash_echo(), pipe_fd[0]);
 }
 
 static int	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
@@ -138,14 +138,14 @@ static int	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
 			if (g_status == -1)
 				return (-1);
 			cmd->here_doc = handle_here_doc(content->fd, pipex);
+			if (lst->next)
+				close(cmd->here_doc);
 			if (cmd->here_doc == -1)
 			{
 				pipex->cmd_head->main->error = 130;
 				g_status = 0;
 				return (-1);
 			}
-			if (lst->next)
-				close(cmd->here_doc);
 		}
 		lst = lst->next;
 	}

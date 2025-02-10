@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:50:32 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 00:19:18 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/10 17:58:10 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ int	echo_command(char **args)
 	while (args[block])
 	{
 		if (i > 0)
-			ft_putstr_fd(" ", 1);
-		ft_putstr_fd(args[block], 1);
+			ft_putstr_fd(" ", STDOUT_FILENO);
+		ft_putstr_fd(args[block], STDOUT_FILENO);
 		block++;
 		i++;
 	}
 	if (flag == 0)
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	return (0);
 }
