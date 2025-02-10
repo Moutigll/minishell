@@ -6,11 +6,55 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:16:19 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:59:07 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	check_exist(t_list *lst, char *str)
+{
+	t_env_var	*var;
+	int			i;
+
+	i = 0;
+	while (lst)
+	{
+		var = lst->content;
+		if (ft_strcmp(var->name, str) == 0)
+			return (i);
+		if (!lst->next)
+			break ;
+		lst = lst->next;
+		i++;
+	}
+	return (-1);
+}
+
+void	change_var(char *value, int index, t_list *lst)
+{
+	t_env_var	*var;
+	int			i;
+
+	i = 0;
+	if (value == NULL)
+		return ;
+	while (lst)
+	{
+		var = lst->content;
+		if (i == index)
+		{
+			free(var->value);
+			var->value = ft_strdup(value);
+			var->exported = 1;
+			break ;
+		}
+		if (!lst->next)
+			break ;
+		lst = lst->next;
+		i++;
+	}
+}
 
 int	add_var(t_list *lst, t_list *var)
 {

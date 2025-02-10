@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 11:20:40 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:08:16 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:06:09 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,34 +153,32 @@ void				k9t6q(void);
 void				x1m3u(void);
 void				v8b4y(void);
 
-// input
-
-	//input.c
+// input.c
 void				while_input(t_main *main);
 
-	//prompt.c
+// prompt.c
 char				*read_cmd(t_main *main);
 
-	//prompt_utils.c
+// prompt_utils.c
 int					count_slash(char *str);
 char				*return_join(char *str1,
 						char *str2, char *path, t_main *main);
 
-	//signal.c
+// signal.c
 void				disable_ctrl_backslash_echo(void);
 void				restore_ctrl_backslash_echo(void);
 void				signal_handler_cut(int sig);
 void				signal_handler(int sig);
 
-// parsing
 
-	//sanitize.c
+// sanitize.c
 t_head				*sanitize_input(char *input, t_main *main);
 
-	//parsing.c
+//  parsing.c
+void				set_redirect(int *redirect, int count);
 int					parsing_error(char *command, int etat);
 
-	//parsing_error_brace.c
+//  parsing_error_brace.c
 int					parse_error(t_head *head, t_main *main);
 int					check_pipe(char *str, int *statement);
 int					check_brace(char *str, int type);
@@ -238,6 +236,8 @@ int					unset_cmd(t_list *lst, char **args, t_main *main);
 // execution
 
 	//manage_fds.c
+int					message_here_doc(char *line, char *new_line, char *delimiter);
+char				*here_doc_replace_var(char *str, t_main *main);
 int					open_fds(t_pipex *pipex, int i, int read_pipe);
 
 	//open_files.c
@@ -265,6 +265,14 @@ void				is_func_cmd(t_pipex *pipex, int i);
 int					handle_special_cmds_func(t_pipex *pipex,
 						t_command_struct *current_cmd);
 
+// here_doc_utils.c
+char				*set_var(int i, char *str, char *var_name);
+int					handle_here_doc_start(int pipe_fd[2], t_pipex *pipex);
+char				*replace_error(t_main *main, char *str, char *var);
+char				*return_var(int i, char *str, char *var_name);
+char				*return_new_str(char *var,
+						char *str, char *var_name, char *new_str);
+
 // builtins
 
 	//export_add.c
@@ -277,6 +285,8 @@ char				*return_value(char *str);
 char				*return_key(char *str);
 
 	//export_cmd.c
+void				change_var(char *value, int index, t_list *lst);
+int					check_exist(t_list *lst, char *str);
 int					add_var(t_list *lst, t_list *var);
 int					export_cmd(char **args, t_main *main);
 
@@ -300,6 +310,7 @@ int					get_env(char *command, int i);
 t_list				*create_env_list(char **env);
 
 	//exit_cmd.c
+void				free_head(t_head *head);
 void				free_total(t_main *main, t_command_head *head_main);
 void				exit_cmd(t_head *head, t_main *main);
 void				free_head(t_head *head);

@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 19:15:13 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/07 20:44:06 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:04:00 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ int	check_pipe(char *str, int *statement)
 
 	i = 0;
 	if (str[0] == '|' && *statement == 1)
-		return (1);
+		return (ft_putstr_fd("minicoquille: ", 2),
+			ft_putstr_fd(ERR_PIPE, 2), 1);
 	*statement = 0;
 	while (str[i])
 	{
 		if (str[i] == '|' && str[i + 1] == '|')
-			return (1);
+			return (ft_putstr_fd("minicoquille: ", 2),
+				ft_putstr_fd(ERR_PIPE, 2), 1);
 		i++;
 	}
 	if (i > 0 && str[i - 1] == '|')

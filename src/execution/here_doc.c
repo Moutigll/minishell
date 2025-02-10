@@ -6,121 +6,69 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 01:39:38 by moutig            #+#    #+#             */
-/*   Updated: 2025/02/10 17:21:49 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:49:55 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	handle_here_doc_start(int pipe_fd[2],
-	t_pipex *pipex, size_t *delimiter_len, char *delimiter)
+int	gest_line(char **new_line, int *pipe_fd, t_pipex *pipex)
 {
-	signal(SIGINT, signal_handler_cut);
-	signal(SIGQUIT, signal_handler_cut);
-	disable_ctrl_backslash_echo();
-	if (pipe(pipe_fd) == -1)
-		return (clean_pipex(pipex, "Pipe error", 32), -1);
-	*delimiter_len = ft_strlen(delimiter);
+	*new_line = get_next_line(STDIN_FILENO);
+	if (g_status == -1)
+		return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
+	if (*new_line)
+		*new_line = here_doc_replace_var(*new_line, pipex->cmd_head->main);
 	return (0);
 }
 
-char	*here_doc_replace_var(char *str, t_main *main)
+int	write_fd(char **line, char *delimiter, int *pipe_fd)
 {
-	t_env_var	*var_node;
-	char		*var_name;
-	char		*var;
-	char		*new_str;
-	int			i;
+	int	delimiter_len;
+	int	len;
 
-	i = 0;
-	while (str[i])
+	delimiter_len = ft_strlen(delimiter);
+	len = ft_strlen(*line);
+	if (len > 0 && (*line)[len - 1] == '\n')
 	{
-		if (str[i] == '$')
-		{
-			var_name = extract_variable(str + i + 1);
-			var_node = find_env_var_node(main->env->env_list, var_name);
-			var = ft_strdup("$");
-			if (str[i + 1] == '{')
-				var = ft_strjoin_free(var, "{", 1, 0);
-			var = ft_strjoin_free(var, var_name, 1, 0);
-			if (str[i + 1] == '{')
-				var = ft_strjoin_free(var, "}", 1, 0);
-			if (var_node)
-				new_str = ft_str_replace(str, var, var_node->value);
-			else if (var_name && var_name[0] == '?' && !var_name[1])
-			{
-				char	*value;
-
-				value = ft_itoa(main->error);
-				new_str = ft_str_replace(str, var, value);
-				free(value);
-			}
-			else
-				new_str = ft_str_replace(str, var, "");
-			free(var);
-			free(var_name);
-			free(str);
-			str = new_str;
-		}
-		i++;
+		if (ft_strncmp(*line, delimiter, delimiter_len) == 0
+			&& (*line)[delimiter_len] == '\n'
+				&& (*line)[delimiter_len + 1] == '\0')
+			return (0);
+		write(pipe_fd[1], *line, len);
+		write(1, "> ", 2);
+		free(*line);
+		*line = NULL;
 	}
-	return (str);
+	return (1);
 }
 
 static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 {
 	char	*line;
 	int		pipe_fd[2];
-	size_t	delimiter_len;
-	int		len;
 	char	*new_line;
 
 	line = NULL;
 	new_line = NULL;
-	if (handle_here_doc_start(pipe_fd, pipex, &delimiter_len, delimiter) == -1)
+	if (handle_here_doc_start(pipe_fd, pipex) == -1)
 		return (-1);
-	write(1, "> ", 2);
 	while (1)
 	{
-		new_line = get_next_line(STDIN_FILENO);
-		if (g_status == -1)
-			return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
-		if (new_line)
-			new_line = here_doc_replace_var(new_line, pipex->cmd_head->main);
-		if (new_line == NULL)
-		{
-			if (line && new_line)
-				line = ft_strjoin(line, new_line);
-			else if (!line)
-			{
-				write(1, "\n", 2);
-				ft_putstr_fd("minicoquille: warning: here-document finished (wanted `", 2);
-				ft_putstr_fd(delimiter, 2);
-				ft_putstr_fd("')\n", 2);
-				break ;
-			}
-		}
+		if (gest_line(&new_line, pipe_fd, pipex) == -1)
+			return (-1);
+		if (message_here_doc(line, new_line, delimiter) == 0)
+			break ;
 		if (line && new_line)
 			line = ft_strjoin_free(line, new_line, 1, 0);
 		else if (new_line)
 			line = new_line;
-		len = ft_strlen(line);
-		if (len > 0 && line[len - 1] == '\n')
-		{
-			if (ft_strncmp(line, delimiter, delimiter_len) == 0
-				&& line[delimiter_len] == '\n' && line[delimiter_len + 1] == '\0')
-				break ;
-			write(pipe_fd[1], line, len);
-			write(1, "> ", 2);
-			free(line);
-			line = NULL;
-		}
+		if (write_fd(&line, delimiter, pipe_fd) == 0)
+			break ;
 	}
 	if (line)
 		free(line);
-	printf("CLOSE\n");
-	close(pipe_fd[1]);
-	return (restore_ctrl_backslash_echo(), pipe_fd[0]);
+	return (close(pipe_fd[1]), restore_ctrl_backslash_echo(), pipe_fd[0]);
 }
 
 static int	get_here_doc(t_command_struct *cmd, t_pipex *pipex)

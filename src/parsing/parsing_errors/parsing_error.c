@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:47:01 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:47:10 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:03:47 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,9 @@ static int	check_redirect(t_list *lst)
 	while (lst)
 	{
 		node = lst->content;
-		if (node->type == 2 && change_redirect(&state, node->content) == 1)
+		if (node->type == 2 && (change_redirect(&state, node->content) == 1
+				|| check_pipe(node->content, &statement) == 1))
 			return (1);
-		if (node->type == 2 && check_pipe(node->content, &statement))
-			return (ft_putstr_fd("minicoquille: ", 2),
-				ft_putstr_fd(ERR_PIPE, 2), 1);
 		if (node->type == 2
 			&& (check_redirect_n(node->content, '>', '<', &redirect_1) == 1
 				|| check_redirect_n(node->content, '<', '>', &redirect_2) == 1))

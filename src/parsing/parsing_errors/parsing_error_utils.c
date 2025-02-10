@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_error_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:47:55 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:05:28 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,6 @@ int	change_pwd(t_list	*lst, char **envp)
 		lst = lst->next;
 	}
 	return (0);
-}
-
-static void	set_redirect(int *redirect, int count)
-{
-	*redirect = 0;
-	if (count > 0)
-		*redirect = 1;
 }
 
 int	check_redirect_n(char *str, char c, char vs, int *redirect)
