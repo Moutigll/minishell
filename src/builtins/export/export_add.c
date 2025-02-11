@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:49:31 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:58:52 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:32:28 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ static int	add_node(t_envirronement *var, char *str, int count, int i)
 	}
 	else
 		tmp = ft_strdup("");
-	if (index >= 0 && tmp[0] != '\0')
+	if (index >= 0)
 		return (change_var(tmp, index, var->env_list),
 			change_pwd(var->env_list, var->envp), free(key), free(tmp), 0);
 	else if ((count == 1 && str[i - 1] != '=') || count > 1)
 		return (add_var(var->env_list, new_var_node(key, tmp, 1)), 0);
 	else if (count == 1 && str[i - 1] == '=')
-		add_var(var->env_list, new_var_node(ft_strdup(key), ft_strdup(""), 1));
+		add_var(var->env_list, new_var_node(key, ft_strdup(""), 1));
 	else
-		add_var(var->env_list, new_var_node(ft_strdup(key), ft_strdup(""), 0));
-	return (update_envlist(var->env_list, key, tmp), free(key), free(tmp), 0);
+		add_var(var->env_list, new_var_node(key, ft_strdup(""), 0));
+	return (free(tmp), 0);
 }
 
 void	print_indentifier(char *part1, char *str)

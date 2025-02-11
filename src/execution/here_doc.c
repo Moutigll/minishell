@@ -6,17 +6,17 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 01:39:38 by moutig            #+#    #+#             */
-/*   Updated: 2025/02/10 18:49:55 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 22:23:12 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	gest_line(char **new_line, int *pipe_fd, t_pipex *pipex)
+int	gest_line(char **new_line, t_pipex *pipex)
 {
 	*new_line = get_next_line(STDIN_FILENO);
 	if (g_status == -1)
-		return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
+		return (-1);
 	if (*new_line)
 		*new_line = here_doc_replace_var(*new_line, pipex->cmd_head->main);
 	return (0);
@@ -55,8 +55,8 @@ static int	handle_here_doc(char *delimiter, t_pipex *pipex)
 		return (-1);
 	while (1)
 	{
-		if (gest_line(&new_line, pipe_fd, pipex) == -1)
-			return (-1);
+		if (gest_line(&new_line, pipex) == -1)
+			return (close(pipe_fd[0]), close(pipe_fd[1]), -1);
 		if (message_here_doc(line, new_line, delimiter) == 0)
 			break ;
 		if (line && new_line)
@@ -86,7 +86,7 @@ static int	get_here_doc(t_command_struct *cmd, t_pipex *pipex)
 			if (g_status == -1)
 				return (-1);
 			cmd->here_doc = handle_here_doc(content->fd, pipex);
-			if (lst->next)
+			if (lst->next && cmd->here_doc != -1)
 				close(cmd->here_doc);
 			if (cmd->here_doc == -1)
 			{

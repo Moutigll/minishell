@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:59:42 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 19:05:28 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:37:20 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	change_pwd_var(t_env_var	*var, char **envp, int i, int len)
 	return (0);
 }
 
-int	change_pwd(t_list	*lst, char **envp)
+int	change_pwd(t_list *lst, char **envp)
 {
 	t_env_var	*var;
 	int			len;
@@ -45,7 +45,7 @@ int	change_pwd(t_list	*lst, char **envp)
 		len = ft_strlen(var->name);
 		while (envp[i])
 		{
-			if (ft_strncmp(var->name, envp[i], len - 1) == 0
+			if (ft_strncmp(var->name, envp[i], len) == 0
 				&& envp[i][len] == '=')
 			{
 				if (change_pwd_var(var, envp, i, len) != 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_func.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moutig <moutig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:04:59 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/07 02:24:46 by moutig           ###   ########.fr       */
+/*   Updated: 2025/02/10 23:44:03 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,27 @@ static void	exec_func_c(char *command, char **args, t_pipex *pipex)
 			= env_cmd(pipex->cmd_head->main->env->env_list, args);
 	else if (!ft_strcmp(command, "exit"))
 		pipex->cmd_head->main->error = exit_part(pipex, args);
+}
+
+static int	openbuiltins_fds(t_pipex *pipex, int i, char *cmd)
+{
+	t_command_head		*cmd_head;
+
+	if (!cmd)
+		return (1);
+	if (ft_strcmp(cmd, "exit") && ft_strcmp(cmd, "cd")
+		&& ft_strcmp(cmd, "export")
+		&& ft_strcmp(cmd, "unset") && ft_strcmp(cmd, "env")
+		&& ft_strcmp(cmd, "echo") && ft_strcmp(cmd, "pwd"))
+		return (1);
+	if (open_fds(pipex, i, -1) == 1)
+	{
+		cmd_head = pipex->cmd_head;
+		clean_pipex(pipex, NULL, 1);
+		free_total(cmd_head->main, cmd_head);
+		exit(1);
+	}
+	return (0);
 }
 
 void	is_func_cmd(t_pipex *pipex, int i)
@@ -68,7 +89,7 @@ void	is_func_cmd(t_pipex *pipex, int i)
 int	handle_special_cmds_func(t_pipex *pipex,
 	t_command_struct *current_cmd)
 {
-	if (current_cmd->command[0] == NULL)
+	if (openbuiltins_fds(pipex, 0, current_cmd->command[0]) != 0)
 		return (0);
 	else if (ft_strcmp("unset", current_cmd->command[0]) == 0)
 		unset_cmd(pipex->cmd_head->main->env->env_list,

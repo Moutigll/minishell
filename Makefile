@@ -5,11 +5,9 @@ LDFLAGS = -lreadline
 
 # 🏗️ Names
 NAME = minishell
-TESTER = minishell_tester
 
 # 📂 Folders
 SRC_DIR = src
-TEST_DIR = tester
 OBJ_DIR = obj
 LIBFT_PATH = libft
 LIBFT = $(LIBFT_PATH)/libft.a
@@ -20,9 +18,6 @@ MINISHELL_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(MINISHELL_SRCS))
 
 MAIN_SRCS = $(SRC_DIR)/main.c
 MAIN_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(MAIN_SRCS))
-
-TEST_SRCS = $(shell find $(TEST_DIR) -type f -name "*.c")
-TEST_OBJS = $(patsubst $(TEST_DIR)/%.c, $(OBJ_DIR)/%.o, $(TEST_SRCS))
 
 DEPS = $(MINISHELL_OBJS:.o=.d) $(MAIN_OBJS:.o=.d) $(TEST_OBJS:.o=.d)
 
@@ -49,12 +44,6 @@ $(NAME): $(OBJ_DIR) $(LIBFT) $(MINISHELL_OBJS) $(MAIN_OBJS)
 	$(CC) $(CFLAGS) -o $(NAME) $(MAIN_OBJS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS)
 	@printf "$(GREEN)✅ Compilation success !$(RESET)\n"
 
-# 🧪 Tester
-$(TESTER): $(OBJ_DIR) $(LIBFT) $(MINISHELL_OBJS) $(TEST_OBJS)
-	@printf "$(YELLOW)🔬 Creating $(BOLD)$(TESTER)$(RESET)$(YELLOW)...$(RESET)\n"
-	$(CC) $(CFLAGS) -o $(TESTER) $(TEST_OBJS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS)
-	@printf "$(GREEN)✅ $(TESTER) est prêt !$(RESET)\n"
-
 # 🛠️ Progression
 TOTAL_FILES := $(words $(MINISHELL_SRCS) $(MAIN_SRCS))
 COMPILED_FILES := 0
@@ -71,8 +60,6 @@ $(OBJ_DIR)/%.o: $(TEST_DIR)/%.c
 	@printf "$(BLUE)📦 Compilation [$$(($(COMPILED_FILES) * 100 / $(TOTAL_FILES)))%%] -> $(BOLD)$<$(RESET)\n"
 	$(CC) $(CFLAGS) -c $< -o $@
 
-test: fclean $(TESTER)
-
 clean:
 	@printf "$(RED)🧹 Deleting object files...$(RESET)\n"
 	@rm -rf $(OBJ_DIR)
@@ -87,4 +74,4 @@ re: fclean all
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re

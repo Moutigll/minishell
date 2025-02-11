@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 12:23:49 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 19:05:35 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:39:25 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ int	parsing_error(char *command, int etat)
 		i++;
 	}
 	if ((quote_1 > 0 || quote_2 > 0))
-		return (error(ERR_QUOTE, etat), 0);
+		return (error(ERR_QUOTE, etat), free(command), 0);
 	return (1);
 }

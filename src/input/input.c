@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 16:10:21 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:42:53 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:57:50 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,9 @@ int	check_is_space(char *command)
 
 	i = 0;
 	while (command[i] == ' ' || command[i] == '\t')
+	{
 		i++;
+	}
 	if (command[i] == '\0')
 	{
 		free(command);

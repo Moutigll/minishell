@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ele-lean <ele-lean@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 08:34:36 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/08 19:52:19 by ele-lean         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:43:14 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static void	resolve_command(t_command_struct *cmd, char **paths)
 {
 	if (!cmd->command || ft_strlen(cmd->command[0]) == 0)
 	{
+		if (cmd->command)
+			free(cmd->command[0]);
 		ft_putstr_fd(": command not found\n", 2);
 		cmd->command[0] = NULL;
 		return ;

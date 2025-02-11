@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:10:25 by tle-goff          #+#    #+#             */
-/*   Updated: 2025/02/10 18:59:07 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:57:44 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	export_cmd(char **args, t_main *main)
 			while (args[i])
 				main->error = check_type_export(args[i++], main->env);
 			update_env(main->env);
+			change_pwd(main->env->env_list, main->env->envp);
 		}
 	}
 	return (0);

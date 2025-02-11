@@ -6,7 +6,7 @@
 /*   By: tle-goff <tle-goff@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 09:05:41 by ele-lean          #+#    #+#             */
-/*   Updated: 2025/02/10 17:19:58 by tle-goff         ###   ########.fr       */
+/*   Updated: 2025/02/11 00:24:33 by tle-goff         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ static void	handle_child_process(t_pipex *pipex,
 	cmd_head = pipex->cmd_head;
 	if (open_fds(pipex, i, read_pipe) == 1)
 	{
+		if (i != pipex->cmd_head->size - 1)
+		{
+			close(pipe_fd[0]);
+			close(pipe_fd[1]);
+		}
 		clean_pipex(pipex, NULL, 1);
 		free_total(cmd_head->main, cmd_head);
 		exit(1);
@@ -108,3 +113,4 @@ int	exec_cmd(t_pipex *pipex, int read_pipe, int i)
 	}
 	return (-1);
 }
+
